@@ -217,7 +217,7 @@ static CGFloat vHeight = 120.0;
 
     Method 2.1: Create token for the first room name/type available with the posibility
                 to create one if not exists.
-
+*/
 
 
     [[Nuve sharedInstance] createTokenForTheFirstAvailableRoom:nil
@@ -234,8 +234,8 @@ static CGFloat vHeight = 120.0;
                                                     }];
 
 
-    Method 2.2: Create a token for a given room id.
-    */
+   /* Method 2.2: Create a token for a given room id.
+    
     [[Nuve sharedInstance] createTokenForRoomId:roomId
                                        username:username
                                            role:kLicodePresenterRole
@@ -246,7 +246,7 @@ static CGFloat vHeight = 120.0;
                                              [self showCallConnectViews:YES
                                                     updateStatusMessage:@"Error!"];
                                          }
-                                     }];
+                                     }];*/
     /*
     Method 2.3: Create a Room and then create a Token.
 

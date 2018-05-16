@@ -65,7 +65,7 @@ typedef void(^SocketIOCallback)(NSArray* data);
 
     [socketIO on:@"connect" callback:^(NSArray* data, SocketAckEmitter* ack) {
         L_INFO(@"Websocket Connection success!");
-        [[socketIO emitWithAck:@"token" with:@[decodedToken]] timingOutAfter:0 callback:^(NSArray* data) {
+        [[socketIO emitWithAck:@"token" with:@[@{@"singlePC":@NO,@"token":decodedToken}]] timingOutAfter:0 callback:^(NSArray* data) {  //lihengz
             [self onSendTokenCallback](data);
         }];
     }];

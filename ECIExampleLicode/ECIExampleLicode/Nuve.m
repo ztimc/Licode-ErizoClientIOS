@@ -10,9 +10,9 @@
 #include <stdlib.h>
 #include <CommonCrypto/CommonHMAC.h>
 
-static NSString *kNuveHost          = @"http://192.168.0.101:3000";
-static NSString *kNuveServiceId     = @"58e27e2447e5cca9c7e9637a";
-static NSString *kNuveServiceKey    = @"17851";
+static NSString *kNuveHost          = @"http://47.92.124.64:3000"; //lihengz
+static NSString *kNuveServiceId     = @"5af3fddbc64aa6c43a89ed87"; //lihengz
+static NSString *kNuveServiceKey    = @"13655";  //lihengz
 
 @implementation Nuve
 
