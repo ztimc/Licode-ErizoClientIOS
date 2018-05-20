@@ -220,10 +220,23 @@ static CGFloat vHeight = 120.0;
 */
 
 
-    [[Nuve sharedInstance] createTokenForTheFirstAvailableRoom:nil
+    /*[[Nuve sharedInstance] createTokenForTheFirstAvailableRoom:nil
                                                       roomType:RoomTypeMCU
                                                       username:username
                                                         create:YES
+                                                    completion:^(BOOL success, NSString *token) {
+                                                        if (success) {
+                                                            [remoteRoom connectWithEncodedToken:token];
+                                                        } else {
+                                                            [self showCallConnectViews:YES
+                                                                   updateStatusMessage:@"Error!"];
+                                                        }
+                                                    }];*/
+    
+                            [[Nuve sharedInstance] createToken:@"basicExampleRoom"
+                                                      roomType:RoomTypeMCU
+                                                      username:username
+                                                        role:@"presenter"
                                                     completion:^(BOOL success, NSString *token) {
                                                         if (success) {
                                                             [remoteRoom connectWithEncodedToken:token];
