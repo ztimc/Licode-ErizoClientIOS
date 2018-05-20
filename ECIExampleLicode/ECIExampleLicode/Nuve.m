@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <CommonCrypto/CommonHMAC.h>
 
-static NSString *kNuveHost          = @"http://47.92.124.64:3000"; //lihengz
+static NSString *kNuveHost          = @"https://webrtc.muguovr.cn:3004"; //@"http://47.92.124.64:3000"; //lihengz
 static NSString *kNuveServiceId     = @"5af3fddbc64aa6c43a89ed87"; //lihengz
 static NSString *kNuveServiceKey    = @"13655";  //lihengz
 
@@ -27,6 +27,34 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
     });
     return sharedInstance;
 }
+
+//-------------add by lihengz 2018.5.20--------------------------------
+- (void)createToken:(NSString *)roomName
+           roomType:(RoomType)roomType
+           username:(NSString *)username
+            role:(NSString *)role
+               completion:(NuveCreateTokenCallback)completion {
+
+    NSString *endpoint = @"/createToken";
+    
+    NSDictionary *postData = @{
+                           @"username" : username,
+                           @"role" : role,
+                           @"room" : roomName
+                           };
+    if (roomType == RoomTypeP2P)
+        [postData setValue:@TRUE forKey:@"p2p"];
+    
+    [self performRequest:endpoint method:@"POST" postData:postData authorization:nil
+              completion:^(BOOL success, id data) {
+                  if (success) {
+                      completion(YES, data);
+                  } else {
+                      completion(NO, nil);
+                  }
+              }];
+}
+//=========================================================================================
 
 - (void)listRoomsWithCompletion:(NuveListRoomsCallback)completion {
     NSString *endpoint = @"/rooms";

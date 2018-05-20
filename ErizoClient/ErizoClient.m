@@ -20,7 +20,7 @@
         RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
 #endif
         RTCInitializeSSL();
-        [ECClient setPreferredVideoCodec:@"VP8"];
+        [ECClient setPreferredVideoCodec:@"H264"];
         sharedInstance = [[self alloc] init];
     });
     return sharedInstance;

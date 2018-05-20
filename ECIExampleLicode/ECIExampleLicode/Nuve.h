@@ -47,4 +47,10 @@ static NSString *const kLicodePresenterRole = @"presenter";
                         username:(NSString *)username
                       completion:(NuveCreateTokenCallback)completion;
 
+- (void)createToken:(NSString *)roomName
+           roomType:(RoomType)roomType
+           username:(NSString *)username
+               role:(NSString *)role
+         completion:(NuveCreateTokenCallback)completion; //lihengz
+
 @end
