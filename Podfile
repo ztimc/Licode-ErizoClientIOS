@@ -10,6 +10,7 @@ target 'ErizoClient' do
   project 'ErizoClientIOS'
   #pod 'PodRTC', '65.8.0.0'
   pod 'PodWebRTC', :path => './'
+  pod 'PodSwiss', :path => './'
   pod 'Socket.IO-Client-Swift', '~> 12.0.0'
 end
 
@@ -26,5 +27,6 @@ target 'ECIExampleLicode' do
   project 'ECIExampleLicode/ECIExampleLicode'
   #pod 'PodRTC', '65.8.0.0'
   pod 'PodWebRTC', :path => './'
+  pod 'PodSwiss', :path => './'
   pod 'Socket.IO-Client-Swift', '~> 12.0.0'
 end

@@ -47,7 +47,11 @@
                           videoConstraints:(RTCMediaConstraints *)videoConstraints
                           audioConstraints:(RTCMediaConstraints *)audioConstraints {
     if (self = [self init]) {
-        _peerFactory = [[RTCPeerConnectionFactory alloc] init];
+        RTCDefaultVideoDecoderFactory *decoderFactory = [[RTCDefaultVideoDecoderFactory alloc] init];
+        RTCDefaultVideoEncoderFactory *encoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
+        _peerFactory = [[RTCPeerConnectionFactory alloc] initWithEncoderFactory:encoderFactory
+                                                             decoderFactory:decoderFactory];
+
         _defaultVideoConstraints = videoConstraints;
         _defaultAudioConstraints = audioConstraints;
         _isLocal = YES;
@@ -105,11 +109,12 @@
 }
 
 - (RTCMediaStream *)createLocalStream {
+    _usingFrontCamera = true;
     _mediaStream = [_peerFactory mediaStreamWithStreamId:@"LCMSv0"];
 
     if ([(NSNumber *)[_streamOptions objectForKey:kStreamOptionVideo] boolValue])
         [self generateVideoTracks];
-
+    
     if ([(NSNumber *)[_streamOptions objectForKey:kStreamOptionAudio] boolValue])
         [self generateAudioTracks];
 
@@ -167,16 +172,6 @@
     _dirtyAttributes = NO;
 }
 
-- (BOOL)switchCamera {
-    RTCVideoSource* source = ((RTCVideoTrack*)[_mediaStream.videoTracks objectAtIndex:0]).source;
-    if ([source isKindOfClass:[RTCAVFoundationVideoSource class]]) {
-        RTCAVFoundationVideoSource* avSource = (RTCAVFoundationVideoSource*)source;
-        avSource.useBackCamera = !avSource.useBackCamera;
-        return YES;
-    } else {
-        return NO;
-    }
-}
 
 - (BOOL)hasAudio {
 	return (self.mediaStream.audioTracks.count > 0);
@@ -233,13 +228,11 @@
 # pragma mark - Private Instance Methods
 
 - (RTCVideoTrack *)createLocalVideoTrack {
-    RTCVideoTrack* localVideoTrack = nil;
-#if !TARGET_IPHONE_SIMULATOR && TARGET_OS_IPHONE
-    RTCAVFoundationVideoSource *source =
-    [_peerFactory avFoundationVideoSourceWithConstraints:_defaultVideoConstraints];
-    localVideoTrack = [_peerFactory videoTrackWithSource:source trackId:kLicodeVideoLabel];
-#endif
-    return localVideoTrack;
+    RTCVideoSource *source = [_peerFactory videoSource];
+    
+    _capturer = [[RTCCameraVideoCapturer alloc] initWithDelegate:source];
+    [self startCapture];
+    return [_peerFactory videoTrackWithSource:source trackId:kLicodeVideoLabel];
 }
 
 - (RTCAudioTrack *)createLocalAudioTrack {
@@ -263,5 +256,77 @@
         [_mediaStream removeVideoTrack:localVideoTrack];
     }
 }
+
+- (void)startCapture {
+    AVCaptureDevicePosition position =
+    _usingFrontCamera ? AVCaptureDevicePositionFront : AVCaptureDevicePositionBack;
+    AVCaptureDevice *device = [self findDeviceForPosition:position];
+    AVCaptureDeviceFormat *format = [self selectFormatForDevice:device];
+    
+    if (format == nil) {
+        RTCLogError(@"No valid formats for device %@", device);
+        NSAssert(NO, @"");
+        
+        return;
+    }
+    
+    //NSInteger fps = [self selectFpsForFormat:format];
+    NSInteger fps = 25;
+
+     [_capturer startCaptureWithDevice:device format:format fps:fps];
+}
+
+- (void)stopCapture {
+    [_capturer stopCapture];
+}
+
+- (void)switchCamera {
+    _usingFrontCamera = !_usingFrontCamera;
+    [self startCapture];
+}
+
+#pragma mark - Private
+
+- (AVCaptureDevice *)findDeviceForPosition:(AVCaptureDevicePosition)position {
+    NSArray<AVCaptureDevice *> *captureDevices = [RTCCameraVideoCapturer captureDevices];
+    for (AVCaptureDevice *device in captureDevices) {
+        if (device.position == position) {
+            return device;
+        }
+    }
+    return captureDevices[0];
+}
+
+- (AVCaptureDeviceFormat *)selectFormatForDevice:(AVCaptureDevice *)device {
+    NSArray<AVCaptureDeviceFormat *> *formats =
+    [RTCCameraVideoCapturer supportedFormatsForDevice:device];
+    int targetWidth = 208;
+    int targetHeight = 351;
+    AVCaptureDeviceFormat *selectedFormat = nil;
+    int currentDiff = INT_MAX;
+    
+    for (AVCaptureDeviceFormat *format in formats) {
+        CMVideoDimensions dimension = CMVideoFormatDescriptionGetDimensions(format.formatDescription);
+        FourCharCode pixelFormat = CMFormatDescriptionGetMediaSubType(format.formatDescription);
+        int diff = abs(targetWidth - dimension.width) + abs(targetHeight - dimension.height);
+        if (diff < currentDiff) {
+            selectedFormat = format;
+            currentDiff = diff;
+        } else if (diff == currentDiff && pixelFormat == [_capturer preferredOutputPixelFormat]) {
+            selectedFormat = format;
+        }
+    }
+    
+    return selectedFormat;
+}
+
+- (NSInteger)selectFpsForFormat:(AVCaptureDeviceFormat *)format {
+    Float64 maxFramerate = 0;
+    for (AVFrameRateRange *fpsRange in format.videoSupportedFrameRateRanges) {
+        maxFramerate = fmax(maxFramerate, fpsRange.maxFrameRate);
+    }
+    return maxFramerate;
+}
+
 
 @end

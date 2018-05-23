@@ -17,7 +17,7 @@ typedef RTCSessionDescription * (^SDPHackCallback)(RTCSessionDescription *descri
 
 static SDPHackCallback sdpHackCallback;
 static NSString *preferredVideoCodec;
-static NSString *defaultVideoCodec = @"VP8";
+static NSString *defaultVideoCodec = @"H264";
 static NSString *const kECAppClientErrorDomain = @"ECAppClient";
 static NSInteger const kECAppClientErrorCreateSDP = -3;
 static NSInteger const kECAppClientErrorSetSDP = -4;

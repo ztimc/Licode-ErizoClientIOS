@@ -16,9 +16,11 @@
     static dispatch_once_t once;
     static id sharedInstance;
     dispatch_once(&once, ^{
+        /*
 #ifdef DEBUG
         RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
 #endif
+         */
         RTCInitializeSSL();
         [ECClient setPreferredVideoCodec:@"H264"];
         sharedInstance = [[self alloc] init];

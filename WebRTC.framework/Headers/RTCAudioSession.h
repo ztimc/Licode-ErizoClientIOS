@@ -101,6 +101,20 @@ RTC_EXPORT
 
 @end
 
+
+/**
+  塞宾设备代理，用来控制塞宾设备录音
+ */
+@protocol SabineDeviceDelegate <NSObject>
+
+- (void)startRecording;
+
+- (void)stopRecoding;
+
+- (BOOL)hasDevice;
+
+@end
+
 /** Proxy class for AVAudioSession that adds a locking mechanism similar to
  *  AVCaptureDevice. This is used to that interleaving configurations between
  *  WebRTC and the application layer are avoided.
@@ -144,6 +158,7 @@ RTC_EXPORT
  *  we are able to prevent the abrupt cutoff.
  */
 @property(nonatomic, assign) BOOL isAudioEnabled;
+@property(nonatomic, strong) id<SabineDeviceDelegate> sabineDelegate;
 
 // Proxy properties.
 @property(readonly) NSString *category;
@@ -224,6 +239,11 @@ RTC_EXPORT
                      error:(NSError **)outError;
 - (BOOL)setOutputDataSource:(AVAudioSessionDataSourceDescription *)dataSource
                       error:(NSError **)outError;
+
+- (void)startSabineRecord;
+- (void)stopSabineRecord;
+- (void)pushSabineAduio:(UInt8 *)data :(NSUInteger) length;
+
 @end
 
 @interface RTCAudioSession (Configuration)

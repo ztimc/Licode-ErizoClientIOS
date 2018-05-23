@@ -6,10 +6,12 @@
 //  Copyright (c) 2015 Alvaro Gil. All rights reserved.
 //
 
+@import WebRTC;
 #import "AppDelegate.h"
 #import "ErizoClient.h"
+#import <Swiss/Swiss.h>
 
-@interface AppDelegate ()
+@interface AppDelegate ()<SabineDeviceDelegate>
 
 @end
 
@@ -20,7 +22,8 @@
     
     // Initialize library
     [ErizoClient sharedInstance];
-    
+    [[SSSwiss sharedInstance] initialize];
+    [[RTCAudioSession sharedInstance] setSabineDelegate:self];
     return YES;
 }
 
@@ -44,6 +47,20 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)hasDevice {
+    return [[SSSwiss sharedInstance] hasDevice];
+}
+
+- (void)startRecording {
+    [[SSSwiss sharedInstance] startRecord:^(UInt8 * _Nonnull pcm, UInt32 length) {
+        [[RTCAudioSession sharedInstance] pushSabineAduio:pcm :length ];
+    }];
+}
+
+- (void)stopRecoding {
+    [[SSSwiss sharedInstance] stopRecord];
 }
 
 @end

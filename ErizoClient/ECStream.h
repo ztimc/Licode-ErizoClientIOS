@@ -125,7 +125,7 @@ static NSString * _Nonnull const kStreamOptionMaxAudioBW    = @"maxAudioBW";
 
  @returns Boolean value.
  */
-- (BOOL)switchCamera;
+- (void)switchCamera;
 
 /**
  Indicates if the media stream has audio tracks.
@@ -221,15 +221,20 @@ static NSString * _Nonnull const kStreamOptionMaxAudioBW    = @"maxAudioBW";
 /// Factory instance used to access local media.
 @property (strong, nonatomic) RTCPeerConnectionFactory * _Nonnull peerFactory;
 
+@property (strong, nonatomic) RTCCameraVideoCapturer *  capturer;
+
 /// ECSignalingChannel instance assigned by ECRoom at the moment
 @property (weak) ECSignalingChannel * _Nullable signalingChannel;
 
 @property (readonly) BOOL isLocal;
+@property (readonly) BOOL usingFrontCamera;
 
 /// Default video contraints.
 @property (readonly) RTCMediaConstraints * _Nullable defaultVideoConstraints;
 
 /// Default audio contraints.
 @property (readonly) RTCMediaConstraints * _Nullable defaultAudioConstraints;
+
+
 
 @end

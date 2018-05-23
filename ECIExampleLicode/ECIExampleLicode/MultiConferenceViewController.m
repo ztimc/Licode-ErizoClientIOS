@@ -13,6 +13,8 @@
 #import "LicodeServer.h"
 #import "Nuve.h"
 #import "ErizoClient.h"
+#import <Swiss/Swiss.h>
+
 
 static NSString *roomId = @"59de889a35189661b58017a1";
 static NSString *roomName = @"IOS Demo APP";
@@ -22,7 +24,9 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 static CGFloat vWidth = 100.0;
 static CGFloat vHeight = 120.0;
 
-@interface MultiConferenceViewController () <UITextFieldDelegate, RTCEAGLVideoViewDelegate>
+@interface MultiConferenceViewController () <UITextFieldDelegate,
+                                             RTCEAGLVideoViewDelegate,
+                                             RTCAudioSessionDelegate>
 @end
 
 @implementation MultiConferenceViewController {
@@ -34,7 +38,7 @@ static CGFloat vHeight = 120.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
+    //RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
 	
     // Initialize player views array
     playerViews = [NSMutableArray array];
@@ -47,6 +51,20 @@ static CGFloat vHeight = 120.0;
 
     // Setup UI
     [self setupUI];
+    
+    RTCAudioSessionConfiguration *webRTCConfig =
+    [RTCAudioSessionConfiguration webRTCConfiguration];
+    webRTCConfig.categoryOptions = AVAudioSessionCategoryOptionDuckOthers;
+    webRTCConfig.category = AVAudioSessionCategoryPlayback;
+    webRTCConfig.mode = AVAudioSessionModeDefault;
+    webRTCConfig.sampleRate = 44100;
+    webRTCConfig.inputNumberOfChannels = 2;
+    webRTCConfig.outputNumberOfChannels = 2;
+    [RTCAudioSessionConfiguration setWebRTCConfiguration:webRTCConfig];
+    
+    [self configureAudioSession];
+    
+     
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,11 +84,10 @@ static CGFloat vHeight = 120.0;
 - (void)initializeLocalStream {
     // Initialize a stream and access local stream
     localStream = [[ECStream alloc] initLocalStreamWithOptions:nil attributes:@{@"name":@"localStream"}];
-    
+
     // Render local stream
     if ([localStream hasVideo]) {
-        RTCVideoTrack *videoTrack = [localStream.mediaStream.videoTracks objectAtIndex:0];
-        [videoTrack addRenderer:_localView];
+        _localView.captureSession = localStream.capturer.captureSession;
     }
 }
 
@@ -178,14 +195,29 @@ static CGFloat vHeight = 120.0;
     if (!localStream) {
         [self initializeLocalStream];
     }
-
+    
     NSString *username = kDefaultUserName;
 	[self showCallConnectViews:NO
            updateStatusMessage:@"Connecting with the room..."];
 
     // Initialize room (without token!)
+    
+    RTCDefaultVideoDecoderFactory *decoderFactory = [[RTCDefaultVideoDecoderFactory alloc] init];
+    RTCDefaultVideoEncoderFactory *encoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
+    /*
+    NSArray<RTCVideoCodecInfo *>* codecs = [RTCDefaultVideoEncoderFactory supportedCodecs];
+    int index = 0;
+    for(int i = 0; i < codecs.count; i++){
+        if([codecs[i].name isEqualToString:@"H264"]){
+            index = i;
+        }
+    }
+    encoderFactory.preferredCodec = codecs[index];
+     */
+    RTCPeerConnectionFactory *_peerFactory = [[RTCPeerConnectionFactory alloc] initWithEncoderFactory:encoderFactory
+                                                             decoderFactory:decoderFactory];
     remoteRoom = [[ECRoom alloc] initWithDelegate:self
-                                   andPeerFactory:[[RTCPeerConnectionFactory alloc] init]];
+                                   andPeerFactory:_peerFactory];
 
     /*
 
@@ -398,6 +430,31 @@ static CGFloat vHeight = 120.0;
     [playerView setFrame:frame];
 }
 
+- (void)configureAudioSession {
+    RTCAudioSessionConfiguration *configuration =
+    [[RTCAudioSessionConfiguration alloc] init];
+    configuration.category = AVAudioSessionCategoryPlayback;
+    configuration.categoryOptions = AVAudioSessionCategoryOptionDuckOthers;
+    configuration.mode = AVAudioSessionModeDefault;
+    
+    
+    RTCAudioSession *session = [RTCAudioSession sharedInstance];
+    [session lockForConfiguration];
+    BOOL hasSucceeded = NO;
+    NSError *error = nil;
+    if (session.isActive) {
+        hasSucceeded = [session setConfiguration:configuration error:&error];
+    } else {
+        hasSucceeded = [session setConfiguration:configuration
+                                          active:YES
+                                           error:&error];
+    }
+    if (!hasSucceeded) {
+        RTCLogError(@"Error setting configuration: %@", error.localizedDescription);
+    }
+    [session unlockForConfiguration];
+}
+
 - (void)showCallConnectViews:(BOOL)show updateStatusMessage:(NSString *)statusMessage {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		self.statusLabel.text = statusMessage;
@@ -406,5 +463,9 @@ static CGFloat vHeight = 120.0;
         self.unpublishButton.hidden = show;
 	});
 }
+
+
+
+
 
 @end
