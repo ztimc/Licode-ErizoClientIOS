@@ -220,8 +220,6 @@
 }
 
 - (void)dealloc {
-    [self removeAudioTracks];
-    [self removeVideoTracks];
     _mediaStream = nil;
 }
 

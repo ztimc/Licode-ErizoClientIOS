@@ -204,16 +204,6 @@ static CGFloat vHeight = 120.0;
     
     RTCDefaultVideoDecoderFactory *decoderFactory = [[RTCDefaultVideoDecoderFactory alloc] init];
     RTCDefaultVideoEncoderFactory *encoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
-    /*
-    NSArray<RTCVideoCodecInfo *>* codecs = [RTCDefaultVideoEncoderFactory supportedCodecs];
-    int index = 0;
-    for(int i = 0; i < codecs.count; i++){
-        if([codecs[i].name isEqualToString:@"H264"]){
-            index = i;
-        }
-    }
-    encoderFactory.preferredCodec = codecs[index];
-     */
     RTCPeerConnectionFactory *_peerFactory = [[RTCPeerConnectionFactory alloc] initWithEncoderFactory:encoderFactory
                                                              decoderFactory:decoderFactory];
     remoteRoom = [[ECRoom alloc] initWithDelegate:self
