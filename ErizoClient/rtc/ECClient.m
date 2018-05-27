@@ -433,6 +433,7 @@ readyToSubscribeStreamId:(NSString *)streamId
             newSDP = [self descriptionForDescription:newSDP bandwidthOptions:_clientOptions];
             
             __weak ECClient *weakSelf = self;
+            
             [_peerConnection setRemoteDescription:newSDP
                                 completionHandler:^(NSError * _Nullable error) {
                 ECClient *strongSelf = weakSelf;
@@ -477,8 +478,13 @@ readyToSubscribeStreamId:(NSString *)streamId
                                 completionHandler:^(RTCSessionDescription * _Nullable sdp, NSError * _Nullable error) {
                 
                 ECClient *strongSelf = weakSelf;
-                [strongSelf peerConnection:strongSelf.peerConnection didCreateSessionDescription:sdp
-                                                                                           error:error];
+                NSString *sdpStr = [[sdp sdp] stringByReplacingOccurrencesOfString:@"a=fmtp:111 minptime=10;useinbandfec=1" withString: @"a=fmtp:111 minptime=10;useinbandfec=1;stereo=1;sprop-stereo=1"];
+                sdpStr = [sdpStr stringByReplacingOccurrencesOfString:@"a=rtpmap:111 opus/48000/2" withString:@"a=rtpmap:111 opus/48000/2 a=rtcp-fb:111 nack\na=rtcp-fb:111 ccm fir"];
+                RTCSessionDescription *newSdp = [[RTCSessionDescription alloc] initWithType:sdp.type sdp:sdpStr];
+                
+                [strongSelf peerConnection:strongSelf.peerConnection
+                            didCreateSessionDescription:newSdp
+                            error:error];
             }];
         }
     });

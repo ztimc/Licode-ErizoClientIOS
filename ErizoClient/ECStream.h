@@ -221,7 +221,7 @@ static NSString * _Nonnull const kStreamOptionMaxAudioBW    = @"maxAudioBW";
 /// Factory instance used to access local media.
 @property (strong, nonatomic) RTCPeerConnectionFactory * _Nonnull peerFactory;
 
-@property (strong, nonatomic) RTCCameraVideoCapturer *  capturer;
+@property (strong, nonatomic) RTCCameraVideoCapturer * _Nullable capturer;
 
 /// ECSignalingChannel instance assigned by ECRoom at the moment
 @property (weak) ECSignalingChannel * _Nullable signalingChannel;

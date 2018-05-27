@@ -24,6 +24,7 @@
     [ErizoClient sharedInstance];
     [[SSSwiss sharedInstance] initialize];
     [[RTCAudioSession sharedInstance] setSabineDelegate:self];
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     return YES;
 }
 

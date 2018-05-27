@@ -16,6 +16,7 @@
 #import <Swiss/Swiss.h>
 
 
+
 static NSString *roomId = @"59de889a35189661b58017a1";
 static NSString *roomName = @"IOS Demo APP";
 static NSString *kDefaultUserName = @"ErizoIOS";
@@ -43,9 +44,7 @@ static CGFloat vHeight = 120.0;
     // Initialize player views array
     playerViews = [NSMutableArray array];
     
-    // Setup navigation
-    self.tabBarItem.image = [UIImage imageNamed:@"Group-Selected"];
-    
+
     // Access to local camera
     [self initializeLocalStream];
 
@@ -54,18 +53,27 @@ static CGFloat vHeight = 120.0;
     
     RTCAudioSessionConfiguration *webRTCConfig =
     [RTCAudioSessionConfiguration webRTCConfiguration];
-    webRTCConfig.categoryOptions = AVAudioSessionCategoryOptionDuckOthers;
-    webRTCConfig.category = AVAudioSessionCategoryPlayback;
+    
+    if([[SSSwiss sharedInstance] hasDevice]){
+        webRTCConfig.category = AVAudioSessionCategoryPlayback;
+        webRTCConfig.categoryOptions = AVAudioSessionCategoryOptionDuckOthers;
+        webRTCConfig.sampleRate = 44100;
+    }else{
+        webRTCConfig.category = AVAudioSessionCategoryPlayAndRecord;
+        webRTCConfig.categoryOptions = webRTCConfig.categoryOptions |
+        AVAudioSessionCategoryOptionDefaultToSpeaker;
+        webRTCConfig.sampleRate = 44100;
+    }
     webRTCConfig.mode = AVAudioSessionModeDefault;
-    webRTCConfig.sampleRate = 44100;
+
     webRTCConfig.inputNumberOfChannels = 2;
     webRTCConfig.outputNumberOfChannels = 2;
     [RTCAudioSessionConfiguration setWebRTCConfiguration:webRTCConfig];
-    
     [self configureAudioSession];
+    [self connect];
     
-     
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -79,16 +87,30 @@ static CGFloat vHeight = 120.0;
     [self.statusLabel addGestureRecognizer:tapGesture];
 
     [self showCallConnectViews:YES updateStatusMessage:@"Ready"];
+    
+    UIColor *barColor = [UIColor colorWithRed:73/255.0 green:145/255.0 blue:255/255.0 alpha:0.82];
+    self.navigationController.navigationBar.barTintColor = barColor;
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.title = @"会议室";
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
+    backItem.title = @"返回";
+    self.navigationItem.backBarButtonItem = backItem;
+    
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)initializeLocalStream {
     // Initialize a stream and access local stream
     localStream = [[ECStream alloc] initLocalStreamWithOptions:nil attributes:@{@"name":@"localStream"}];
-
+    
     // Render local stream
     if ([localStream hasVideo]) {
-        _localView.captureSession = localStream.capturer.captureSession;
+        _videoView.captureSession = localStream.capturer.captureSession;
     }
+    
 }
 
 # pragma mark - ECRoomDelegate
@@ -128,7 +150,8 @@ static CGFloat vHeight = 120.0;
            updateStatusMessage:[NSString stringWithFormat:@"Subscribed: %@", stream.streamId]];
 
     // We have subscribed so let's watch the stream.
-    [self watchStream:stream];
+   // [self watchStream:stream];
+    [_videoView watchStream:stream];
 }
 
 - (void)room:(ECRoom *)room didUnSubscribeStream:(ECStream *)stream {
@@ -189,124 +212,128 @@ static CGFloat vHeight = 120.0;
 	L_INFO(@"Change %p %f %f", videoView, size.width, size.height);
 }
 
+
+
 # pragma mark - UI Actions
 
-- (IBAction)connect:(id)sender {
+-(void)connect {
     if (!localStream) {
         [self initializeLocalStream];
     }
     
     NSString *username = kDefaultUserName;
-	[self showCallConnectViews:NO
+    [self showCallConnectViews:NO
            updateStatusMessage:@"Connecting with the room..."];
-
+    
     // Initialize room (without token!)
     
     RTCDefaultVideoDecoderFactory *decoderFactory = [[RTCDefaultVideoDecoderFactory alloc] init];
     RTCDefaultVideoEncoderFactory *encoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
     RTCPeerConnectionFactory *_peerFactory = [[RTCPeerConnectionFactory alloc] initWithEncoderFactory:encoderFactory
-                                                             decoderFactory:decoderFactory];
+                                                                                       decoderFactory:decoderFactory];
     remoteRoom = [[ECRoom alloc] initWithDelegate:self
                                    andPeerFactory:_peerFactory];
-
+    
     /*
-
-    Method 1: Chotis example:
-    =========================
-
-    Obtains a token from official Licode demo servers.
-    This method is useful if you don't have a custom Licode deployment and
-    want to try it. Keep in mind that many times demo servers are down or
-    with self-signed or expired certificates.
-    You might need to update room ID on LicodeServer.m file.
-
-    [[LicodeServer sharedInstance] obtainMultiVideoConferenceToken:username
-            completion:^(BOOL result, NSString *token) {
-			if (result) {
-				// Connect with the Room
-				[remoteRoom connectWithEncodedToken:token];
-			} else {
-				[self showCallConnectViews:YES updateStatusMessage:@"Token fetch failed"];
-			}
-    }];
-
-    Method 2: Connect with Nuve directly without middle server API:
-    ===============================================================
-
-    The following methods are recommended if you already have your own
-    Licode deployment. Check Nuve.h for sub-API details.
-
-
-    Method 2.1: Create token for the first room name/type available with the posibility
-                to create one if not exists.
-*/
-
-
+     
+     Method 1: Chotis example:
+     =========================
+     
+     Obtains a token from official Licode demo servers.
+     This method is useful if you don't have a custom Licode deployment and
+     want to try it. Keep in mind that many times demo servers are down or
+     with self-signed or expired certificates.
+     You might need to update room ID on LicodeServer.m file.
+     
+     [[LicodeServer sharedInstance] obtainMultiVideoConferenceToken:username
+     completion:^(BOOL result, NSString *token) {
+     if (result) {
+     // Connect with the Room
+     [remoteRoom connectWithEncodedToken:token];
+     } else {
+     [self showCallConnectViews:YES updateStatusMessage:@"Token fetch failed"];
+     }
+     }];
+     
+     Method 2: Connect with Nuve directly without middle server API:
+     ===============================================================
+     
+     The following methods are recommended if you already have your own
+     Licode deployment. Check Nuve.h for sub-API details.
+     
+     
+     Method 2.1: Create token for the first room name/type available with the posibility
+     to create one if not exists.
+     */
+    
+    
     /*[[Nuve sharedInstance] createTokenForTheFirstAvailableRoom:nil
-                                                      roomType:RoomTypeMCU
-                                                      username:username
-                                                        create:YES
-                                                    completion:^(BOOL success, NSString *token) {
-                                                        if (success) {
-                                                            [remoteRoom connectWithEncodedToken:token];
-                                                        } else {
-                                                            [self showCallConnectViews:YES
-                                                                   updateStatusMessage:@"Error!"];
-                                                        }
-                                                    }];*/
+     roomType:RoomTypeMCU
+     username:username
+     create:YES
+     completion:^(BOOL success, NSString *token) {
+     if (success) {
+     [remoteRoom connectWithEncodedToken:token];
+     } else {
+     [self showCallConnectViews:YES
+     updateStatusMessage:@"Error!"];
+     }
+     }];*/
     
-                            [[Nuve sharedInstance] createToken:@"basicExampleRoom"
-                                                      roomType:RoomTypeMCU
-                                                      username:username
-                                                        role:@"presenter"
-                                                    completion:^(BOOL success, NSString *token) {
-                                                        if (success) {
-                                                            [remoteRoom connectWithEncodedToken:token];
-                                                        } else {
-                                                            [self showCallConnectViews:YES
-                                                                   updateStatusMessage:@"Error!"];
-                                                        }
-                                                    }];
-
-
-   /* Method 2.2: Create a token for a given room id.
+    [[Nuve sharedInstance] createToken:@"basicExampleRoom"
+                              roomType:RoomTypeMCU
+                              username:username
+                                  role:@"presenter"
+                            completion:^(BOOL success, NSString *token) {
+                                if (success) {
+                                    [remoteRoom connectWithEncodedToken:token];
+                                } else {
+                                    [self showCallConnectViews:YES
+                                           updateStatusMessage:@"Error!"];
+                                }
+                            }];
     
-    [[Nuve sharedInstance] createTokenForRoomId:roomId
-                                       username:username
-                                           role:kLicodePresenterRole
-                                     completion:^(BOOL success, NSString *token) {
-                                         if (success) {
-                                            [remoteRoom connectWithEncodedToken:token];
-                                         } else {
-                                             [self showCallConnectViews:YES
-                                                    updateStatusMessage:@"Error!"];
-                                         }
-                                     }];*/
+    
+    /* Method 2.2: Create a token for a given room id.
+     
+     [[Nuve sharedInstance] createTokenForRoomId:roomId
+     username:username
+     role:kLicodePresenterRole
+     completion:^(BOOL success, NSString *token) {
+     if (success) {
+     [remoteRoom connectWithEncodedToken:token];
+     } else {
+     [self showCallConnectViews:YES
+     updateStatusMessage:@"Error!"];
+     }
+     }];*/
     /*
-    Method 2.3: Create a Room and then create a Token.
-
-    [[Nuve sharedInstance] createRoomAndCreateToken:roomName
-                                           roomType:RoomTypeMCU
-                                           username:username
-                                              completion:^(BOOL success, NSString *token) {
-                                             if (success) {
-                                                 [remoteRoom connectWithEncodedToken:token];
-                                             } else {
-                                                 [self showCallConnectViews:YES
-                                                        updateStatusMessage:@"Error!"];
-                                             }
-                                         }];
-        */
+     Method 2.3: Create a Room and then create a Token.
+     
+     [[Nuve sharedInstance] createRoomAndCreateToken:roomName
+     roomType:RoomTypeMCU
+     username:username
+     completion:^(BOOL success, NSString *token) {
+     if (success) {
+     [remoteRoom connectWithEncodedToken:token];
+     } else {
+     [self showCallConnectViews:YES
+     updateStatusMessage:@"Error!"];
+     }
+     }];
+     */
 
 }
 
-- (IBAction)leave:(id)sender {
+- (void)leave{
     for (ECStream *stream in remoteRoom.remoteStreams) {
         [self removeStream:stream.streamId];
     }
     [remoteRoom leave];
     remoteRoom = nil;
     [self showCallConnectViews:YES updateStatusMessage:@"Ready"];
+    _videoView.captureSession = nil;
+    [localStream.capturer stopCapture];
 }
 
 - (IBAction)unpublish:(id)sender {
@@ -376,15 +403,7 @@ static CGFloat vHeight = 120.0;
 }
 
 - (void)removeStream:(NSString *)streamId {
-	for (int index = 0; index < [playerViews count]; index++) {
-		ECPlayerView *playerView = [playerViews objectAtIndex:index];
-		if ([playerView.stream.streamId caseInsensitiveCompare:streamId] == NSOrderedSame) {
-			[playerViews removeObjectAtIndex:index];
-			[playerView removeFromSuperview];
-			break;
-		}
-	}
-	
+    [_videoView removeStreamById:streamId];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -427,7 +446,6 @@ static CGFloat vHeight = 120.0;
     configuration.categoryOptions = AVAudioSessionCategoryOptionDuckOthers;
     configuration.mode = AVAudioSessionModeDefault;
     
-    
     RTCAudioSession *session = [RTCAudioSession sharedInstance];
     [session lockForConfiguration];
     BOOL hasSucceeded = NO;
@@ -456,6 +474,11 @@ static CGFloat vHeight = 120.0;
 
 
 
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self leave];
+}
 
 
 @end

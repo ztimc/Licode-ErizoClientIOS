@@ -146,6 +146,7 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
     } else {
         self.status = ECRoomStatusDisconnected;
     }
+    [publishClient disconnect];
 }
 
 - (NSArray *)remoteStreams {

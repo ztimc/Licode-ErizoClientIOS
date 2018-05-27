@@ -56,9 +56,9 @@
 ///-----------------------------------
 
 /// Stream object that contains a media stream
-@property (weak, nonatomic, readonly) ECStream *stream;
+@property (weak, nonatomic) ECStream *stream;
 
 /// View where the video gets rendered
-@property (strong, nonatomic, readonly) RTCEAGLVideoView *videoView;
+@property (strong, nonatomic) RTCEAGLVideoView *videoView;
 
 @end

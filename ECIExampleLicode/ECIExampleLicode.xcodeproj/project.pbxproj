@@ -21,6 +21,13 @@
 		78E53A341B99F388004B63EF /* ECIExampleLicodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E53A331B99F388004B63EF /* ECIExampleLicodeTests.m */; };
 		78E53A3F1B99F3EF004B63EF /* LicodeServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 78E53A3E1B99F3EF004B63EF /* LicodeServer.m */; };
 		78E53A431B9A0A2B004B63EF /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 78E53A421B9A0A2B004B63EF /* libicucore.dylib */; };
+		7D26E52A20B55F7C00D66326 /* ICNMainViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D26E52820B55F7C00D66326 /* ICNMainViewController.h */; };
+		7D26E52B20B55F7C00D66326 /* ICNMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D26E52920B55F7C00D66326 /* ICNMainViewController.m */; };
+		7D26E53220B565A100D66326 /* UIViewController+Hidden.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D26E53020B565A100D66326 /* UIViewController+Hidden.h */; };
+		7D26E53320B565A100D66326 /* UIViewController+Hidden.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D26E53120B565A100D66326 /* UIViewController+Hidden.m */; };
+		7D26E53720B5978B00D66326 /* ICNViewCallView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D26E53520B5978B00D66326 /* ICNViewCallView.h */; };
+		7D26E53820B5978B00D66326 /* ICNViewCallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D26E53620B5978B00D66326 /* ICNViewCallView.m */; };
+		7D26E53B20B652A300D66326 /* ICNVideoView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D26E53A20B652A300D66326 /* ICNVideoView.h */; };
 		7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DFDFF5D20B3FBFF0096D25A /* Wav.h */; };
 		7DFDFF6020B3FC000096D25A /* Wav.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFDFF5E20B3FC000096D25A /* Wav.m */; };
 /* End PBXBuildFile section */
@@ -62,6 +69,13 @@
 		78E53A3D1B99F3EF004B63EF /* LicodeServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LicodeServer.h; sourceTree = "<group>"; };
 		78E53A3E1B99F3EF004B63EF /* LicodeServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LicodeServer.m; sourceTree = "<group>"; };
 		78E53A421B9A0A2B004B63EF /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		7D26E52820B55F7C00D66326 /* ICNMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNMainViewController.h; sourceTree = "<group>"; };
+		7D26E52920B55F7C00D66326 /* ICNMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNMainViewController.m; sourceTree = "<group>"; };
+		7D26E53020B565A100D66326 /* UIViewController+Hidden.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Hidden.h"; sourceTree = "<group>"; };
+		7D26E53120B565A100D66326 /* UIViewController+Hidden.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Hidden.m"; sourceTree = "<group>"; };
+		7D26E53520B5978B00D66326 /* ICNViewCallView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNViewCallView.h; sourceTree = "<group>"; };
+		7D26E53620B5978B00D66326 /* ICNViewCallView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNViewCallView.m; sourceTree = "<group>"; };
+		7D26E53A20B652A300D66326 /* ICNVideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNVideoView.h; sourceTree = "<group>"; };
 		7DFDFF5D20B3FBFF0096D25A /* Wav.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wav.h; sourceTree = "<group>"; };
 		7DFDFF5E20B3FC000096D25A /* Wav.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wav.m; sourceTree = "<group>"; };
 		B8B9640BB43255AF81F1E68D /* Pods-ECIExampleLicode.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ECIExampleLicode.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ECIExampleLicode/Pods-ECIExampleLicode.release.xcconfig"; sourceTree = "<group>"; };
@@ -136,13 +150,18 @@
 		78E53A131B99F388004B63EF /* ECIExampleLicode */ = {
 			isa = PBXGroup;
 			children = (
+				7D26E53920B6525500D66326 /* VideoView */,
 				78621BE91BD16D36009D4342 /* Logger */,
 				78E53A181B99F388004B63EF /* AppDelegate.h */,
 				78E53A191B99F388004B63EF /* AppDelegate.m */,
 				78E53A1B1B99F388004B63EF /* MultiConferenceViewController.h */,
 				78E53A1C1B99F388004B63EF /* MultiConferenceViewController.m */,
+				7D26E52820B55F7C00D66326 /* ICNMainViewController.h */,
+				7D26E52920B55F7C00D66326 /* ICNMainViewController.m */,
 				78E53A3D1B99F3EF004B63EF /* LicodeServer.h */,
 				78E53A3E1B99F3EF004B63EF /* LicodeServer.m */,
+				7D26E53020B565A100D66326 /* UIViewController+Hidden.h */,
+				7D26E53120B565A100D66326 /* UIViewController+Hidden.m */,
 				781B3FEC1E6DDEF2003782EE /* Nuve.h */,
 				781B3FEB1E6DDEF2003782EE /* Nuve.m */,
 				78E53A211B99F388004B63EF /* Main.storyboard */,
@@ -179,6 +198,16 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		7D26E53920B6525500D66326 /* VideoView */ = {
+			isa = PBXGroup;
+			children = (
+				7D26E53520B5978B00D66326 /* ICNViewCallView.h */,
+				7D26E53620B5978B00D66326 /* ICNViewCallView.m */,
+				7D26E53A20B652A300D66326 /* ICNVideoView.h */,
+			);
+			path = VideoView;
+			sourceTree = "<group>";
+		};
 		C4B7398EE29893B353AD6D22 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,8 +226,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D26E53B20B652A300D66326 /* ICNVideoView.h in Headers */,
+				7D26E52A20B55F7C00D66326 /* ICNMainViewController.h in Headers */,
 				781B3FEE1E6DDEF3003782EE /* Nuve.h in Headers */,
 				7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */,
+				7D26E53720B5978B00D66326 /* ICNViewCallView.h in Headers */,
+				7D26E53220B565A100D66326 /* UIViewController+Hidden.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,6 +283,7 @@
 		78E53A091B99F388004B63EF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = ICN;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Alvaro Gil";
 				TargetAttributes = {
@@ -366,12 +400,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D26E53320B565A100D66326 /* UIViewController+Hidden.m in Sources */,
+				7D26E52B20B55F7C00D66326 /* ICNMainViewController.m in Sources */,
 				78E53A3F1B99F3EF004B63EF /* LicodeServer.m in Sources */,
 				78E53A1A1B99F388004B63EF /* AppDelegate.m in Sources */,
 				78E53A1D1B99F388004B63EF /* MultiConferenceViewController.m in Sources */,
 				78E53A171B99F388004B63EF /* main.mm in Sources */,
 				7DFDFF6020B3FC000096D25A /* Wav.m in Sources */,
 				78621BEA1BD16D36009D4342 /* Logger.m in Sources */,
+				7D26E53820B5978B00D66326 /* ICNViewCallView.m in Sources */,
 				781B3FED1E6DDEF2003782EE /* Nuve.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -521,7 +558,6 @@
 			baseConfigurationReference = 0AFC3F47948CBC54E4DB4FE1 /* Pods-ECIExampleLicode.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 39NFZ65S8H;
@@ -560,7 +596,6 @@
 			baseConfigurationReference = B8B9640BB43255AF81F1E68D /* Pods-ECIExampleLicode.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 39NFZ65S8H;

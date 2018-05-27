@@ -10,8 +10,7 @@
 #import "ECPlayerView.h"
 
 @implementation ECPlayerView {
-    
-CGRect viewFrame;
+
 
 }
 
@@ -24,7 +23,6 @@ CGRect viewFrame;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    viewFrame = frame;
     if (self = [super initWithFrame:frame]) {
         _videoView = [[RTCEAGLVideoView alloc] initWithFrame:frame];
         [self addSubview:_videoView];

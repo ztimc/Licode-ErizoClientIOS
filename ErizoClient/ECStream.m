@@ -298,8 +298,8 @@
 - (AVCaptureDeviceFormat *)selectFormatForDevice:(AVCaptureDevice *)device {
     NSArray<AVCaptureDeviceFormat *> *formats =
     [RTCCameraVideoCapturer supportedFormatsForDevice:device];
-    int targetWidth = 208;
-    int targetHeight = 351;
+    int targetWidth = [[UIScreen mainScreen] bounds].size.width;
+    int targetHeight = [[UIScreen mainScreen] bounds].size.height;
     AVCaptureDeviceFormat *selectedFormat = nil;
     int currentDiff = INT_MAX;
     
