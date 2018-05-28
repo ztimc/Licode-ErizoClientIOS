@@ -28,6 +28,14 @@
 		7D26E53720B5978B00D66326 /* ICNViewCallView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D26E53520B5978B00D66326 /* ICNViewCallView.h */; };
 		7D26E53820B5978B00D66326 /* ICNViewCallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D26E53620B5978B00D66326 /* ICNViewCallView.m */; };
 		7D26E53B20B652A300D66326 /* ICNVideoView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D26E53A20B652A300D66326 /* ICNVideoView.h */; };
+		7D5DBA8520BBB22200A8757E /* ICNSettingTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D5DBA8320BBB22200A8757E /* ICNSettingTableViewController.h */; };
+		7D5DBA8620BBB22200A8757E /* ICNSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBA8420BBB22200A8757E /* ICNSettingTableViewController.m */; };
+		7D5DBA8920BBDC8700A8757E /* ICNSettingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D5DBA8720BBDC8700A8757E /* ICNSettingViewController.h */; };
+		7D5DBA8A20BBDC8700A8757E /* ICNSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBA8820BBDC8700A8757E /* ICNSettingViewController.m */; };
+		7D5DBA8F20BBF0E100A8757E /* ICNSettingModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D5DBA8D20BBF0E100A8757E /* ICNSettingModel.h */; };
+		7D5DBA9020BBF0E100A8757E /* ICNSettingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBA8E20BBF0E100A8757E /* ICNSettingModel.m */; };
+		7D5DBA9320BBF75800A8757E /* ICNSettingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D5DBA9120BBF75800A8757E /* ICNSettingStore.h */; };
+		7D5DBA9420BBF75800A8757E /* ICNSettingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBA9220BBF75800A8757E /* ICNSettingStore.m */; };
 		7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DFDFF5D20B3FBFF0096D25A /* Wav.h */; };
 		7DFDFF6020B3FC000096D25A /* Wav.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFDFF5E20B3FC000096D25A /* Wav.m */; };
 /* End PBXBuildFile section */
@@ -76,6 +84,14 @@
 		7D26E53520B5978B00D66326 /* ICNViewCallView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNViewCallView.h; sourceTree = "<group>"; };
 		7D26E53620B5978B00D66326 /* ICNViewCallView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNViewCallView.m; sourceTree = "<group>"; };
 		7D26E53A20B652A300D66326 /* ICNVideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNVideoView.h; sourceTree = "<group>"; };
+		7D5DBA8320BBB22200A8757E /* ICNSettingTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSettingTableViewController.h; sourceTree = "<group>"; };
+		7D5DBA8420BBB22200A8757E /* ICNSettingTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSettingTableViewController.m; sourceTree = "<group>"; };
+		7D5DBA8720BBDC8700A8757E /* ICNSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSettingViewController.h; sourceTree = "<group>"; };
+		7D5DBA8820BBDC8700A8757E /* ICNSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSettingViewController.m; sourceTree = "<group>"; };
+		7D5DBA8D20BBF0E100A8757E /* ICNSettingModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSettingModel.h; sourceTree = "<group>"; };
+		7D5DBA8E20BBF0E100A8757E /* ICNSettingModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSettingModel.m; sourceTree = "<group>"; };
+		7D5DBA9120BBF75800A8757E /* ICNSettingStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSettingStore.h; sourceTree = "<group>"; };
+		7D5DBA9220BBF75800A8757E /* ICNSettingStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSettingStore.m; sourceTree = "<group>"; };
 		7DFDFF5D20B3FBFF0096D25A /* Wav.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wav.h; sourceTree = "<group>"; };
 		7DFDFF5E20B3FC000096D25A /* Wav.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wav.m; sourceTree = "<group>"; };
 		B8B9640BB43255AF81F1E68D /* Pods-ECIExampleLicode.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ECIExampleLicode.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ECIExampleLicode/Pods-ECIExampleLicode.release.xcconfig"; sourceTree = "<group>"; };
@@ -158,6 +174,14 @@
 				78E53A1C1B99F388004B63EF /* MultiConferenceViewController.m */,
 				7D26E52820B55F7C00D66326 /* ICNMainViewController.h */,
 				7D26E52920B55F7C00D66326 /* ICNMainViewController.m */,
+				7D5DBA8320BBB22200A8757E /* ICNSettingTableViewController.h */,
+				7D5DBA8420BBB22200A8757E /* ICNSettingTableViewController.m */,
+				7D5DBA8720BBDC8700A8757E /* ICNSettingViewController.h */,
+				7D5DBA8820BBDC8700A8757E /* ICNSettingViewController.m */,
+				7D5DBA9120BBF75800A8757E /* ICNSettingStore.h */,
+				7D5DBA9220BBF75800A8757E /* ICNSettingStore.m */,
+				7D5DBA8D20BBF0E100A8757E /* ICNSettingModel.h */,
+				7D5DBA8E20BBF0E100A8757E /* ICNSettingModel.m */,
 				78E53A3D1B99F3EF004B63EF /* LicodeServer.h */,
 				78E53A3E1B99F3EF004B63EF /* LicodeServer.m */,
 				7D26E53020B565A100D66326 /* UIViewController+Hidden.h */,
@@ -226,12 +250,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D5DBA9320BBF75800A8757E /* ICNSettingStore.h in Headers */,
 				7D26E53B20B652A300D66326 /* ICNVideoView.h in Headers */,
 				7D26E52A20B55F7C00D66326 /* ICNMainViewController.h in Headers */,
 				781B3FEE1E6DDEF3003782EE /* Nuve.h in Headers */,
+				7D5DBA8520BBB22200A8757E /* ICNSettingTableViewController.h in Headers */,
 				7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */,
 				7D26E53720B5978B00D66326 /* ICNViewCallView.h in Headers */,
 				7D26E53220B565A100D66326 /* UIViewController+Hidden.h in Headers */,
+				7D5DBA8920BBDC8700A8757E /* ICNSettingViewController.h in Headers */,
+				7D5DBA8F20BBF0E100A8757E /* ICNSettingModel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,12 +428,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D5DBA8A20BBDC8700A8757E /* ICNSettingViewController.m in Sources */,
 				7D26E53320B565A100D66326 /* UIViewController+Hidden.m in Sources */,
+				7D5DBA9020BBF0E100A8757E /* ICNSettingModel.m in Sources */,
 				7D26E52B20B55F7C00D66326 /* ICNMainViewController.m in Sources */,
 				78E53A3F1B99F3EF004B63EF /* LicodeServer.m in Sources */,
 				78E53A1A1B99F388004B63EF /* AppDelegate.m in Sources */,
 				78E53A1D1B99F388004B63EF /* MultiConferenceViewController.m in Sources */,
 				78E53A171B99F388004B63EF /* main.mm in Sources */,
+				7D5DBA8620BBB22200A8757E /* ICNSettingTableViewController.m in Sources */,
+				7D5DBA9420BBF75800A8757E /* ICNSettingStore.m in Sources */,
 				7DFDFF6020B3FC000096D25A /* Wav.m in Sources */,
 				78621BEA1BD16D36009D4342 /* Logger.m in Sources */,
 				7D26E53820B5978B00D66326 /* ICNViewCallView.m in Sources */,

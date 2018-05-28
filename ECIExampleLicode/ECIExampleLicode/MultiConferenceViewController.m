@@ -229,8 +229,9 @@ static CGFloat vHeight = 120.0;
     
     RTCDefaultVideoDecoderFactory *decoderFactory = [[RTCDefaultVideoDecoderFactory alloc] init];
     RTCDefaultVideoEncoderFactory *encoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
-    RTCPeerConnectionFactory *_peerFactory = [[RTCPeerConnectionFactory alloc] initWithEncoderFactory:encoderFactory
-                                                                                       decoderFactory:decoderFactory];
+    RTCPeerConnectionFactory *_peerFactory = [[RTCPeerConnectionFactory alloc]
+                                              initWithEncoderFactory:encoderFactory
+                                              decoderFactory:decoderFactory];
     remoteRoom = [[ECRoom alloc] initWithDelegate:self
                                    andPeerFactory:_peerFactory];
     

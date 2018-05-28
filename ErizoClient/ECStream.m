@@ -6,8 +6,13 @@
 //  MIT License, see LICENSE file for details.
 //
 
+
+
+
 @import WebRTC;
 #import "ECStream.h"
+
+static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
 
 @implementation ECStream
 
@@ -298,8 +303,18 @@
 - (AVCaptureDeviceFormat *)selectFormatForDevice:(AVCaptureDevice *)device {
     NSArray<AVCaptureDeviceFormat *> *formats =
     [RTCCameraVideoCapturer supportedFormatsForDevice:device];
-    int targetWidth = [[UIScreen mainScreen] bounds].size.width;
-    int targetHeight = [[UIScreen mainScreen] bounds].size.height;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *resolution = [defaults objectForKey:kVideoResolutionKey];
+    int targetWidth;
+    int targetHeight;
+    if(resolution){
+        targetWidth = [self videoResolutionComponentAtIndex:0 inString:resolution];
+        targetHeight = [self videoResolutionComponentAtIndex:1 inString:resolution];
+    }else{
+        targetWidth = 480;
+        targetHeight = 360;
+    }
+    
     AVCaptureDeviceFormat *selectedFormat = nil;
     int currentDiff = INT_MAX;
     
@@ -326,5 +341,16 @@
     return maxFramerate;
 }
 
+
+- (int)videoResolutionComponentAtIndex:(int)index inString:(NSString *)resolution {
+    if (index != 0 && index != 1) {
+        return 0;
+    }
+    NSArray<NSString *> *components = [resolution componentsSeparatedByString:@"x"];
+    if (components.count != 2) {
+        return 0;
+    }
+    return components[index].intValue;
+}
 
 @end
