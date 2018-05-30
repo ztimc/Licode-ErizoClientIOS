@@ -32,7 +32,7 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
             _peerFactory = [[RTCPeerConnectionFactory alloc] init];
         }
         _recordEnabled = NO;
-        _publishingStats = NO;
+        _publishingStats = YES;
         p2pClients = [NSMutableDictionary dictionary];
         _streamsByStreamId = [NSMutableDictionary dictionary];
         self.status = ECRoomStatusReady;
@@ -446,7 +446,7 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
     NSString *mediaType = [statsReport.values objectForKey:kRTCStatsMediaTypeKey];
 
     unsigned long kbps = [self calculateBitrateForStatsReport:statsReport];
-
+    
     L_INFO(@"RTC Publishing %@ Stats Type: %@, ID: %@ Dict: %@",
            mediaType, statsReport.type, statsReport.reportId, statsReport.values);
     L_INFO(@"RTC Publishing %@ kbps: %lld", mediaType, kbps)

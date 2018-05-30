@@ -11,6 +11,7 @@
 #import "ICNVideoView.h"
 #import "ECStream.h"
 #import "ECPlayerView.h"
+#import "ICNStatsView.h"
 
 @interface ICNViewCallView : UIView
 
@@ -19,6 +20,7 @@
 
 @property(nonatomic,readonly) NSMutableArray<ICNVideoView> *videoViews;
 @property(nonatomic,readonly) UIScrollView *videoScrollView;
+@property(nonatomic,strong) ICNStatsView *statsView;
 @property(nonatomic, strong) AVCaptureSession *captureSession;
 
 

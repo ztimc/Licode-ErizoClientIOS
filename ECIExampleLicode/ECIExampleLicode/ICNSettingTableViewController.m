@@ -22,13 +22,20 @@ typedef NS_ENUM(int, ARDSettingsSections) {
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *settingTableView;
+
+@property (weak, nonatomic) IBOutlet UITableViewCell *cell192x144;
+
+@property (weak, nonatomic) IBOutlet UITableViewCell *cell320x240;
+
 @property (weak, nonatomic) IBOutlet UITableViewCell *cell480x360;
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cell640x480;
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cell1280x720;
 
-@property (weak, nonatomic) IBOutlet UITextField *bitrateTextField;
+@property (weak, nonatomic) IBOutlet UITextField *audioBitrateTextField;
+
+@property (weak, nonatomic) IBOutlet UITextField *videoBitarateTextField;
 
 @end
 
@@ -45,11 +52,15 @@ typedef NS_ENUM(int, ARDSettingsSections) {
         currentSlected.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     
-    _bitrateTextField.keyboardType = UIKeyboardTypeNumberPad;
+    [self initTextField:_audioBitrateTextField bitrate:[_settingModel currentMaxAudioBitrateSettingFromStore].stringValue];
+    [self initTextField:_videoBitarateTextField bitrate:[_settingModel currentMaxVideoBitrateSettingFromStore].stringValue];
+}
+
+- (void)initTextField: (UITextField *)textField
+              bitrate: (NSString *)bitrate{
+    textField.keyboardType = UIKeyboardTypeNumberPad;
+    textField.text = bitrate;
     
-    NSString *currentMaxBitrate = [_settingModel currentMaxBitrateSettingFromStore].stringValue;
-    _bitrateTextField.text = currentMaxBitrate;
-    _bitrateTextField.delegate = self;
     UIToolbar *numberToolbar =
     [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50)];
     numberToolbar.items = @[
@@ -62,9 +73,10 @@ typedef NS_ENUM(int, ARDSettingsSections) {
                                                             action:@selector(numberTextFieldDidEndEditing:)]
                             ];
     [numberToolbar sizeToFit];
-    
-    _bitrateTextField.inputAccessoryView = numberToolbar;
+    textField.delegate = self;
+    textField.inputAccessoryView = numberToolbar;
 }
+
 
 # pragma mark - Table view bitrate cell
 - (void)numberTextFieldDidEndEditing:(id)sender {
@@ -78,7 +90,11 @@ typedef NS_ENUM(int, ARDSettingsSections) {
         bitrateNumber = [NSNumber numberWithInteger:textField.text.intValue];
     }
     
-    [_settingModel storeMaxBitrateSetting:bitrateNumber];
+    if(textField == _videoBitarateTextField){
+        [_settingModel storeMaxVideoBitrateSetting:bitrateNumber];
+    }else if(textField == _audioBitrateTextField){
+        [_settingModel storeMaxAudioBitrateSetting:bitrateNumber];
+    }
 }
 
 # pragma mark - dataSource
@@ -87,8 +103,11 @@ typedef NS_ENUM(int, ARDSettingsSections) {
 }
 
 - (UITableViewCell *)resolut2Cell:(NSString *)resolut{
-    
-    if([resolut caseInsensitiveCompare:@"480x360"] == NSOrderedSame){
+    if([resolut caseInsensitiveCompare:@"192x144"] == NSOrderedSame){
+        return _cell192x144;
+    }else if([resolut caseInsensitiveCompare:@"320x240"] == NSOrderedSame){
+        return _cell320x240;
+    }else if([resolut caseInsensitiveCompare:@"480x360"] == NSOrderedSame){
         return _cell480x360;
     }else if([resolut caseInsensitiveCompare:@"640x480"] == NSOrderedSame){
         return _cell640x480;

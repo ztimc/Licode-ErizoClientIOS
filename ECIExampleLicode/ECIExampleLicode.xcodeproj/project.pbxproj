@@ -36,6 +36,8 @@
 		7D5DBA9020BBF0E100A8757E /* ICNSettingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBA8E20BBF0E100A8757E /* ICNSettingModel.m */; };
 		7D5DBA9320BBF75800A8757E /* ICNSettingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D5DBA9120BBF75800A8757E /* ICNSettingStore.h */; };
 		7D5DBA9420BBF75800A8757E /* ICNSettingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBA9220BBF75800A8757E /* ICNSettingStore.m */; };
+		7D7B930120BE415F0082C9F3 /* ICNStatsView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D7B92FF20BE415F0082C9F3 /* ICNStatsView.h */; };
+		7D7B930220BE415F0082C9F3 /* ICNStatsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7B930020BE415F0082C9F3 /* ICNStatsView.m */; };
 		7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DFDFF5D20B3FBFF0096D25A /* Wav.h */; };
 		7DFDFF6020B3FC000096D25A /* Wav.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFDFF5E20B3FC000096D25A /* Wav.m */; };
 /* End PBXBuildFile section */
@@ -92,6 +94,8 @@
 		7D5DBA8E20BBF0E100A8757E /* ICNSettingModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSettingModel.m; sourceTree = "<group>"; };
 		7D5DBA9120BBF75800A8757E /* ICNSettingStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSettingStore.h; sourceTree = "<group>"; };
 		7D5DBA9220BBF75800A8757E /* ICNSettingStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSettingStore.m; sourceTree = "<group>"; };
+		7D7B92FF20BE415F0082C9F3 /* ICNStatsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNStatsView.h; sourceTree = "<group>"; };
+		7D7B930020BE415F0082C9F3 /* ICNStatsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNStatsView.m; sourceTree = "<group>"; };
 		7DFDFF5D20B3FBFF0096D25A /* Wav.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wav.h; sourceTree = "<group>"; };
 		7DFDFF5E20B3FC000096D25A /* Wav.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wav.m; sourceTree = "<group>"; };
 		B8B9640BB43255AF81F1E68D /* Pods-ECIExampleLicode.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ECIExampleLicode.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ECIExampleLicode/Pods-ECIExampleLicode.release.xcconfig"; sourceTree = "<group>"; };
@@ -166,6 +170,7 @@
 		78E53A131B99F388004B63EF /* ECIExampleLicode */ = {
 			isa = PBXGroup;
 			children = (
+				7D7B92FA20BE3A800082C9F3 /* statistic */,
 				7D26E53920B6525500D66326 /* VideoView */,
 				78621BE91BD16D36009D4342 /* Logger */,
 				78E53A181B99F388004B63EF /* AppDelegate.h */,
@@ -232,6 +237,15 @@
 			path = VideoView;
 			sourceTree = "<group>";
 		};
+		7D7B92FA20BE3A800082C9F3 /* statistic */ = {
+			isa = PBXGroup;
+			children = (
+				7D7B92FF20BE415F0082C9F3 /* ICNStatsView.h */,
+				7D7B930020BE415F0082C9F3 /* ICNStatsView.m */,
+			);
+			path = statistic;
+			sourceTree = "<group>";
+		};
 		C4B7398EE29893B353AD6D22 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -255,6 +269,7 @@
 				7D26E52A20B55F7C00D66326 /* ICNMainViewController.h in Headers */,
 				781B3FEE1E6DDEF3003782EE /* Nuve.h in Headers */,
 				7D5DBA8520BBB22200A8757E /* ICNSettingTableViewController.h in Headers */,
+				7D7B930120BE415F0082C9F3 /* ICNStatsView.h in Headers */,
 				7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */,
 				7D26E53720B5978B00D66326 /* ICNViewCallView.h in Headers */,
 				7D26E53220B565A100D66326 /* UIViewController+Hidden.h in Headers */,
@@ -319,6 +334,11 @@
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 39NFZ65S8H;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					78E53A2C1B99F388004B63EF = {
 						CreatedOnToolsVersion = 6.4;
@@ -440,6 +460,7 @@
 				7D5DBA9420BBF75800A8757E /* ICNSettingStore.m in Sources */,
 				7DFDFF6020B3FC000096D25A /* Wav.m in Sources */,
 				78621BEA1BD16D36009D4342 /* Logger.m in Sources */,
+				7D7B930220BE415F0082C9F3 /* ICNStatsView.m in Sources */,
 				7D26E53820B5978B00D66326 /* ICNViewCallView.m in Sources */,
 				781B3FED1E6DDEF2003782EE /* Nuve.m in Sources */,
 			);

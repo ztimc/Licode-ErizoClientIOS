@@ -39,11 +39,11 @@
 
 
 /**
- 获取当前最大的bitrate
+ 获取当前最大的音频bitrate
 
- @return 最大bitrate值
+ @return 最大音频bitrate值
  */
-- (nullable NSNumber *)currentMaxBitrateSettingFromStore;
+- (nullable NSNumber *)currentMaxAudioBitrateSettingFromStore;
 
 
 /**
@@ -51,6 +51,21 @@
 
  @param bitrate
  */
-- (void)storeMaxBitrateSetting:(nullable NSNumber *)bitrate;
+- (void)storeMaxAudioBitrateSetting:(nullable NSNumber *)bitrate;
+
+/**
+ 获取当前最大的视频bitrate
+ 
+ @return 最大视频bitrate值
+ */
+- (nullable NSNumber *)currentMaxVideoBitrateSettingFromStore;
+
+
+/**
+ 存储bitrate
+ 
+ @param bitrate
+ */
+- (void)storeMaxVideoBitrateSetting:(nullable NSNumber *)bitrate;
 
 @end

@@ -14,6 +14,7 @@
 #import "Nuve.h"
 #import "ErizoClient.h"
 #import <Swiss/Swiss.h>
+#import "ICNSettingModel.h"
 
 
 
@@ -27,13 +28,15 @@ static CGFloat vHeight = 120.0;
 
 @interface MultiConferenceViewController () <UITextFieldDelegate,
                                              RTCEAGLVideoViewDelegate,
-                                             RTCAudioSessionDelegate>
+                                             RTCAudioSessionDelegate,
+                                             ECRoomStatsDelegate>
 @end
 
 @implementation MultiConferenceViewController {
     ECStream *localStream;
     ECRoom *remoteRoom;
     NSMutableArray *playerViews;
+    ICNSettingModel *settingMode;
 }
 
 - (void)viewDidLoad {
@@ -43,7 +46,7 @@ static CGFloat vHeight = 120.0;
 	
     // Initialize player views array
     playerViews = [NSMutableArray array];
-    
+    settingMode = [[ICNSettingModel alloc] init];
 
     // Access to local camera
     [self initializeLocalStream];
@@ -104,7 +107,14 @@ static CGFloat vHeight = 120.0;
 
 - (void)initializeLocalStream {
     // Initialize a stream and access local stream
-    localStream = [[ECStream alloc] initLocalStreamWithOptions:nil attributes:@{@"name":@"localStream"}];
+    NSNumber *vidoeBitrate = [settingMode currentMaxVideoBitrateSettingFromStore];
+    NSNumber *audioBitrate = [settingMode currentMaxAudioBitrateSettingFromStore];
+    NSMutableDictionary *options = [NSMutableDictionary dictionaryWithDictionary:@{
+                                        kStreamOptionMaxAudioBW: audioBitrate,
+                                                    kStreamOptionMaxVideoBW: vidoeBitrate,
+                                                    }];
+    
+    localStream = [[ECStream alloc] initLocalStreamWithOptions:options attributes:@{@"name":@"localStream"}];
     
     // Render local stream
     if ([localStream hasVideo]) {
@@ -234,6 +244,7 @@ static CGFloat vHeight = 120.0;
                                               decoderFactory:decoderFactory];
     remoteRoom = [[ECRoom alloc] initWithDelegate:self
                                    andPeerFactory:_peerFactory];
+    [remoteRoom setStatsDelegate:self];
     
     /*
      
@@ -471,6 +482,20 @@ static CGFloat vHeight = 120.0;
         self.leaveButton.hidden = show;
         self.unpublishButton.hidden = show;
 	});
+}
+
+- (void)room:(ECRoom *)room publishingClient:(ECClient *)publishingClient
+                                            mediaType:(NSString *)mediaType
+                                            ssrc:(NSString *)ssrc
+                                            didPublishingAtKbps:(long)kbps{
+    [_videoView.statsView setStats:mediaType kbps:kbps];
+}
+
+- (void)room:(ECRoom *)room publishingClient:(ECClient *)publishingClient
+                                            mediaType:(NSString *)mediaType
+                                            ssrc:(NSString *)ssrc
+                                            didReceiveStats:(RTCLegacyStatsReport *)statsReport{
+    
 }
 
 

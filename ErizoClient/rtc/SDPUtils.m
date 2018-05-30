@@ -94,7 +94,7 @@
 + (RTCSessionDescription *)descriptionForDescription:(RTCSessionDescription *)description
                                        bandwidthLimit:(NSInteger)bandwidthLimit
                                          forMediaType:(NSString *)mediaType {
-
+    
     NSString *mediaPattern = [NSString stringWithFormat:@"m=%@.*", mediaType];
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:mediaPattern
                                                                            options:NSRegularExpressionCaseInsensitive

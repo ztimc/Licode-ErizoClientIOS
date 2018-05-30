@@ -9,7 +9,8 @@
 #import "ICNSettingStore.h"
 
 static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
-static NSString *const kBitrateKey = @"rtc_max_bitrate_key";
+static NSString *const kAudioBitrateKey = @"rtc_audio_max_bitrate_key";
+static NSString *const kVideoBitrateKey = @"rtc_video_max_bitrate_key";
 
 
 @interface ICNSettingStore() {
@@ -21,15 +22,20 @@ static NSString *const kBitrateKey = @"rtc_max_bitrate_key";
 @implementation ICNSettingStore
 
 + (void)setDefaultsForVideoResolution:(NSString *)videoResolution
-                              bitrate:(nullable NSNumber *)bitrate{
+                              audioBitrate:(nullable NSNumber *)audioBitrate
+                              videoBitrate:(nullable NSNumber *)videoBitrate{
     NSMutableDictionary<NSString *, id> *defaultsDictionary = [[NSMutableDictionary alloc] init];
     
     if(videoResolution){
         defaultsDictionary[kVideoResolutionKey] = videoResolution;
     }
     
-    if(bitrate){
-        defaultsDictionary[kBitrateKey] = bitrate;
+    if(audioBitrate){
+        defaultsDictionary[kAudioBitrateKey] = audioBitrate;
+    }
+    
+    if(videoBitrate){
+        defaultsDictionary[kVideoBitrateKey] = audioBitrate;
     }
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDictionary];
@@ -51,13 +57,23 @@ static NSString *const kBitrateKey = @"rtc_max_bitrate_key";
     [self.storage synchronize];
 }
 
-- (nullable NSNumber *)maxBitrate {
-    return [self.storage objectForKey:kBitrateKey];
+- (nullable NSNumber *)maxAudioBitrate{
+    return [self.storage objectForKey:kAudioBitrateKey];
 }
 
-- (void)setMaxBitrate:(nullable NSNumber *)value {
-    [self.storage setObject:value forKey:kBitrateKey];
+- (void)setMaxAudioBitrate:(nullable NSNumber *)value{
+    [self.storage setObject:value forKey:kAudioBitrateKey];
     [self.storage synchronize];
 }
+
+- (nullable NSNumber *)maxVideoBitrate{
+     return [self.storage objectForKey:kVideoBitrateKey];
+}
+
+- (void)setMaxVideoBitrate:(nullable NSNumber *)value{
+    [self.storage setObject:value forKey:kVideoBitrateKey];
+    [self.storage synchronize];
+}
+
 
 @end

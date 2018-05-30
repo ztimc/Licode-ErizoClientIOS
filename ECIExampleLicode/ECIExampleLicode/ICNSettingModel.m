@@ -25,7 +25,9 @@
     static NSArray<NSString *> *_titles;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _titles = @[@"480x360",
+        _titles = @[@"192x144",
+                    @"320x240",
+                    @"480x360",
                     @"640x480",
                     @"1280x720"];
     });
@@ -98,13 +100,22 @@
     return YES;
 }
 
-- (nullable NSNumber *)currentMaxBitrateSettingFromStore {
+- (nullable NSNumber *)currentMaxAudioBitrateSettingFromStore{
     [self registerStoreDefaults];
-    return [[self settingsStore] maxBitrate];
+    return [[self settingsStore] maxAudioBitrate];
 }
 
-- (void)storeMaxBitrateSetting:(nullable NSNumber *)bitrate {
-    [[self settingsStore] setMaxBitrate:bitrate];
+- (void)storeMaxAudioBitrateSetting:(nullable NSNumber *)bitrate{
+    [[self settingsStore] setMaxAudioBitrate:bitrate];
+}
+
+- (nullable NSNumber *)currentMaxVideoBitrateSettingFromStore{
+    [self registerStoreDefaults];
+    return [[self settingsStore] maxVideoBitrate];
+}
+
+- (void)storeMaxVideoBitrateSetting:(nullable NSNumber *)bitrate{
+    [[self settingsStore] setMaxVideoBitrate:bitrate];
 }
 
 - (int)currentVideoResolutionWidthFromStore {
@@ -136,8 +147,7 @@
 }
 
 - (void)registerStoreDefaults {
-    [ICNSettingStore setDefaultsForVideoResolution:[self defaultVideoResolutionSetting] bitrate:nil];
-    
+    [ICNSettingStore setDefaultsForVideoResolution:[self defaultVideoResolutionSetting] audioBitrate:nil videoBitrate:nil];
 }
 
 @end

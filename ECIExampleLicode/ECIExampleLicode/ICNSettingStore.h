@@ -11,19 +11,18 @@
 @interface ICNSettingStore : NSObject
 
 + (void)setDefaultsForVideoResolution:(NSString *)videoResolution
-                              bitrate:(nullable NSNumber *)bitrate;
+                         audioBitrate:(nullable NSNumber *)audioBitrate
+                         videoBitrate:(nullable NSNumber *)videoBitrate;
 
 @property(nonatomic) NSString *videoResolution;
 
-/**
- * Returns current max bitrate number stored in the store.
- */
-- (nullable NSNumber *)maxBitrate;
 
-/**
- * Stores the provided value as maximum bitrate setting.
- * @param value the number to be stored
- */
-- (void)setMaxBitrate:(nullable NSNumber *)value;
+- (nullable NSNumber *)maxAudioBitrate;
+
+- (void)setMaxAudioBitrate:(nullable NSNumber *)value;
+
+- (nullable NSNumber *)maxVideoBitrate;
+
+- (void)setMaxVideoBitrate:(nullable NSNumber *)value;
 
 @end

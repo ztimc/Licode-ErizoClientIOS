@@ -50,15 +50,17 @@ static CGFloat vHeight = 160.0;
 - (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
+        _statsView = [[ICNStatsView alloc] initWithFrame:CGRectZero];
         ICNCameraPreviewView *preView = [[ICNCameraPreviewView alloc] initWithFrame:CGRectZero];
         _videoScrollView = [[UIScrollView alloc] initWithFrame: CGRectZero];
         _videoViews = [[NSMutableArray<ICNVideoView> alloc] init];
         _current = preView;
         _currentPosition = 0;
+
         
         [self addSubview:preView];
         [self addSubview:_videoScrollView];
-        
+        [self addSubview:_statsView];
         
     }
     return self;
@@ -84,6 +86,7 @@ static CGFloat vHeight = 160.0;
     _videoScrollView.contentOffset = CGPointZero;
     _videoScrollView.frame = scrollFrame;
     
+    _statsView.frame = CGRectMake(0, 20,bounds.size.width, 100);
    
 }
 
