@@ -35,7 +35,7 @@ static NSString *const kVideoBitrateKey = @"rtc_video_max_bitrate_key";
     }
     
     if(videoBitrate){
-        defaultsDictionary[kVideoBitrateKey] = audioBitrate;
+        defaultsDictionary[kVideoBitrateKey] = videoBitrate;
     }
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDictionary];

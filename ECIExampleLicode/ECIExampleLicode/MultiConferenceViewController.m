@@ -42,7 +42,7 @@ static CGFloat vHeight = 120.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
+    RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
 	
     // Initialize player views array
     playerViews = [NSMutableArray array];

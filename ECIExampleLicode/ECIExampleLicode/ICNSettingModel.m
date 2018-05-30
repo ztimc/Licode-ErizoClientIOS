@@ -146,8 +146,18 @@
     return @"480x360";
 }
 
+- (NSNumber *)defaultVideoBitrate {
+    return [[NSNumber alloc] initWithInt:300];
+}
+
+- (NSNumber *)defaultAudioBitrate {
+    return [[NSNumber alloc] initWithInt:100];;
+}
+
 - (void)registerStoreDefaults {
-    [ICNSettingStore setDefaultsForVideoResolution:[self defaultVideoResolutionSetting] audioBitrate:nil videoBitrate:nil];
+    [ICNSettingStore setDefaultsForVideoResolution:[self defaultVideoResolutionSetting]
+                                      audioBitrate:[self defaultAudioBitrate]
+                                      videoBitrate:[self defaultVideoBitrate]];
 }
 
 @end

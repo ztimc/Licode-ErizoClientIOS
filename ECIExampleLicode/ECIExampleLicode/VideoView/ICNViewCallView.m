@@ -56,12 +56,20 @@ static CGFloat vHeight = 160.0;
         _videoViews = [[NSMutableArray<ICNVideoView> alloc] init];
         _current = preView;
         _currentPosition = 0;
-
         
+        [_statsView setHidden:YES];
         [self addSubview:preView];
         [self addSubview:_videoScrollView];
         [self addSubview:_statsView];
         
+        UITapGestureRecognizer *tapRecognizer =
+        [[UITapGestureRecognizer alloc]
+         initWithTarget:self
+         action:@selector(didTripleTap:)];
+        tapRecognizer.numberOfTapsRequired = 3;
+        [self addGestureRecognizer:tapRecognizer];
+        
+        [self addGestureRecognizer:tapRecognizer];
     }
     return self;
 }
@@ -213,6 +221,10 @@ static CGFloat vHeight = 160.0;
 - (void)addBorderToView:(UIView *) view{
     view.layer.borderWidth = 1;
     view.layer.borderColor = [[UIColor colorWithRed:151.0/255 green:151.0/255 blue:151.0/255 alpha:1] CGColor];
+}
+
+- (void)didTripleTap:(UITapGestureRecognizer *)recognizer {
+    [_statsView setHidden:NO];
 }
 
 
