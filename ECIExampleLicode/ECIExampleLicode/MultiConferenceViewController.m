@@ -14,7 +14,9 @@
 #import "Nuve.h"
 #import "ErizoClient.h"
 #import <Swiss/Swiss.h>
+#import <CoreTelephony/CTCellularData.h>
 #import "ICNSettingModel.h"
+
 
 
 
@@ -74,7 +76,6 @@ static CGFloat vHeight = 120.0;
     [RTCAudioSessionConfiguration setWebRTCConfiguration:webRTCConfig];
     [self configureAudioSession];
     [self connect];
-    
 }
 
 
