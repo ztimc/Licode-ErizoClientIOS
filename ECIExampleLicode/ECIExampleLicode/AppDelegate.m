@@ -22,9 +22,10 @@
     
     // Initialize library
     [ErizoClient sharedInstance];
-    [[SSSwiss sharedInstance] initialize];
-    [[RTCAudioSession sharedInstance] setSabineDelegate:self];
+    [self initSwiss];
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+   
     return YES;
 }
 
@@ -48,6 +49,21 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)initSwiss{
+    [[NSNotificationCenter defaultCenter] addObserverForName:kSwissDidConnectNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));
+        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+            [[SSSwiss sharedInstance] setAGC:YES];
+            [[SSSwiss sharedInstance] setMusicMix:NO];
+            [[SSSwiss sharedInstance] setMonitor:(UInt8)0];
+            [[SSSwiss sharedInstance] setReverberaion:(UInt8)0];
+        });
+    }];
+    [[SSSwiss sharedInstance] initialize];
+    [[RTCAudioSession sharedInstance] setSabineDelegate:self];
+  
 }
 
 - (BOOL)hasDevice {
