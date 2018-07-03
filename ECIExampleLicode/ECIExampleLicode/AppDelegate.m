@@ -10,13 +10,22 @@
 #import "AppDelegate.h"
 #import "ErizoClient.h"
 #import <Swiss/Swiss.h>
-
+#import <MediaPlayer/MediaPlayer.h>
+#import <AVFoundation/AVFoundation.h>
+#import "ICNSabineDeviceConfigure.h"
 @interface AppDelegate ()<SabineDeviceDelegate>
+
+@property(nonatomic,strong)UISlider *volumeSlider;
+@property(nonatomic,strong)MPVolumeView *volumeView;
 
 @end
 
 @implementation AppDelegate
 
++ (AppDelegate *)sharedDelegate
+{
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
@@ -53,13 +62,14 @@
 
 - (void)initSwiss{
     [[NSNotificationCenter defaultCenter] addObserverForName:kSwissDidConnectNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));
-        dispatch_after(delayTime, dispatch_get_main_queue(), ^{
-            [[SSSwiss sharedInstance] setAGC:YES];
-            [[SSSwiss sharedInstance] setMusicMix:NO];
-            [[SSSwiss sharedInstance] setMonitor:(UInt8)0];
-            [[SSSwiss sharedInstance] setReverberaion:(UInt8)0];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [[AVAudioSession sharedInstance]setActive:YES error:nil];
+            [[AppDelegate sharedDelegate] setVolume:100];
+            ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
+            [deviceConfigrue configure];
         });
+        
     }];
     [[SSSwiss sharedInstance] initialize];
     [[RTCAudioSession sharedInstance] setSabineDelegate:self];
@@ -78,6 +88,64 @@
 
 - (void)stopRecoding {
     [[SSSwiss sharedInstance] stopRecord];
+}
+
+/**
+ 获取音量大小
+ 
+ @return 返回值
+ */
+-(float)getVolume{
+    //    在app刚刚初始化的时候使用MPVolumeView获取音量大小可能为0，因此使用[[AVAudioSession sharedInstance]outputVolume]，使用AVAudioSession需要导入头文件#import <AVFoundation/AVFoundation.h>
+    return self.volumeSlider.value > 0 ? self.volumeSlider.value : [[AVAudioSession sharedInstance]outputVolume];
+}
+
+
+/**
+ 设置音量大小
+ 
+ @param value 范围0~100
+ */
+- (void)setVolume:(float)value {
+    
+    self.volumeSlider = [self volumeSlider];
+    self.volumeView.showsVolumeSlider = YES; // 需要设置 showsVolumeSlider 为 YES
+    // 下面两句代码是关键
+    [self.volumeSlider setValue:value animated:NO];
+    [self.volumeSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+    [self.volumeView sizeToFit];
+}
+
+/**
+ 获取MPVolumeView
+ 
+ @return MPVolumeView
+ */
+- (MPVolumeView *)volumeView {
+    if (!_volumeView) {
+        _volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(-100, -100, 100, 100)];
+        //下面两行代码都会使音量界面重新显示
+        //        [_volumeView setHidden:YES];
+        //        [_volumeView removeFromSuperview];
+        [self.window addSubview:_volumeView];
+    }
+    return _volumeView;
+}
+
+/**
+ 获取MPVolumeView上面的滑条
+ 
+ @return UISlider
+ */
+- (UISlider *)volumeSlider {
+    UISlider* volumeSlider = nil;
+    for (UIView *view in [self.volumeView subviews]) {
+        if ([view.class.description isEqualToString:@"MPVolumeSlider"]){
+            volumeSlider = (UISlider *)view;
+            break;
+        }
+    }
+    return volumeSlider;
 }
 
 @end

@@ -129,6 +129,14 @@
     return [self videoResolutionComponentAtIndex:1 inString:resolution];
 }
 
+- (nullable NSString *)currentServerSettingFromStore{
+    [self registerStoreDefaults];
+    return [[self settingsStore] serverAddress];
+}
+
+- (void)storeServerSetting:(nullable NSString *)server{
+    [[self settingsStore] setserverAddress:server];
+}
 
 - (int)videoResolutionComponentAtIndex:(int)index inString:(NSString *)resolution {
     if (index != 0 && index != 1) {
@@ -143,21 +151,31 @@
 
 
 - (NSString *)defaultVideoResolutionSetting {
-    return @"480x360";
+    return @"640x480";
 }
 
 - (NSNumber *)defaultVideoBitrate {
-    return [[NSNumber alloc] initWithInt:300];
+    return [[NSNumber alloc] initWithInt:1000];
 }
 
 - (NSNumber *)defaultAudioBitrate {
-    return [[NSNumber alloc] initWithInt:100];;
+    return [[NSNumber alloc] initWithInt:128];
+}
+
+- (NSString *)defaultServer {
+    return [[self defaultServers] objectAtIndex:0];
+}
+
+- (NSArray<NSString *> *)defaultServers {
+   return @[@"中国",
+            @"美国"];
 }
 
 - (void)registerStoreDefaults {
     [ICNSettingStore setDefaultsForVideoResolution:[self defaultVideoResolutionSetting]
                                       audioBitrate:[self defaultAudioBitrate]
-                                      videoBitrate:[self defaultVideoBitrate]];
+                                      videoBitrate:[self defaultVideoBitrate]
+                                            server:[self defaultServer]];
 }
 
 @end

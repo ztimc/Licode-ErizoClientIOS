@@ -12,7 +12,8 @@
 
 + (void)setDefaultsForVideoResolution:(NSString *)videoResolution
                          audioBitrate:(nullable NSNumber *)audioBitrate
-                         videoBitrate:(nullable NSNumber *)videoBitrate;
+                         videoBitrate:(nullable NSNumber *)videoBitrate
+                         server:(nullable NSString *)server;
 
 @property(nonatomic) NSString *videoResolution;
 
@@ -24,5 +25,9 @@
 - (nullable NSNumber *)maxVideoBitrate;
 
 - (void)setMaxVideoBitrate:(nullable NSNumber *)value;
+
+- (nullable NSString *)serverAddress;
+
+- (void)setserverAddress:(nullable NSString *)value;
 
 @end

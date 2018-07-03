@@ -16,7 +16,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _videoView = [[RTCEAGLVideoView alloc] initWithFrame:self.frame];
+        _videoView = [[RTCMTLVideoView alloc] initWithFrame:self.frame];
         [self addSubview:_videoView];
     }
     return self;
@@ -24,7 +24,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _videoView = [[RTCEAGLVideoView alloc] initWithFrame:frame];
+        _videoView = [[RTCMTLVideoView alloc] initWithFrame:frame];
         [self addSubview:_videoView];
     }
     return self;

@@ -11,7 +11,7 @@
 static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
 static NSString *const kAudioBitrateKey = @"rtc_audio_max_bitrate_key";
 static NSString *const kVideoBitrateKey = @"rtc_video_max_bitrate_key";
-
+static NSString *const kServerKey = @"rtc_server_key";
 
 @interface ICNSettingStore() {
     NSUserDefaults *_storage;
@@ -23,7 +23,8 @@ static NSString *const kVideoBitrateKey = @"rtc_video_max_bitrate_key";
 
 + (void)setDefaultsForVideoResolution:(NSString *)videoResolution
                               audioBitrate:(nullable NSNumber *)audioBitrate
-                              videoBitrate:(nullable NSNumber *)videoBitrate{
+                              videoBitrate:(nullable NSNumber *)videoBitrate
+                              server:(nullable NSString *)server{
     NSMutableDictionary<NSString *, id> *defaultsDictionary = [[NSMutableDictionary alloc] init];
     
     if(videoResolution){
@@ -36,6 +37,10 @@ static NSString *const kVideoBitrateKey = @"rtc_video_max_bitrate_key";
     
     if(videoBitrate){
         defaultsDictionary[kVideoBitrateKey] = videoBitrate;
+    }
+    
+    if(server){
+        defaultsDictionary[kServerKey] = server;
     }
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDictionary];
@@ -72,6 +77,15 @@ static NSString *const kVideoBitrateKey = @"rtc_video_max_bitrate_key";
 
 - (void)setMaxVideoBitrate:(nullable NSNumber *)value{
     [self.storage setObject:value forKey:kVideoBitrateKey];
+    [self.storage synchronize];
+}
+
+- (nullable NSString *)serverAddress {
+    return [self.storage objectForKey:kServerKey];
+}
+
+- (void)setserverAddress:(nullable NSString *)value {
+    [self.storage setObject:value forKey:kServerKey];
     [self.storage synchronize];
 }
 

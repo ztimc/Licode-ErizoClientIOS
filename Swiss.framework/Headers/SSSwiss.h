@@ -51,6 +51,14 @@ FOUNDATION_EXPORT NSString *const kSwissMultipleDeviceErrorNotification;
  */
 - (void)setAGC:(BOOL)enable;
 
+
+/**
+ 设置增益
+
+ @param gain 0-100
+ */
+- (void)setGain:(UInt8)gain;
+
 /**
  ANS(噪声抑制)
 
@@ -78,6 +86,13 @@ FOUNDATION_EXPORT NSString *const kSwissMultipleDeviceErrorNotification;
  @param enable YES  打开 NO 关闭
  */
 - (void)setMusicMix:(BOOL)enable;
+
+/**
+ 声道转换
+ 
+ @param enable YES  打开 NO 关闭
+ */
+- (void)setSwapStereo:(BOOL)enable;
 
 /**
  响指检查开关

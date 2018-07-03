@@ -59,6 +59,6 @@
 @property (weak, nonatomic) ECStream *stream;
 
 /// View where the video gets rendered
-@property (strong, nonatomic) RTCEAGLVideoView *videoView;
+@property (strong, nonatomic) __kindof UIView<RTCVideoRenderer> *videoView;
 
 @end

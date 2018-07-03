@@ -68,4 +68,13 @@
  */
 - (void)storeMaxVideoBitrateSetting:(nullable NSNumber *)bitrate;
 
+
+- (nullable NSString *)currentServerSettingFromStore;
+
+
+- (void)storeServerSetting:(nullable NSString *)bitrate;
+
+
+- (NSArray<NSString *> *)defaultServers;
+
 @end

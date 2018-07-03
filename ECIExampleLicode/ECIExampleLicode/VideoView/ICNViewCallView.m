@@ -42,6 +42,9 @@ static CGFloat vHeight = 160.0;
 @end
 
 
+@interface ICNViewCallView () <RTCEAGLVideoViewDelegate>
+@end
+
 @implementation ICNViewCallView
 
 @synthesize captureSession = _captureSession;
@@ -51,29 +54,56 @@ static CGFloat vHeight = 160.0;
     self = [super initWithCoder:coder];
     if (self) {
         _statsView = [[ICNStatsView alloc] initWithFrame:CGRectZero];
+        _swissPanel = [[SwissPanel alloc] initWithFrame:CGRectZero];
         ICNCameraPreviewView *preView = [[ICNCameraPreviewView alloc] initWithFrame:CGRectZero];
         _videoScrollView = [[UIScrollView alloc] initWithFrame: CGRectZero];
         _videoViews = [[NSMutableArray<ICNVideoView> alloc] init];
         _current = preView;
-        _currentPosition = 0;
+        
         
         [_statsView setHidden:YES];
+        [_swissPanel setHidden:YES];
+        
         [self addSubview:preView];
         [self addSubview:_videoScrollView];
         [self addSubview:_statsView];
+        [self addSubview:_swissPanel];
         
         UITapGestureRecognizer *tapRecognizer =
         [[UITapGestureRecognizer alloc]
          initWithTarget:self
-         action:@selector(didTripleTap:)];
-        tapRecognizer.numberOfTapsRequired = 3;
+         action:@selector(didTripleHidde:)];
+        tapRecognizer.numberOfTapsRequired = 2;
         [self addGestureRecognizer:tapRecognizer];
         
-        [self addGestureRecognizer:tapRecognizer];
+        UITapGestureRecognizer *tapRecognizer1 =
+        [[UITapGestureRecognizer alloc]
+         initWithTarget:self
+         action:@selector(didTriplePanel:)];
+        tapRecognizer1.numberOfTapsRequired = 3;
+        [self addGestureRecognizer:tapRecognizer1];
+        
+        UITapGestureRecognizer *tapRecognizer2 =
+        [[UITapGestureRecognizer alloc]
+         initWithTarget:self
+         action:@selector(didTripleTap:)];
+        tapRecognizer2.numberOfTapsRequired = 4;
+        [self addGestureRecognizer:tapRecognizer2];
+        
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleDeviceOrientationDidChange:)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil
+         ];
+        
     }
     return self;
 }
 
+- (void)handleDeviceOrientationDidChange:(UIInterfaceOrientation)interfaceOrientation{
+    [self setNeedsLayout];
+}
 
 - (void)setCaptureSession:(AVCaptureSession *)captureSession {
     _captureSession = captureSession;
@@ -87,15 +117,25 @@ static CGFloat vHeight = 160.0;
 
 
 - (void)layoutSubviews {
-    NSLog(@"fucking");
     CGRect bounds = self.bounds;
+    
+    _swissPanel.frame = CGRectMake(0,
+                                   0,
+                                   bounds.size.width,
+                                   bounds.size.height / 2);
     [[_current getVideoView] setFrame:bounds];
+    
+    if([[_current getVideoView] isKindOfClass:[ICNPlayView class]]){
+        ICNPlayView *playView = (ICNPlayView *)[_current getVideoView];
+        playView.videoView.frame = bounds;
+    }
+    
     CGRect scrollFrame = CGRectMake(0, bounds.size.height - vHeight, bounds.size.width, vHeight);
     _videoScrollView.contentOffset = CGPointZero;
     _videoScrollView.frame = scrollFrame;
     
     _statsView.frame = CGRectMake(0, 20,bounds.size.width, 100);
-   
+    
 }
 
 - (CGRect)obtainFrameByIndex:(NSInteger)index {
@@ -113,6 +153,7 @@ static CGFloat vHeight = 160.0;
     CGRect frame = [self obtainFrameByIndex:_videoViews.count];
     ICNPlayView *playView = [[ICNPlayView alloc] initWithLiveStream:stream frame:frame];
     playView.videoView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    
     [self addBorderToView:playView];
     [self addClickAction:playView];
     [_videoScrollView addSubview:playView];
@@ -219,12 +260,37 @@ static CGFloat vHeight = 160.0;
 }
 
 - (void)addBorderToView:(UIView *) view{
-    view.layer.borderWidth = 1;
+   /* view.layer.borderWidth = 1;
     view.layer.borderColor = [[UIColor colorWithRed:151.0/255 green:151.0/255 blue:151.0/255 alpha:1] CGColor];
+    */
+}
+
+- (void)didTripleHidde:(UITapGestureRecognizer *)recognizer {
+    [_statsView setHidden:YES];
+    [_swissPanel setHidden:YES];
 }
 
 - (void)didTripleTap:(UITapGestureRecognizer *)recognizer {
     [_statsView setHidden:NO];
+    [_swissPanel setHidden:YES];
+}
+
+- (void)didTriplePanel:(UITapGestureRecognizer *)recognizer {
+    [_swissPanel setHidden:NO];
+    [_statsView setHidden:YES];
+}
+
+- (void)videoView:(nonnull RTCEAGLVideoView *)videoView didChangeVideoSize:(CGSize)size {
+        
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIDeviceOrientationDidChangeNotification
+                                                  object:nil
+     ];
+    [[UIDevice currentDevice]endGeneratingDeviceOrientationNotifications];
 }
 
 

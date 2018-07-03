@@ -170,11 +170,10 @@
 
     if (_peerSocketId) {
         _isInitiator = NO;
-        [self startPublishSignaling];
     } else {
         _isInitiator = YES;
-        [self startPublishSignaling];
     }
+    [self startPublishSignaling];
 }
 
 - (void)signalingChannelPublishFailed:(ECSignalingChannel *)signalingChannel {

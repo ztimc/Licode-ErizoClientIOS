@@ -28,6 +28,8 @@ typedef enum _DEVICE_NAME{
 
 @interface SSDeviceInfo : NSObject
 
+//获取固件名称
+- (DEVICE_NAME)getDeviceName;
 //获取协议波版本
 - (NSNumber *)getProtocol;
 //获取固件版本

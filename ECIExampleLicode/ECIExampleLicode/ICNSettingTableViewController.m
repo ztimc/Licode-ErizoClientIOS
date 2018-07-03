@@ -12,13 +12,15 @@
 typedef NS_ENUM(int, ARDSettingsSections) {
     
     ARDSettingsSectionBitRate = 0,
-    ARDSettingsSectionVideoResolution
+    ARDSettingsSectionVideoResolution,
+    ARDSettingsSectionStatistics,
+    ARDSettingsSectionServer
 };
 
 @interface ICNSettingTableViewController ()<UITextFieldDelegate>{
     ICNSettingModel *_settingModel;
-    UITableViewCell *currentSlected;
-    
+    UITableViewCell *currentSlectedResolutCell;
+    UITableViewCell *currentSlectedServerCell;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *settingTableView;
@@ -32,10 +34,12 @@ typedef NS_ENUM(int, ARDSettingsSections) {
 @property (weak, nonatomic) IBOutlet UITableViewCell *cell640x480;
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *cell1280x720;
+@property (weak, nonatomic) IBOutlet UITableViewCell *usCell;
 
 @property (weak, nonatomic) IBOutlet UITextField *audioBitrateTextField;
 
 @property (weak, nonatomic) IBOutlet UITextField *videoBitarateTextField;
+@property (weak, nonatomic) IBOutlet UITableViewCell *cnCell;
 
 @end
 
@@ -47,13 +51,21 @@ typedef NS_ENUM(int, ARDSettingsSections) {
     
     NSString *currentResolut = [_settingModel currentVideoResolutionSettingFromStore];
     
-    currentSlected = [self resolut2Cell:currentResolut];
-    if(currentSlected){
-        currentSlected.accessoryType = UITableViewCellAccessoryCheckmark;
+    currentSlectedResolutCell = [self resolut2Cell:currentResolut];
+    if(currentSlectedResolutCell){
+        currentSlectedResolutCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     
     [self initTextField:_audioBitrateTextField bitrate:[_settingModel currentMaxAudioBitrateSettingFromStore].stringValue];
     [self initTextField:_videoBitarateTextField bitrate:[_settingModel currentMaxVideoBitrateSettingFromStore].stringValue];
+    
+    NSString *server = [_settingModel currentServerSettingFromStore];
+    
+    currentSlectedServerCell = [self server2cell:server];
+    if(currentSlectedServerCell){
+        currentSlectedServerCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
+    
 }
 
 - (void)initTextField: (UITextField *)textField
@@ -102,6 +114,10 @@ typedef NS_ENUM(int, ARDSettingsSections) {
     return [_settingModel availableVideoResolutions];
 }
 
+- (NSArray<NSString *> *)serverArray {
+    return [_settingModel defaultServers];
+}
+
 - (UITableViewCell *)resolut2Cell:(NSString *)resolut{
     if([resolut caseInsensitiveCompare:@"192x144"] == NSOrderedSame){
         return _cell192x144;
@@ -117,6 +133,15 @@ typedef NS_ENUM(int, ARDSettingsSections) {
     return nil;
 }
 
+- (UITableViewCell *)server2cell:(NSString *)resolut{
+    if([resolut caseInsensitiveCompare:@"中国"] == NSOrderedSame){
+        return _cnCell;
+    }else if([resolut caseInsensitiveCompare:@"美国"] == NSOrderedSame){
+        return _usCell;
+    }
+    return nil;
+}
+
 # pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView cellForRowAtIndexPath:indexPath].selected = false;
@@ -126,7 +151,9 @@ typedef NS_ENUM(int, ARDSettingsSections) {
         case ARDSettingsSectionVideoResolution:
             [self tableView:tableView disSelectVideoResolutionAtIndex:indexPath];
             break;
-       
+        case ARDSettingsSectionServer:
+            [self tableView:tableView disSelectServerAtIndex:indexPath];
+            break;
         default:
             break;
     }
@@ -135,9 +162,9 @@ typedef NS_ENUM(int, ARDSettingsSections) {
 
 # pragma mark - Table view reslution cell
 - (void)selectedCell:(NSIndexPath * _Nonnull)indexPath tableViewCell:(UITableViewCell * _Nonnull)tableViewCell {
-    currentSlected.accessoryType = UITableViewCellAccessoryNone;
-    currentSlected = tableViewCell;
-    currentSlected.accessoryType = UITableViewCellAccessoryCheckmark;
+    currentSlectedResolutCell.accessoryType = UITableViewCellAccessoryNone;
+    currentSlectedResolutCell = tableViewCell;
+    currentSlectedResolutCell.accessoryType = UITableViewCellAccessoryCheckmark;
     [_settingTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -148,6 +175,21 @@ typedef NS_ENUM(int, ARDSettingsSections) {
     
     NSString *videoResolution = self.videoResolutionArray[indexPath.row];
     [_settingModel storeVideoResolutionSetting:videoResolution];
+}
+# pragma mark - Table view server cell
+- (void)selectedServerCell:(NSIndexPath * _Nonnull)indexPath tableViewCell:(UITableViewCell * _Nonnull)tableViewCell {
+    currentSlectedServerCell.accessoryType = UITableViewCellAccessoryNone;
+    currentSlectedServerCell = tableViewCell;
+    currentSlectedServerCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    [_settingTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView
+disSelectServerAtIndex:(NSIndexPath *)indexPath {
+    UITableViewCell *tableViewCell = [tableView cellForRowAtIndexPath:indexPath];
+    [self selectedServerCell:indexPath tableViewCell:tableViewCell];
+    NSString *server = self.serverArray[indexPath.row];
+    [_settingModel storeServerSetting:server];
 }
 
 

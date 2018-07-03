@@ -16,7 +16,8 @@
 #import <Swiss/Swiss.h>
 #import <CoreTelephony/CTCellularData.h>
 #import "ICNSettingModel.h"
-
+#import "AppDelegate.h"
+#import "ICNSabineDeviceConfigure.h"
 
 
 
@@ -43,7 +44,10 @@ static CGFloat vHeight = 120.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [[AVAudioSession sharedInstance]setActive:YES error:nil];
+    [[AppDelegate sharedDelegate] setVolume:100];
+    ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
+    [deviceConfigrue configure];
     RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
 	
     // Initialize player views array
@@ -396,7 +400,7 @@ static CGFloat vHeight = 120.0;
     // Setup a fram and init a player.
     CGRect frame = CGRectMake(0, 0, vWidth, vHeight);
     ECPlayerView *playerView = [[ECPlayerView alloc] initWithLiveStream:stream frame:frame];
-	playerView.videoView.delegate = self;
+	
     
     // Add button to unsubscribe the stream
     CGRect closeFrame = CGRectMake(0, playerView.frame.size.height - 20,

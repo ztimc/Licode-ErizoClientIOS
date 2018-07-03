@@ -7,6 +7,7 @@
 //
 
 #import "Nuve.h"
+#import "ICNSettingModel.h"
 #include <stdlib.h>
 #include <CommonCrypto/CommonHMAC.h>
 
@@ -19,6 +20,8 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
 + (instancetype)sharedInstance {
     static dispatch_once_t once;
     static id sharedInstance;
+    
+   
     dispatch_once(&once, ^{
         NSAssert(kNuveHost, @"kNuvehost cannot be nil!");
         NSAssert(kNuveServiceId, @"kNuveServiceId cannot be nil!");
@@ -181,6 +184,16 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
          authorization:(NSString *)authorization
             completion:(NuveHTTPCallback)completion {
 
+    ICNSettingModel *model = [[ICNSettingModel alloc] init];
+    NSString *server = [model currentServerSettingFromStore];
+    if(server){
+        if([server caseInsensitiveCompare:@"美国"] == NSOrderedSame){
+            kNuveHost =  @"http://18.222.176.169:3001";
+        }else{
+            kNuveHost = @"https://webrtc.muguovr.cn:3004";
+        }
+    }
+    
     NSURL *url = [NSURL URLWithString:[kNuveHost stringByAppendingString:path]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 

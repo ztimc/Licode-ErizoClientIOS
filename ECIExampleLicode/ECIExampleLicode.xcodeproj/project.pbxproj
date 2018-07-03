@@ -28,6 +28,10 @@
 		7D26E53720B5978B00D66326 /* ICNViewCallView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D26E53520B5978B00D66326 /* ICNViewCallView.h */; };
 		7D26E53820B5978B00D66326 /* ICNViewCallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D26E53620B5978B00D66326 /* ICNViewCallView.m */; };
 		7D26E53B20B652A300D66326 /* ICNVideoView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D26E53A20B652A300D66326 /* ICNVideoView.h */; };
+		7D29C87720CFBF63008C649A /* SwissPanel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D29C87520CFBF62008C649A /* SwissPanel.h */; };
+		7D29C87820CFBF63008C649A /* SwissPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D29C87620CFBF63008C649A /* SwissPanel.m */; };
+		7D29C87B20CFCDA9008C649A /* ICNSabineDeviceConfigure.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D29C87920CFCDA9008C649A /* ICNSabineDeviceConfigure.h */; };
+		7D29C87C20CFCDA9008C649A /* ICNSabineDeviceConfigure.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D29C87A20CFCDA9008C649A /* ICNSabineDeviceConfigure.m */; };
 		7D5DBA8520BBB22200A8757E /* ICNSettingTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D5DBA8320BBB22200A8757E /* ICNSettingTableViewController.h */; };
 		7D5DBA8620BBB22200A8757E /* ICNSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBA8420BBB22200A8757E /* ICNSettingTableViewController.m */; };
 		7D5DBA8920BBDC8700A8757E /* ICNSettingViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D5DBA8720BBDC8700A8757E /* ICNSettingViewController.h */; };
@@ -86,6 +90,10 @@
 		7D26E53520B5978B00D66326 /* ICNViewCallView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNViewCallView.h; sourceTree = "<group>"; };
 		7D26E53620B5978B00D66326 /* ICNViewCallView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNViewCallView.m; sourceTree = "<group>"; };
 		7D26E53A20B652A300D66326 /* ICNVideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNVideoView.h; sourceTree = "<group>"; };
+		7D29C87520CFBF62008C649A /* SwissPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwissPanel.h; sourceTree = "<group>"; };
+		7D29C87620CFBF63008C649A /* SwissPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwissPanel.m; sourceTree = "<group>"; };
+		7D29C87920CFCDA9008C649A /* ICNSabineDeviceConfigure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSabineDeviceConfigure.h; sourceTree = "<group>"; };
+		7D29C87A20CFCDA9008C649A /* ICNSabineDeviceConfigure.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSabineDeviceConfigure.m; sourceTree = "<group>"; };
 		7D5DBA8320BBB22200A8757E /* ICNSettingTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSettingTableViewController.h; sourceTree = "<group>"; };
 		7D5DBA8420BBB22200A8757E /* ICNSettingTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSettingTableViewController.m; sourceTree = "<group>"; };
 		7D5DBA8720BBDC8700A8757E /* ICNSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSettingViewController.h; sourceTree = "<group>"; };
@@ -170,6 +178,8 @@
 		78E53A131B99F388004B63EF /* ECIExampleLicode */ = {
 			isa = PBXGroup;
 			children = (
+				7D29C87520CFBF62008C649A /* SwissPanel.h */,
+				7D29C87620CFBF63008C649A /* SwissPanel.m */,
 				7D7B92FA20BE3A800082C9F3 /* statistic */,
 				7D26E53920B6525500D66326 /* VideoView */,
 				78621BE91BD16D36009D4342 /* Logger */,
@@ -197,6 +207,8 @@
 				78E53A241B99F388004B63EF /* Images.xcassets */,
 				78E53A261B99F388004B63EF /* LaunchScreen.xib */,
 				78E53A141B99F388004B63EF /* Supporting Files */,
+				7D29C87920CFCDA9008C649A /* ICNSabineDeviceConfigure.h */,
+				7D29C87A20CFCDA9008C649A /* ICNSabineDeviceConfigure.m */,
 			);
 			path = ECIExampleLicode;
 			sourceTree = "<group>";
@@ -267,10 +279,12 @@
 				7D5DBA9320BBF75800A8757E /* ICNSettingStore.h in Headers */,
 				7D26E53B20B652A300D66326 /* ICNVideoView.h in Headers */,
 				7D26E52A20B55F7C00D66326 /* ICNMainViewController.h in Headers */,
+				7D29C87B20CFCDA9008C649A /* ICNSabineDeviceConfigure.h in Headers */,
 				781B3FEE1E6DDEF3003782EE /* Nuve.h in Headers */,
 				7D5DBA8520BBB22200A8757E /* ICNSettingTableViewController.h in Headers */,
 				7D7B930120BE415F0082C9F3 /* ICNStatsView.h in Headers */,
 				7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */,
+				7D29C87720CFBF63008C649A /* SwissPanel.h in Headers */,
 				7D26E53720B5978B00D66326 /* ICNViewCallView.h in Headers */,
 				7D26E53220B565A100D66326 /* UIViewController+Hidden.h in Headers */,
 				7D5DBA8920BBDC8700A8757E /* ICNSettingViewController.h in Headers */,
@@ -432,6 +446,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D29C87820CFBF63008C649A /* SwissPanel.m in Sources */,
 				7D5DBA8A20BBDC8700A8757E /* ICNSettingViewController.m in Sources */,
 				7D26E53320B565A100D66326 /* UIViewController+Hidden.m in Sources */,
 				7D5DBA9020BBF0E100A8757E /* ICNSettingModel.m in Sources */,
@@ -440,6 +455,7 @@
 				78E53A1A1B99F388004B63EF /* AppDelegate.m in Sources */,
 				78E53A1D1B99F388004B63EF /* MultiConferenceViewController.m in Sources */,
 				78E53A171B99F388004B63EF /* main.mm in Sources */,
+				7D29C87C20CFCDA9008C649A /* ICNSabineDeviceConfigure.m in Sources */,
 				7D5DBA8620BBB22200A8757E /* ICNSettingTableViewController.m in Sources */,
 				7D5DBA9420BBF75800A8757E /* ICNSettingStore.m in Sources */,
 				7DFDFF6020B3FC000096D25A /* Wav.m in Sources */,
@@ -627,8 +643,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = sabinetek.licode.icnceshi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "22653dbe-63d1-4dc4-b4a1-197a59b20235";
-				PROVISIONING_PROFILE_SPECIFIER = icntestpp;
+				PROVISIONING_PROFILE = "756cd50a-6f99-44e9-af9c-ee5546ea5c1b";
+				PROVISIONING_PROFILE_SPECIFIER = icnpp3;
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
@@ -664,8 +680,8 @@
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = sabinetek.licode.icnceshi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "22653dbe-63d1-4dc4-b4a1-197a59b20235";
-				PROVISIONING_PROFILE_SPECIFIER = icntestpp;
+				PROVISIONING_PROFILE = "756cd50a-6f99-44e9-af9c-ee5546ea5c1b";
+				PROVISIONING_PROFILE_SPECIFIER = icnpp3;
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";

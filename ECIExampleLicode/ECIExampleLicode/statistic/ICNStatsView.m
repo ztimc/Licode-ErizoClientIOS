@@ -30,8 +30,8 @@
 
 - (void)layoutSubviews{
     CGRect frame = self.bounds;
-    CGRect audioFrame = CGRectMake(0, 0, frame.size.width, frame.size.height / 2);
-    CGRect videoFrame = CGRectMake(0, frame.size.height / 2, frame.size.width, frame.size.height / 2);
+    CGRect audioFrame = CGRectMake(20, 0, frame.size.width-40, frame.size.height / 2);
+    CGRect videoFrame = CGRectMake(20, frame.size.height / 2, frame.size.width - 40, frame.size.height / 2);
     _audioStatsLable.frame = audioFrame;
     _videoStatsLable.frame = videoFrame;
 }

@@ -12,16 +12,21 @@
 #import "ECStream.h"
 #import "ECPlayerView.h"
 #import "ICNStatsView.h"
+#import "SwissPanel.h"
 
-@interface ICNViewCallView : UIView
+@interface ICNViewCallView : UIView 
 
 @property(nonatomic, strong,readonly) id<ICNVideoView> current;
-@property(nonatomic, assign,readonly) NSInteger currentPosition;
+
 
 @property(nonatomic,readonly) NSMutableArray<ICNVideoView> *videoViews;
 @property(nonatomic,readonly) UIScrollView *videoScrollView;
 @property(nonatomic,strong) ICNStatsView *statsView;
 @property(nonatomic, strong) AVCaptureSession *captureSession;
+@property(nonatomic,readonly) SwissPanel *swissPanel;
+
+
+
 
 
 - (void)watchStream:(ECStream *)stream;
