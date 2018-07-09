@@ -51,6 +51,12 @@
         [_reverberationSlider setMaximumValue:100];
         [_reverberationSlider setMinimumValue:0];
         
+        
+        [_gainSlider setValue:40];
+        [_monitorSlider setValue:50];
+        [_reverberationSlider setValue:0];
+        
+        
         [_gainSlider addTarget:self action:@selector(onGainSliderChange:)
                        forControlEvents:UIControlEventValueChanged];
         [_monitorSlider addTarget:self action:@selector(onMonitorSliderChange:)
@@ -72,6 +78,13 @@
         [_mixTextLable setText:@"混音"];
         [_agcTextLable setText:@"自动增益"];
         [_stereoTextLable setText:@"声道互换"];
+        
+        [_gainTextLable setTextColor:UIColor.greenColor];
+        [_monitorTextLable setTextColor:UIColor.greenColor];
+        [_reverberationTextLable setTextColor:UIColor.greenColor];
+        [_mixTextLable setTextColor:UIColor.greenColor];
+        [_agcTextLable setTextColor:UIColor.greenColor];
+        [_stereoTextLable setTextColor:UIColor.greenColor];
         
         [self addSubview:_gainSlider];
         [self addSubview:_monitorSlider];

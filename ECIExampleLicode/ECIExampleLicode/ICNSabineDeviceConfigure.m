@@ -14,17 +14,16 @@
 - (void)configure{
     SSDeviceInfo *deviceInfo = [[SSDeviceInfo alloc] init];
     [[SSSwiss sharedInstance] setMusicMix:NO];
-    [[SSSwiss sharedInstance] setMonitor:(UInt8)0];
     [[SSSwiss sharedInstance] setReverberaion:(UInt8)0];
+    [[SSSwiss sharedInstance] setAGC:NO];
     
     DEVICE_NAME name = [deviceInfo getDeviceName];
     
     if(name == S_MIC){
-        [[SSSwiss sharedInstance] setAGC:NO];
         [[SSSwiss sharedInstance] setGain:15];
     }else if(name == ALAYA_PRO || name == ALAYA_SILVER){
-        [[SSSwiss sharedInstance] setAGC:NO];
-        [[SSSwiss sharedInstance] setGain:30];
+        [[SSSwiss sharedInstance] setGain:40];
+        [[SSSwiss sharedInstance] setMonitor:(UInt8)50];
     }
 }
 
