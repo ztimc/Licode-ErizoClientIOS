@@ -42,6 +42,8 @@
 		7D5DBA9420BBF75800A8757E /* ICNSettingStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DBA9220BBF75800A8757E /* ICNSettingStore.m */; };
 		7D7B930120BE415F0082C9F3 /* ICNStatsView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D7B92FF20BE415F0082C9F3 /* ICNStatsView.h */; };
 		7D7B930220BE415F0082C9F3 /* ICNStatsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7B930020BE415F0082C9F3 /* ICNStatsView.m */; };
+		7DACE71320F74B7600AD6C7E /* ICNEditText.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DACE71120F74B7600AD6C7E /* ICNEditText.h */; };
+		7DACE71420F74B7600AD6C7E /* ICNEditText.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DACE71220F74B7600AD6C7E /* ICNEditText.m */; };
 		7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DFDFF5D20B3FBFF0096D25A /* Wav.h */; };
 		7DFDFF6020B3FC000096D25A /* Wav.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFDFF5E20B3FC000096D25A /* Wav.m */; };
 /* End PBXBuildFile section */
@@ -104,6 +106,9 @@
 		7D5DBA9220BBF75800A8757E /* ICNSettingStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSettingStore.m; sourceTree = "<group>"; };
 		7D7B92FF20BE415F0082C9F3 /* ICNStatsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNStatsView.h; sourceTree = "<group>"; };
 		7D7B930020BE415F0082C9F3 /* ICNStatsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNStatsView.m; sourceTree = "<group>"; };
+		7DACE71020F73E4E00AD6C7E /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		7DACE71120F74B7600AD6C7E /* ICNEditText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNEditText.h; sourceTree = "<group>"; };
+		7DACE71220F74B7600AD6C7E /* ICNEditText.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNEditText.m; sourceTree = "<group>"; };
 		7DFDFF5D20B3FBFF0096D25A /* Wav.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wav.h; sourceTree = "<group>"; };
 		7DFDFF5E20B3FC000096D25A /* Wav.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wav.m; sourceTree = "<group>"; };
 		B8B9640BB43255AF81F1E68D /* Pods-ECIExampleLicode.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ECIExampleLicode.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ECIExampleLicode/Pods-ECIExampleLicode.release.xcconfig"; sourceTree = "<group>"; };
@@ -209,6 +214,9 @@
 				78E53A141B99F388004B63EF /* Supporting Files */,
 				7D29C87920CFCDA9008C649A /* ICNSabineDeviceConfigure.h */,
 				7D29C87A20CFCDA9008C649A /* ICNSabineDeviceConfigure.m */,
+				7DACE71020F73E4E00AD6C7E /* PrefixHeader.pch */,
+				7DACE71120F74B7600AD6C7E /* ICNEditText.h */,
+				7DACE71220F74B7600AD6C7E /* ICNEditText.m */,
 			);
 			path = ECIExampleLicode;
 			sourceTree = "<group>";
@@ -278,6 +286,7 @@
 			files = (
 				7D5DBA9320BBF75800A8757E /* ICNSettingStore.h in Headers */,
 				7D26E53B20B652A300D66326 /* ICNVideoView.h in Headers */,
+				7DACE71320F74B7600AD6C7E /* ICNEditText.h in Headers */,
 				7D26E52A20B55F7C00D66326 /* ICNMainViewController.h in Headers */,
 				7D29C87B20CFCDA9008C649A /* ICNSabineDeviceConfigure.h in Headers */,
 				781B3FEE1E6DDEF3003782EE /* Nuve.h in Headers */,
@@ -463,6 +472,7 @@
 				7D7B930220BE415F0082C9F3 /* ICNStatsView.m in Sources */,
 				7D26E53820B5978B00D66326 /* ICNViewCallView.m in Sources */,
 				781B3FED1E6DDEF2003782EE /* Nuve.m in Sources */,
+				7DACE71420F74B7600AD6C7E /* ICNEditText.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +636,7 @@
 					"$(inherited)/**",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PREFIX_HEADER = ECIExampleLicode/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -667,6 +678,7 @@
 					"$(inherited)/**",
 					"$(PROJECT_DIR)",
 				);
+				GCC_PREFIX_HEADER = ECIExampleLicode/PrefixHeader.pch;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",

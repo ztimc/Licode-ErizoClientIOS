@@ -20,10 +20,11 @@
 #import "ICNSabineDeviceConfigure.h"
 
 
-
+/*
 static NSString *roomId = @"59de889a35189661b58017a1";
 static NSString *roomName = @"IOS Demo APP";
 static NSString *kDefaultUserName = @"ErizoIOS";
+ */
 
 // Remote video view size
 static CGFloat vWidth = 100.0;
@@ -33,6 +34,11 @@ static CGFloat vHeight = 120.0;
                                              RTCEAGLVideoViewDelegate,
                                              RTCAudioSessionDelegate,
                                              ECRoomStatsDelegate>
+
+@property(nonatomic,strong) NSString *roomName;
+@property(nonatomic,strong) NSString *userName;
+@property(nonatomic,assign) ChatMode mode;
+
 @end
 
 @implementation MultiConferenceViewController {
@@ -40,10 +46,24 @@ static CGFloat vHeight = 120.0;
     ECRoom *remoteRoom;
     NSMutableArray *playerViews;
     ICNSettingModel *settingMode;
+    ICNViewCallView *videoView;
+}
+
+- (instancetype) initWithMode:(ChatMode)mode
+                     roomName:(NSString*)roomName
+                     userName:(NSString*)userNmae{
+    self = [super init];
+    if(self){
+        self.roomName = roomName;
+        self.userName = userNmae;
+        self.mode = mode;
+    }
+    return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [[AVAudioSession sharedInstance]setActive:YES error:nil];
     [[AppDelegate sharedDelegate] setVolume:100];
     ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
@@ -53,10 +73,7 @@ static CGFloat vHeight = 120.0;
     // Initialize player views array
     playerViews = [NSMutableArray array];
     settingMode = [[ICNSettingModel alloc] init];
-
-    // Access to local camera
-    [self initializeLocalStream];
-
+    
     // Setup UI
     [self setupUI];
     
@@ -79,6 +96,10 @@ static CGFloat vHeight = 120.0;
     webRTCConfig.outputNumberOfChannels = 2;
     [RTCAudioSessionConfiguration setWebRTCConfiguration:webRTCConfig];
     [self configureAudioSession];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated{
     [self connect];
 }
 
@@ -88,26 +109,8 @@ static CGFloat vHeight = 120.0;
 }
 
 - (void)setupUI {
-    self.statusLabel.userInteractionEnabled = YES;
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]
-                                            initWithTarget:self
-                                                    action:@selector(didTapLabelWithGesture:)];
-    [self.statusLabel addGestureRecognizer:tapGesture];
-
-    [self showCallConnectViews:YES updateStatusMessage:@"Ready"];
-    
-    UIColor *barColor = [UIColor colorWithRed:73/255.0 green:145/255.0 blue:255/255.0 alpha:0.82];
-    self.navigationController.navigationBar.barTintColor = barColor;
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-    self.title = @"会议室";
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
-    backItem.title = @"返回";
-    self.navigationItem.backBarButtonItem = backItem;
-    
-    self.navigationController.navigationBar.translucent = NO;
+    videoView = [[ICNViewCallView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:videoView];
 }
 
 - (void)initializeLocalStream {
@@ -123,7 +126,7 @@ static CGFloat vHeight = 120.0;
     
     // Render local stream
     if ([localStream hasVideo]) {
-        _videoView.captureSession = localStream.capturer.captureSession;
+        [videoView setCaptureSession:[localStream capturer].captureSession];
     }
     
 }
@@ -139,8 +142,8 @@ static CGFloat vHeight = 120.0;
 	[self showCallConnectViews:NO updateStatusMessage:@"Room connected!"];
 
     NSDictionary *attributes = @{
-						   @"name": kDefaultUserName,
-						   @"actualName": kDefaultUserName,
+						   @"name": _roomName,
+						   @"actualName": _userName,
 						   @"type": @"public",
 						   };
     [localStream setAttributes:attributes];
@@ -155,7 +158,7 @@ static CGFloat vHeight = 120.0;
 }
 
 - (void)room:(ECRoom *)room didPublishStream:(ECStream *)stream {
-    [self.unpublishButton setTitle:@"UnPublish" forState:UIControlStateNormal];
+
 	[self showCallConnectViews:NO
            updateStatusMessage:[NSString stringWithFormat:@"Published with ID: %@", stream.streamId]];
 }
@@ -166,7 +169,7 @@ static CGFloat vHeight = 120.0;
 
     // We have subscribed so let's watch the stream.
    // [self watchStream:stream];
-    [_videoView watchStream:stream];
+    [videoView watchStream:stream];
 }
 
 - (void)room:(ECRoom *)room didUnSubscribeStream:(ECStream *)stream {
@@ -199,7 +202,7 @@ static CGFloat vHeight = 120.0;
 - (void)room:(ECRoom *)room didUnpublishStream:(ECStream *)stream {
     dispatch_async(dispatch_get_main_queue(), ^{
         localStream = nil;
-        [_unpublishButton setTitle:@"Publish" forState:UIControlStateNormal];
+       
     });
 }
 
@@ -236,7 +239,6 @@ static CGFloat vHeight = 120.0;
         [self initializeLocalStream];
     }
     
-    NSString *username = kDefaultUserName;
     [self showCallConnectViews:NO
            updateStatusMessage:@"Connecting with the room..."];
     
@@ -297,18 +299,19 @@ static CGFloat vHeight = 120.0;
      }
      }];*/
     
-    [[Nuve sharedInstance] createToken:@"basicExampleRoom"
+    [[Nuve sharedInstance] createToken:_roomName
                               roomType:RoomTypeMCU
-                              username:username
+                              username:_userName
                                   role:@"presenter"
                             completion:^(BOOL success, NSString *token) {
                                 if (success) {
-                                    [remoteRoom connectWithEncodedToken:token];
+                                    [self->remoteRoom connectWithEncodedToken:token];
                                 } else {
                                     [self showCallConnectViews:YES
                                            updateStatusMessage:@"Error!"];
                                 }
                             }];
+    
     
     
     /* Method 2.2: Create a token for a given room id.
@@ -349,7 +352,7 @@ static CGFloat vHeight = 120.0;
     [remoteRoom leave];
     remoteRoom = nil;
     [self showCallConnectViews:YES updateStatusMessage:@"Ready"];
-    _videoView.captureSession = nil;
+    videoView.captureSession = nil;
     [localStream.capturer stopCapture];
 }
 
@@ -359,20 +362,19 @@ static CGFloat vHeight = 120.0;
     } else {
         [self initializeLocalStream];
         [remoteRoom publish:localStream];
-        [self.unpublishButton setTitle:@"UnPublish" forState:UIControlStateNormal];
     }
 }
 
 - (void)didTapLabelWithGesture:(UITapGestureRecognizer *)tapGesture {
 	NSDictionary *data = @{
-						   @"name": kDefaultUserName,
+						   @"name": _userName,
 						   @"msg": @"my test message in licode chat room"
 						   };
 	[localStream sendData:data];
 	
 	NSDictionary *attributes = @{
-						   @"name": kDefaultUserName,
-						   @"actualName": kDefaultUserName,
+						   @"name": _userName,
+						   @"actualName": _userName,
 						   @"type": @"public",
 						   };
 	[localStream setAttributes:attributes];
@@ -420,7 +422,7 @@ static CGFloat vHeight = 120.0;
 }
 
 - (void)removeStream:(NSString *)streamId {
-    [_videoView removeStreamById:streamId];
+    [videoView removeStreamById:streamId];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -481,19 +483,14 @@ static CGFloat vHeight = 120.0;
 }
 
 - (void)showCallConnectViews:(BOOL)show updateStatusMessage:(NSString *)statusMessage {
-	dispatch_async(dispatch_get_main_queue(), ^{
-		self.statusLabel.text = statusMessage;
-		self.connectButton.hidden = !show;
-        self.leaveButton.hidden = show;
-        self.unpublishButton.hidden = show;
-	});
+	
 }
 
 - (void)room:(ECRoom *)room publishingClient:(ECClient *)publishingClient
                                             mediaType:(NSString *)mediaType
                                             ssrc:(NSString *)ssrc
                                             didPublishingAtKbps:(long)kbps{
-    [_videoView.statsView setStats:mediaType kbps:kbps];
+    [videoView.statsView setStats:mediaType kbps:kbps];
 }
 
 - (void)room:(ECRoom *)room publishingClient:(ECClient *)publishingClient

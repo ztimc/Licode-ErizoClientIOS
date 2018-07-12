@@ -11,16 +11,18 @@
 #import "ECRoom.h"
 #import "ICNViewCallView.h"
 
+typedef enum _ChatMode{
+    Audio = 0,
+    Video = 1
+} ChatMode;
+
 
 @interface MultiConferenceViewController : UIViewController <ECRoomDelegate>
 
-@property (strong, nonatomic) IBOutlet UIButton *connectButton;
-@property (strong, nonatomic) IBOutlet UIButton *leaveButton;
-@property (strong, nonatomic) IBOutlet UIButton *unpublishButton;
 
-@property (strong, nonatomic) IBOutlet UILabel *statusLabel;
-@property (weak, nonatomic) IBOutlet ICNViewCallView *videoView;
-
+- (instancetype) initWithMode:(ChatMode)mode
+                     roomName:(NSString*)roomName
+                     userName:(NSString*)userNmae;
 
 @end
 

@@ -50,62 +50,75 @@ static CGFloat vHeight = 160.0;
 @synthesize captureSession = _captureSession;
 
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
-    self = [super initWithCoder:coder];
-    if (self) {
-        _statsView = [[ICNStatsView alloc] initWithFrame:CGRectZero];
-        _swissPanel = [[SwissPanel alloc] initWithFrame:CGRectZero];
-        ICNCameraPreviewView *preView = [[ICNCameraPreviewView alloc] initWithFrame:CGRectZero];
-        _videoScrollView = [[UIScrollView alloc] initWithFrame: CGRectZero];
-        _videoViews = [[NSMutableArray<ICNVideoView> alloc] init];
-        _current = preView;
-        
-        
-        [_statsView setHidden:YES];
-        [_swissPanel setHidden:YES];
-        
-        [self addSubview:preView];
-        [self addSubview:_videoScrollView];
-        [self addSubview:_statsView];
-        [self addSubview:_swissPanel];
-        
-        UITapGestureRecognizer *tapRecognizer =
-        [[UITapGestureRecognizer alloc]
-         initWithTarget:self
-         action:@selector(didTripleHidde:)];
-        tapRecognizer.numberOfTapsRequired = 2;
-        [self addGestureRecognizer:tapRecognizer];
-        
-        UITapGestureRecognizer *tapRecognizer1 =
-        [[UITapGestureRecognizer alloc]
-         initWithTarget:self
-         action:@selector(didTriplePanel:)];
-        tapRecognizer1.numberOfTapsRequired = 3;
-        [self addGestureRecognizer:tapRecognizer1];
-        
-        UITapGestureRecognizer *tapRecognizer2 =
-        [[UITapGestureRecognizer alloc]
-         initWithTarget:self
-         action:@selector(didTripleTap:)];
-        tapRecognizer2.numberOfTapsRequired = 4;
-        [self addGestureRecognizer:tapRecognizer2];
-        
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleDeviceOrientationDidChange:)
-                                                     name:UIDeviceOrientationDidChangeNotification
-                                                   object:nil
-         ];
-        
+- (instancetype)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if(self){
+        [self initView];
     }
     return self;
 }
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self initView];
+    }
+    return self;
+}
+
+- (void)initView {
+    _statsView = [[ICNStatsView alloc] initWithFrame:CGRectZero];
+    _swissPanel = [[SwissPanel alloc] initWithFrame:CGRectZero];
+    ICNCameraPreviewView *preView = [[ICNCameraPreviewView alloc] initWithFrame:CGRectZero];
+    _videoScrollView = [[UIScrollView alloc] initWithFrame: CGRectZero];
+    _videoViews = [[NSMutableArray<ICNVideoView> alloc] init];
+    _current = preView;
+    
+    
+    [_statsView setHidden:YES];
+    [_swissPanel setHidden:YES];
+    
+    [self addSubview:preView];
+    [self addSubview:_videoScrollView];
+    [self addSubview:_statsView];
+    [self addSubview:_swissPanel];
+    
+    UITapGestureRecognizer *tapRecognizer =
+    [[UITapGestureRecognizer alloc]
+     initWithTarget:self
+     action:@selector(didTripleHidde:)];
+    tapRecognizer.numberOfTapsRequired = 2;
+    [self addGestureRecognizer:tapRecognizer];
+    
+    UITapGestureRecognizer *tapRecognizer1 =
+    [[UITapGestureRecognizer alloc]
+     initWithTarget:self
+     action:@selector(didTriplePanel:)];
+    tapRecognizer1.numberOfTapsRequired = 3;
+    [self addGestureRecognizer:tapRecognizer1];
+    
+    UITapGestureRecognizer *tapRecognizer2 =
+    [[UITapGestureRecognizer alloc]
+     initWithTarget:self
+     action:@selector(didTripleTap:)];
+    tapRecognizer2.numberOfTapsRequired = 4;
+    [self addGestureRecognizer:tapRecognizer2];
+    
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleDeviceOrientationDidChange:)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil
+     ];
+}
+
 
 - (void)handleDeviceOrientationDidChange:(UIInterfaceOrientation)interfaceOrientation{
     [self setNeedsLayout];
 }
 
 - (void)setCaptureSession:(AVCaptureSession *)captureSession {
+    
     _captureSession = captureSession;
     for(int i = 0; i < self.subviews.count; i++) {
         if([self.subviews[i] isKindOfClass:[ICNCameraPreviewView class]]){

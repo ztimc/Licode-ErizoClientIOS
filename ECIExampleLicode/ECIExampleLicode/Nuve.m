@@ -60,11 +60,26 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
 //=========================================================================================
 
 - (void)listRoomsWithCompletion:(NuveListRoomsCallback)completion {
-    NSString *endpoint = @"/rooms";
-    NSString *authorizationHeader = [self authorizationHeaderForUserName:nil
-                                                                    role:nil];
+    NSString *endpoint = @"/getRooms";
+    
+    [self performRequest:endpoint method:@"GET" postData:nil authorization:nil
+              completion:^(BOOL success, id data) {
+                  if (success) {
+                      completion(YES, data);
+                  } else {
+                      completion(NO, nil);
+                  }
+              }];
+}
 
-    [self performRequest:endpoint method:@"GET" postData:nil authorization:authorizationHeader
+- (void)getUsersByRoom:(NSString *)room
+           completion:(NuveUserListCallback)completion {
+    
+    
+    NSString *endpoint = [NSString stringWithFormat:@"/getUsers/%@/", room];
+    
+    
+    [self performRequest:endpoint method:@"GET" postData:nil authorization:nil
               completion:^(BOOL success, id data) {
                   if (success) {
                       completion(YES, data);

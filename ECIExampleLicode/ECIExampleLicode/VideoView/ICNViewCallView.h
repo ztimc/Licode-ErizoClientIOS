@@ -22,12 +22,8 @@
 @property(nonatomic,readonly) NSMutableArray<ICNVideoView> *videoViews;
 @property(nonatomic,readonly) UIScrollView *videoScrollView;
 @property(nonatomic,strong) ICNStatsView *statsView;
-@property(nonatomic, strong) AVCaptureSession *captureSession;
+@property(nonatomic,strong) AVCaptureSession *captureSession;
 @property(nonatomic,readonly) SwissPanel *swissPanel;
-
-
-
-
 
 - (void)watchStream:(ECStream *)stream;
 
