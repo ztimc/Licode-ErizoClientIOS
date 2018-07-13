@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol ICNVideoView <NSObject>
+@protocol ICNVideoViewDelegete <NSObject>
 
 - (UIView *)getVideoView;
 

@@ -10,7 +10,7 @@
 
 static CGFloat vHeight = 160.0;
 
-@interface ICNCameraPreviewView : RTCCameraPreviewView<ICNVideoView>
+@interface ICNCameraPreviewView : RTCCameraPreviewView<ICNVideoViewDelegete>
 
 @end
 
@@ -26,7 +26,7 @@ static CGFloat vHeight = 160.0;
 
 @end
 
-@interface ICNPlayView : ECPlayerView<ICNVideoView>
+@interface ICNPlayView : ECPlayerView<ICNVideoViewDelegete>
 @end
 
 @implementation ICNPlayView
@@ -71,7 +71,7 @@ static CGFloat vHeight = 160.0;
     _swissPanel = [[SwissPanel alloc] initWithFrame:CGRectZero];
     ICNCameraPreviewView *preView = [[ICNCameraPreviewView alloc] initWithFrame:CGRectZero];
     _videoScrollView = [[UIScrollView alloc] initWithFrame: CGRectZero];
-    _videoViews = [[NSMutableArray<ICNVideoView> alloc] init];
+    _videoViews = [[NSMutableArray<ICNVideoViewDelegete> alloc] init];
     _current = preView;
     
     
@@ -222,15 +222,15 @@ static CGFloat vHeight = 160.0;
 - (void)switchStream:(id)sender {
     UIGestureRecognizer *gesture = (UIGestureRecognizer *)sender;
     
-    id<ICNVideoView> clickedVideoView = (id<ICNVideoView>)gesture.view;
+    id<ICNVideoViewDelegete> clickedVideoView = (id<ICNVideoViewDelegete>)gesture.view;
     [clickedVideoView.getVideoView removeGestureRecognizer:gesture];
     [self swichView:clickedVideoView];
 }
 
-- (void)swichView:(id<ICNVideoView>)playView {
-    id<ICNVideoView> clickedVideoView = playView;
+- (void)swichView:(id<ICNVideoViewDelegete>)playView {
+    id<ICNVideoViewDelegete> clickedVideoView = playView;
     UIView *clickedView = [clickedVideoView getVideoView];
-    id<ICNVideoView> currentVideoView = _current;
+    id<ICNVideoViewDelegete> currentVideoView = _current;
     UIView *currentView = [currentVideoView getVideoView];
     [self addClickAction:currentView];
     

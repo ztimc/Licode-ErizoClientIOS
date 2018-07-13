@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <WebRTC/RTCCameraPreviewView.h>
-#import "ICNVideoView.h"
+#import "ICNVideoViewDelegete.h"
 #import "ECStream.h"
 #import "ECPlayerView.h"
 #import "ICNStatsView.h"
@@ -16,10 +16,10 @@
 
 @interface ICNViewCallView : UIView 
 
-@property(nonatomic, strong,readonly) id<ICNVideoView> current;
+@property(nonatomic, strong,readonly) id<ICNVideoViewDelegete> current;
 
 
-@property(nonatomic,readonly) NSMutableArray<ICNVideoView> *videoViews;
+@property(nonatomic,readonly) NSMutableArray<ICNVideoViewDelegete> *videoViews;
 @property(nonatomic,readonly) UIScrollView *videoScrollView;
 @property(nonatomic,strong) ICNStatsView *statsView;
 @property(nonatomic,strong) AVCaptureSession *captureSession;
