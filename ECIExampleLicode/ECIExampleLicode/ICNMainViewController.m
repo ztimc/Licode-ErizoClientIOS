@@ -10,7 +10,7 @@
 #import "Nuve.h"
 #import "ICNEditText.h"
 #import "MultiConferenceViewController.h"
-
+#import "ICNRoomView.h"
 
 @interface ICNMainViewController ()
 
@@ -96,7 +96,9 @@
     mainFame.origin.y = 84;
     mainIcon.frame = mainFame;
     [self.view addSubview:mainIcon];
-  
+    
+    //ICNRoomView *roomView = [[ICNRoomView alloc] initWithFrame:self.view.bounds];
+   // [self.view addSubview:roomView];
 }
 
 - (void)onJionButtonClick:(UIButton *)buttion {

@@ -276,6 +276,8 @@ static CGFloat vHeight = 160.0;
    /* view.layer.borderWidth = 1;
     view.layer.borderColor = [[UIColor colorWithRed:151.0/255 green:151.0/255 blue:151.0/255 alpha:1] CGColor];
     */
+    view.layer.cornerRadius = 10;
+    view.layer.masksToBounds = YES;
 }
 
 - (void)didTripleHidde:(UITapGestureRecognizer *)recognizer {
@@ -294,7 +296,7 @@ static CGFloat vHeight = 160.0;
 }
 
 - (void)videoView:(nonnull RTCEAGLVideoView *)videoView didChangeVideoSize:(CGSize)size {
-        
+    
 }
 
 - (void)dealloc

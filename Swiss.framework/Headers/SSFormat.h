@@ -10,6 +10,12 @@
 
 @interface SSFormat : NSObject
 
+/**
+ 编码类型:
+ 0: opus
+ 1: sbc
+ */
+@property (nonatomic,assign) int codec;
 
 /**
  采样率，如 48000,44100,16000等

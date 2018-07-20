@@ -122,7 +122,7 @@ static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
     
     if ([(NSNumber *)[_streamOptions objectForKey:kStreamOptionAudio] boolValue])
         [self generateAudioTracks];
-
+    
     return _mediaStream;
 }
 
@@ -274,10 +274,12 @@ static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
     }
     
     //NSInteger fps = [self selectFpsForFormat:format];
-    NSInteger fps = 25;
+    NSInteger fps = 20;
 
      [_capturer startCaptureWithDevice:device format:format fps:fps];
 }
+
+
 
 - (void)stopCapture {
     [_capturer stopCapture];

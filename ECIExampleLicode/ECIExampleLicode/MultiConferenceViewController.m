@@ -18,6 +18,7 @@
 #import "ICNSettingModel.h"
 #import "AppDelegate.h"
 #import "ICNSabineDeviceConfigure.h"
+#import "ICNRoomView.h"
 
 
 /*
@@ -26,14 +27,11 @@ static NSString *roomName = @"IOS Demo APP";
 static NSString *kDefaultUserName = @"ErizoIOS";
  */
 
-// Remote video view size
-static CGFloat vWidth = 100.0;
-static CGFloat vHeight = 120.0;
-
 @interface MultiConferenceViewController () <UITextFieldDelegate,
                                              RTCEAGLVideoViewDelegate,
                                              RTCAudioSessionDelegate,
-                                             ECRoomStatsDelegate>
+                                             ECRoomStatsDelegate,
+                                             ICNRoomViewDelegete>
 
 @property(nonatomic,strong) NSString *roomName;
 @property(nonatomic,strong) NSString *userName;
@@ -46,7 +44,7 @@ static CGFloat vHeight = 120.0;
     ECRoom *remoteRoom;
     NSMutableArray *playerViews;
     ICNSettingModel *settingMode;
-    ICNViewCallView *videoView;
+    ICNRoomView *videoView;
 }
 
 - (instancetype) initWithMode:(ChatMode)mode
@@ -73,9 +71,6 @@ static CGFloat vHeight = 120.0;
     // Initialize player views array
     playerViews = [NSMutableArray array];
     settingMode = [[ICNSettingModel alloc] init];
-    
-    // Setup UI
-    [self setupUI];
     
     RTCAudioSessionConfiguration *webRTCConfig =
     [RTCAudioSessionConfiguration webRTCConfiguration];
@@ -108,22 +103,24 @@ static CGFloat vHeight = 120.0;
     [super didReceiveMemoryWarning];
 }
 
-- (void)setupUI {
-    videoView = [[ICNViewCallView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:videoView];
-}
-
 - (void)initializeLocalStream {
     // Initialize a stream and access local stream
     NSNumber *vidoeBitrate = [settingMode currentMaxVideoBitrateSettingFromStore];
     NSNumber *audioBitrate = [settingMode currentMaxAudioBitrateSettingFromStore];
     NSMutableDictionary *options = [NSMutableDictionary dictionaryWithDictionary:@{
-                                        kStreamOptionMaxAudioBW: audioBitrate,
-                                                    kStreamOptionMaxVideoBW: vidoeBitrate,
-                                                    }];
+        kStreamOptionMaxAudioBW: audioBitrate,
+        kStreamOptionMaxVideoBW: vidoeBitrate,}];
     
-    localStream = [[ECStream alloc] initLocalStreamWithOptions:options attributes:@{@"name":@"localStream"}];
+    localStream = [[ECStream alloc]
+                   initLocalStreamWithOptions:options
+                   attributes:@{@"name":@"localStream",
+                                @"actualName":_userName,
+                                @"roomName":self.roomName}];
     
+    localStream.mediaStream.videoTracks[0].isEnabled = _mode == Video;
+    videoView = [[ICNRoomView alloc] initWithLocalStream:localStream frame:self.view.bounds];
+    [videoView setDelegete:self];
+    [self.view addSubview:videoView];
     // Render local stream
     if ([localStream hasVideo]) {
         [videoView setCaptureSession:[localStream capturer].captureSession];
@@ -134,19 +131,19 @@ static CGFloat vHeight = 120.0;
 # pragma mark - ECRoomDelegate
 
 - (void)room:(ECRoom *)room didError:(ECRoomErrorStatus)status reason:(NSString *)reason {
-	[self showCallConnectViews:YES
-           updateStatusMessage:[NSString stringWithFormat:@"Room error: %@", reason]];
 }
 
 - (void)room:(ECRoom *)room didConnect:(NSDictionary *)roomMetadata {
-	[self showCallConnectViews:NO updateStatusMessage:@"Room connected!"];
 
     NSDictionary *attributes = @{
 						   @"name": _roomName,
 						   @"actualName": _userName,
-						   @"type": @"public",
+                    @"audio":@(localStream.mediaStream.audioTracks[0].isEnabled),
+                    @"video":@(localStream.mediaStream.videoTracks[0].isEnabled)
 						   };
+
     [localStream setAttributes:attributes];
+    
 	
 	// We get connected and ready to publish, so publish.
     [remoteRoom publish:localStream];
@@ -159,33 +156,24 @@ static CGFloat vHeight = 120.0;
 
 - (void)room:(ECRoom *)room didPublishStream:(ECStream *)stream {
 
-	[self showCallConnectViews:NO
-           updateStatusMessage:[NSString stringWithFormat:@"Published with ID: %@", stream.streamId]];
 }
 
 - (void)room:(ECRoom *)room didSubscribeStream:(ECStream *)stream {
-	[self showCallConnectViews:NO
-           updateStatusMessage:[NSString stringWithFormat:@"Subscribed: %@", stream.streamId]];
-
-    // We have subscribed so let's watch the stream.
-   // [self watchStream:stream];
     [videoView watchStream:stream];
 }
 
 - (void)room:(ECRoom *)room didUnSubscribeStream:(ECStream *)stream {
-    [self removeStream:stream.streamId];
+    [videoView removeStreamById:stream.streamId];
 }
 
 - (void)room:(ECRoom *)room didAddedStream:(ECStream *)stream {
     // We subscribe to all streams added.
-	[self showCallConnectViews:NO
-           updateStatusMessage:[NSString stringWithFormat:@"Subscribing stream: %@", stream.streamId]];
 
     [remoteRoom subscribe:stream];
 }
 
 - (void)room:(ECRoom *)room didRemovedStream:(ECStream *)stream {
-	[self removeStream:stream.streamId];
+    [videoView removeStreamById:stream.streamId];
 }
 
 - (void)room:(ECRoom *)room didStartRecordingStream:(ECStream *)stream
@@ -201,15 +189,14 @@ static CGFloat vHeight = 120.0;
 
 - (void)room:(ECRoom *)room didUnpublishStream:(ECStream *)stream {
     dispatch_async(dispatch_get_main_queue(), ^{
-        localStream = nil;
-       
+        self->localStream = nil;
     });
 }
 
 - (void)room:(ECRoom *)room didChangeStatus:(ECRoomStatus)status {
     switch (status) {
         case ECRoomStatusDisconnected:
-            [self showCallConnectViews:YES updateStatusMessage:@"Room Disconnected"];
+            
             break;
         default:
             break;
@@ -218,6 +205,15 @@ static CGFloat vHeight = 120.0;
 
 - (void)room:(ECRoom *)room didReceiveData:(NSDictionary *)data fromStream:(ECStream *)stream {
 	L_INFO(@"received data stream %@ %@\n", stream.streamId, data);
+    
+    NSNumber *audio = [data objectForKey:@"audioSate"];
+    NSNumber *video = [data objectForKey:@"videoSate"];
+    if(audio){
+        [videoView notifyRemoteAudioSateChange:stream ennable:audio.boolValue];
+    }
+    if(video){
+        [videoView notifyRemoteVideoSateChange:stream ennable:video.boolValue];
+    }
 }
 
 - (void)room:(ECRoom *)room didUpdateAttributesOfStream:(ECStream *)stream {
@@ -238,9 +234,6 @@ static CGFloat vHeight = 120.0;
     if (!localStream) {
         [self initializeLocalStream];
     }
-    
-    [self showCallConnectViews:NO
-           updateStatusMessage:@"Connecting with the room..."];
     
     // Initialize room (without token!)
     
@@ -306,9 +299,9 @@ static CGFloat vHeight = 120.0;
                             completion:^(BOOL success, NSString *token) {
                                 if (success) {
                                     [self->remoteRoom connectWithEncodedToken:token];
+                                    self->localStream.signalingChannel = self->remoteRoom.signalingChannel;
                                 } else {
-                                    [self showCallConnectViews:YES
-                                           updateStatusMessage:@"Error!"];
+                                    NSLog(@"error createToken");
                                 }
                             }];
     
@@ -347,13 +340,13 @@ static CGFloat vHeight = 120.0;
 
 - (void)leave{
     for (ECStream *stream in remoteRoom.remoteStreams) {
-        [self removeStream:stream.streamId];
+        [videoView removeStreamById:stream.streamId];
     }
     [remoteRoom leave];
     remoteRoom = nil;
-    [self showCallConnectViews:YES updateStatusMessage:@"Ready"];
     videoView.captureSession = nil;
     [localStream.capturer stopCapture];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)unpublish:(id)sender {
@@ -389,75 +382,6 @@ static CGFloat vHeight = 120.0;
     }
 }
 
-# pragma mark - UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	[textField resignFirstResponder];
-	return NO;
-}
-
-# pragma mark - Private
-
-- (void)watchStream:(ECStream *)stream {
-    // Setup a fram and init a player.
-    CGRect frame = CGRectMake(0, 0, vWidth, vHeight);
-    ECPlayerView *playerView = [[ECPlayerView alloc] initWithLiveStream:stream frame:frame];
-	
-    
-    // Add button to unsubscribe the stream
-    CGRect closeFrame = CGRectMake(0, playerView.frame.size.height - 20,
-                                   playerView.frame.size.width, 20);
-    UIButton *close = [[UIButton alloc] initWithFrame:closeFrame];
-    close.titleLabel.font = [UIFont systemFontOfSize:15.0];
-    close.tag = [stream.streamId integerValue];
-    [close setTitle:@"Close" forState:UIControlStateNormal];
-    close.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-    [close addTarget:self action:@selector(closeStream:)
-                forControlEvents:UIControlEventTouchUpInside];
-    [playerView.videoView addSubview:close];
-
-    // Add player view to collection and to our view.
-    [playerViews addObject:playerView];
-    [self.view addSubview:playerView];
-}
-
-- (void)removeStream:(NSString *)streamId {
-    [videoView removeStreamById:streamId];
-}
-
-- (void)viewDidLayoutSubviews {
-    for (int i=0; i<[playerViews count]; i++) {
-        [self layoutPlayerView:playerViews[i] index:i];
-    }
-}
-
-- (void)layoutPlayerView:(ECPlayerView *)playerView index:(int)index {
-    CGRect frame;
-    CGFloat vOffset = 80.0;
-    CGFloat margin = 20.0;
-    
-    switch (index) {
-        case 0:
-            frame = CGRectMake(margin, vOffset, vWidth, vHeight);
-            break;
-        case 1:
-            frame = CGRectMake(vWidth + margin * 2, vOffset, vWidth, vHeight);
-            break;
-        case 2:
-            frame = CGRectMake(margin, vOffset + vHeight + margin, vWidth, vHeight);
-            break;
-        case 3:
-            frame = CGRectMake(vWidth + margin * 2, vOffset + vHeight + margin, vWidth, vHeight);
-            break;
-        default:
-            [NSException raise:NSGenericException
-                        format:@"Sorry we allow only 4 streams on this example :)"];
-            break;
-    }
-    
-    [playerView setFrame:frame];
-}
-
 - (void)configureAudioSession {
     RTCAudioSessionConfiguration *configuration =
     [[RTCAudioSessionConfiguration alloc] init];
@@ -482,30 +406,68 @@ static CGFloat vHeight = 120.0;
     [session unlockForConfiguration];
 }
 
-- (void)showCallConnectViews:(BOOL)show updateStatusMessage:(NSString *)statusMessage {
-	
-}
+# pragma mark - publish statistic
 
 - (void)room:(ECRoom *)room publishingClient:(ECClient *)publishingClient
                                             mediaType:(NSString *)mediaType
                                             ssrc:(NSString *)ssrc
                                             didPublishingAtKbps:(long)kbps{
-    [videoView.statsView setStats:mediaType kbps:kbps];
 }
 
 - (void)room:(ECRoom *)room publishingClient:(ECClient *)publishingClient
                                             mediaType:(NSString *)mediaType
                                             ssrc:(NSString *)ssrc
                                             didReceiveStats:(RTCLegacyStatsReport *)statsReport{
-    
 }
 
+# pragma mark - roomViewDelegete
 
+- (void)onCameraCtlClick:(BOOL)close {
+    
+    localStream.mediaStream.videoTracks[0].isEnabled = close;
+    
+    NSDictionary *data = @{@"videoSate": @(close)};
 
+    [localStream sendData:data];
+}
 
-- (void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
+- (void)onHangUpClick {
     [self leave];
+}
+
+- (void)onMutuCtlClick:(BOOL)mutu {
+    if(mutu){
+        [localStream mute];
+    }else{
+        [localStream unmute];
+    }
+    
+    NSDictionary *data = @{@"audioSate": @(!mutu)};
+    
+    [localStream sendData:data];
+}
+
+- (void)onSpeakerCtlClick:(BOOL)speaker {
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    
+    if(speaker){
+        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
+                      withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker
+                            error:nil];
+    }else{
+        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord
+                            error:nil];
+    }
+}
+
+- (void)onSwitchCamera {
+    [localStream switchCamera];
+}
+
+# pragma mark - status bar hide
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 

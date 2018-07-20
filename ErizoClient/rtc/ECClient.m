@@ -357,7 +357,7 @@ readyToSubscribeStreamId:(NSString *)streamId
     _peerConnection = [_factory peerConnectionWithConfiguration:config
                                                     constraints:constraints
                                                        delegate:self];
-
+    
     C_L_INFO(@"Adding local media stream to PeerConnection");
     _localStream = [self.delegate streamToPublishByAppClient:self];
     [_peerConnection addStream:_localStream];
