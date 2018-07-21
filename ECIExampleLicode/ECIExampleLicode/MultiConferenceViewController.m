@@ -96,6 +96,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 
 - (void)viewWillAppear:(BOOL)animated{
     [self connect];
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
 }
 
 

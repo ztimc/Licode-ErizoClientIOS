@@ -294,26 +294,6 @@ typedef enum _MediaType{
         [self checkSate];
         cammerCtlImage.selected = state == Video;
         
-        
-        
-        //定时器开始执行的延时时间
-        NSTimeInterval delayTime = 0.0f;
-        //定时器间隔时间
-        NSTimeInterval timeInterval = 1.0f;
-        //创建子线程队列
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        
-        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
-        
-        dispatch_time_t startDelayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayTime * NSEC_PER_SEC));
-
-        dispatch_source_set_timer(timer, startDelayTime, timeInterval * NSEC_PER_SEC, 0.1 * NSEC_PER_SEC);
-        dispatch_source_set_event_handler(timer, ^{
-            NSLog(@"FUCKING");
-        });
-        // 启动计时器
-        dispatch_resume(timer);
-        
       
     }
     return self;
@@ -674,7 +654,14 @@ typedef enum _MediaType{
         for(int i = 0; i < smallVideoViews.count; i++){
             [smallVideoViews[i].getView setHidden:YES];
         }
+        [cameraSwichImage setHidden:YES];
     }else{
+        if(localStream.mediaStream.videoTracks[0].isEnabled){
+            [cameraSwichImage setHidden:NO];
+        }else{
+            [cameraSwichImage setHidden:YES];
+        }
+        
         if(currentVideo == localVideo){
             if(localStream.mediaStream.videoTracks[0].isEnabled){
                 currentVideo.getView.hidden = NO;
@@ -707,6 +694,7 @@ typedef enum _MediaType{
             }
         }
     }
+    
 }
 
 
