@@ -11,6 +11,7 @@
 #import "ICNEditText.h"
 #import "MultiConferenceViewController.h"
 #import "ICNRoomView.h"
+#import "ICNConferenceView.h"
 
 @interface ICNMainViewController ()
 
@@ -20,15 +21,29 @@
 {
     NSString *roomName;
     NSString *userName;
+    
+    UIButton *jionButton;
+    UIImageView *mainIcon;
+    ICNEditText *nameEditText;
+    ICNEditText *roomEditText;
+    
 }
 
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setUIViewBackgound:self.view name:@"Main-Background"];
     
+    //注册键盘出现的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+    //注册键盘消失的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
     
+
     [self initView];
     
     //用于网络权限处理
@@ -39,14 +54,45 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.delegate = self;
+    
 }
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
+    
+    
+    if(size.height > size.width){
+        jionButton.frame = CGRectMake((size.width / 2) - (jionButton.mh_width / 2),
+                                           size.height - 220 - 80,
+                                           138 * 2,
+                                           40);
+        CGRect nameFrame = jionButton.frame;
+        nameFrame.origin.y = jionButton.frame.origin.y - 20 - jionButton.frame.size.height;
+        nameEditText.frame = nameFrame;
+        CGRect roomFrame = jionButton.frame;
+        roomFrame.origin.y = nameFrame.origin.y - 20 - jionButton.frame.size.height;
+        roomEditText.frame = roomFrame;
+        mainIcon.mh_x = (size.width / 2) - (mainIcon.mh_width / 2);
+        mainIcon.mh_y = 106;
+    }else{
+        jionButton.frame = CGRectMake((size.width / 2) - (jionButton.mh_width / 2),
+                                      size.height - 100,
+                                      138 * 2,
+                                      40);
+        CGRect nameFrame = jionButton.frame;
+        nameFrame.origin.y = jionButton.frame.origin.y - 20 - jionButton.frame.size.height;
+        nameEditText.frame = nameFrame;
+        CGRect roomFrame = jionButton.frame;
+        roomFrame.origin.y = nameFrame.origin.y - 20 - jionButton.frame.size.height;
+        roomEditText.frame = roomFrame;
+        mainIcon.mh_x = (size.width / 2) - (mainIcon.mh_width / 2);
+        mainIcon.mh_y = 50;
+    }
+    
 }
 
 -(void)setUIViewBackgound:(UIView *)uiview name:(NSString *)name {
@@ -60,12 +106,22 @@
 }
 
 - (void)initView {
-    UIButton *jionButton = [UIButton buttonWithType:UIButtonTypeCustom];
     
-    jionButton.frame = CGRectMake(CGRectGetMidX(self.view.bounds) - 138,
-                              self.view.bounds.size.height - 220 - 40,
+    jionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    
+    
+    jionButton.frame = CGRectMake(CGRectGetMidX(self.view.bounds),
+                              self.view.bounds.size.height - 220 - 80,
                               138 * 2,
                               40);
+    
+    if(self.view.mh_width > self.view.mh_height){
+        jionButton.mh_y = self.view.mh_height - 100;
+    }
+    
+    jionButton.mh_centerX = CGRectGetMidX(self.view.bounds);
+    
     UIColor *color = RGBHexAlpha(0x6AECFF, 1);
     [jionButton setTitle:@"加入会议" forState:UIControlStateNormal];
     [jionButton.layer setMasksToBounds:YES];
@@ -76,7 +132,7 @@
     
     CGRect nameFrame = jionButton.frame;
     nameFrame.origin.y = jionButton.frame.origin.y - 20 - jionButton.frame.size.height;
-    ICNEditText *nameEditText = [[ICNEditText alloc] initWithIcon:[UIImage imageNamed:@"EditText-Name-Icon"] text:@"名字" frame:nameFrame];
+    nameEditText = [[ICNEditText alloc] initWithIcon:[UIImage imageNamed:@"EditText-Name-Icon"] text:@"名字" keyboardType:UIKeyboardTypeDefault frame:nameFrame];
     [nameEditText setOnTextChange:^(NSString *text) {
         self->userName = text;
     }];
@@ -84,21 +140,23 @@
     
     CGRect roomFrame = jionButton.frame;
     roomFrame.origin.y = nameFrame.origin.y - 20 - jionButton.frame.size.height;
-    ICNEditText *roomEditText = [[ICNEditText alloc] initWithIcon:[UIImage imageNamed:@"EditText-Room-Icon"] text:@"房间" frame:roomFrame];
+    
+    roomEditText = [[ICNEditText alloc] initWithIcon:[UIImage imageNamed:@"EditText-Room-Icon"] text:@"房间" keyboardType:UIKeyboardTypeNumberPad frame:roomFrame];
     [roomEditText setOnTextChange:^(NSString *text) {
         self->roomName = text;
     }];
     [self.view addSubview:roomEditText];
     
-    UIImageView *mainIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Home-Icon"]];
-    CGRect mainFame = mainIcon.frame;
-    mainFame.origin.x = CGRectGetMidX(self.view.bounds) - (mainFame.size.width / 2);
-    mainFame.origin.y = 84;
-    mainIcon.frame = mainFame;
+    mainIcon= [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Home-Icon"]];
+    mainIcon.mh_x = CGRectGetMidX(self.view.bounds) - (mainIcon.mh_width / 2);
+    mainIcon.mh_y = 106;
+    
+    if(self.view.mh_width > self.view.mh_height){
+       mainIcon.mh_y = 50;
+    }
+    
     [self.view addSubview:mainIcon];
     
-    //ICNRoomView *roomView = [[ICNRoomView alloc] initWithFrame:self.view.bounds];
-   // [self.view addSubview:roomView];
 }
 
 - (void)onJionButtonClick:(UIButton *)buttion {
@@ -150,12 +208,14 @@
     [uiAlertController addAction:videoAction];
     [uiAlertController addAction:cancelAction];
     [self presentViewController:uiAlertController animated:YES completion:nil];
-   
 }
+
+
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
 }
+
 -(void)demo2{
     
     //1. 创建一个网络请求
@@ -186,6 +246,41 @@
     
     //5.执行任务
     [dataTask resume];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskAll;
+}
+
+
+
+///键盘显示事件
+- (void) keyboardWillShow:(NSNotification *)notification {
+    //获取键盘高度，在不同设备上，以及中英文下是不同的
+    CGFloat kbHeight = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height;
+    
+    //计算出键盘顶端到inputTextView panel底端的距离(加上自定义的缓冲距离INTERVAL_KEYBOARD)
+    CGFloat offset = (roomEditText.frame.origin.y + roomEditText.frame.size.height+50) - (self.view.frame.size.height - kbHeight);
+    
+    // 取得键盘的动画时间，这样可以在视图上移的时候更连贯
+    double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    //将视图上移计算好的偏移
+    if(offset > 0) {
+        [UIView animateWithDuration:duration animations:^{
+            self.view.frame = CGRectMake(0.0f, -offset, self.view.frame.size.width, self.view.frame.size.height);
+        }];
+    }
+}
+
+
+- (void) keyboardWillHide:(NSNotification *)notify {
+    
+    double duration = [[notify.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    [UIView animateWithDuration:duration animations:^{
+        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }];
 }
 
 

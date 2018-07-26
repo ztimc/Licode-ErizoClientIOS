@@ -290,6 +290,20 @@ static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
     [self startCapture];
 }
 
+- (void)setAudioEnable:(BOOL)audioEnable{
+    self.audioEnable = audioEnable;
+    for(int i = 0; i < self.mediaStream.audioTracks.count; i++){
+        self.mediaStream.audioTracks[i].isEnabled = self.audioEnable;
+    }
+}
+
+- (void)setVideoEnable:(BOOL)videoEnable{
+    self.videoEnable = videoEnable;
+    for(int i = 0; i < self.mediaStream.videoTracks.count; i++){
+        self.mediaStream.videoTracks[i].isEnabled = self.videoEnable;
+    }
+}
+
 #pragma mark - Private
 
 - (AVCaptureDevice *)findDeviceForPosition:(AVCaptureDevicePosition)position {

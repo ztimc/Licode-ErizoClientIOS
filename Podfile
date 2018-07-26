@@ -12,6 +12,7 @@ target 'ErizoClient' do
   pod 'PodWebRTC', :path => './'
   pod 'PodSwiss', :path => './'
   pod 'Socket.IO-Client-Swift', '~> 12.0.0'
+  pod 'IQKeyboardManager'
 end
 
 target 'ErizoClientTests' do
@@ -29,4 +30,5 @@ target 'ECIExampleLicode' do
   pod 'PodWebRTC', :path => './'
   pod 'PodSwiss', :path => './'
   pod 'Socket.IO-Client-Swift', '~> 12.0.0'
+  pod 'IQKeyboardManager'
 end

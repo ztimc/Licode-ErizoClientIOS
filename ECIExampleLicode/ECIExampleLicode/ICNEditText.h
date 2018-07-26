@@ -16,6 +16,7 @@ typedef void(^OnTextFieldChangeCallback)(NSString *text);
 
 - (instancetype)initWithIcon:(UIImage *)image
                         text:(NSString *)text
+                keyboardType:(UIKeyboardType)keyboardType
                        frame:(CGRect)frame;
 
 - (void)setOnTextChange:(OnTextFieldChangeCallback)callback;

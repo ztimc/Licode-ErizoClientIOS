@@ -18,7 +18,7 @@
 #import "ICNSettingModel.h"
 #import "AppDelegate.h"
 #import "ICNSabineDeviceConfigure.h"
-#import "ICNRoomView.h"
+#import "ICNConferenceView.h"
 
 
 /*
@@ -26,12 +26,13 @@ static NSString *roomId = @"59de889a35189661b58017a1";
 static NSString *roomName = @"IOS Demo APP";
 static NSString *kDefaultUserName = @"ErizoIOS";
  */
+#import "SwissPanel.h"
 
 @interface MultiConferenceViewController () <UITextFieldDelegate,
                                              RTCEAGLVideoViewDelegate,
                                              RTCAudioSessionDelegate,
                                              ECRoomStatsDelegate,
-                                             ICNRoomViewDelegete>
+                                             ICNConferenceViewDelegete>
 
 @property(nonatomic,strong) NSString *roomName;
 @property(nonatomic,strong) NSString *userName;
@@ -40,11 +41,13 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 @end
 
 @implementation MultiConferenceViewController {
-    ECStream *localStream;
-    ECRoom *remoteRoom;
-    NSMutableArray *playerViews;
-    ICNSettingModel *settingMode;
-    ICNRoomView *videoView;
+    ECStream *_localStream;
+    ECRoom *_remoteRoom;
+    
+    ICNSettingModel *_settingMode;
+    
+    ICNConferenceView *_conferenceView;
+    SwissPanel *_swissPanel;
 }
 
 - (instancetype) initWithMode:(ChatMode)mode
@@ -59,6 +62,12 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     return self;
 }
 
+- (void)loadView{
+    _settingMode = [[ICNSettingModel alloc] init];
+    [self initview];
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -67,10 +76,6 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
     [deviceConfigrue configure];
     RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
-	
-    // Initialize player views array
-    playerViews = [NSMutableArray array];
-    settingMode = [[ICNSettingModel alloc] init];
     
     RTCAudioSessionConfiguration *webRTCConfig =
     [RTCAudioSessionConfiguration webRTCConfiguration];
@@ -104,27 +109,27 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     [super didReceiveMemoryWarning];
 }
 
-- (void)initializeLocalStream {
+- (void)initview {
     // Initialize a stream and access local stream
-    NSNumber *vidoeBitrate = [settingMode currentMaxVideoBitrateSettingFromStore];
-    NSNumber *audioBitrate = [settingMode currentMaxAudioBitrateSettingFromStore];
+    NSNumber *vidoeBitrate = [_settingMode currentMaxVideoBitrateSettingFromStore];
+    NSNumber *audioBitrate = [_settingMode currentMaxAudioBitrateSettingFromStore];
     NSMutableDictionary *options = [NSMutableDictionary dictionaryWithDictionary:@{
         kStreamOptionMaxAudioBW: audioBitrate,
         kStreamOptionMaxVideoBW: vidoeBitrate,}];
     
-    localStream = [[ECStream alloc]
+    _localStream = [[ECStream alloc]
                    initLocalStreamWithOptions:options
                    attributes:@{@"name":@"localStream",
                                 @"actualName":_userName,
                                 @"roomName":self.roomName}];
     
-    localStream.mediaStream.videoTracks[0].isEnabled = _mode == Video;
-    videoView = [[ICNRoomView alloc] initWithLocalStream:localStream frame:self.view.bounds];
-    [videoView setDelegete:self];
-    [self.view addSubview:videoView];
-    // Render local stream
-    if ([localStream hasVideo]) {
-        [videoView setCaptureSession:[localStream capturer].captureSession];
+    _conferenceView = [[ICNConferenceView alloc] initWithLocalStream:_localStream frame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    [_conferenceView setDelegete:self];
+    self.view = _conferenceView;
+    
+    _localStream.mediaStream.videoTracks[0].isEnabled = _mode == Video;
+    if ([_localStream hasVideo]) {
+        [_conferenceView setCaptureSession:[_localStream capturer].captureSession];
     }
     
 }
@@ -139,19 +144,19 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     NSDictionary *attributes = @{
 						   @"name": _roomName,
 						   @"actualName": _userName,
-                    @"audio":@(localStream.mediaStream.audioTracks[0].isEnabled),
-                    @"video":@(localStream.mediaStream.videoTracks[0].isEnabled)
+                    @"audio":@(_localStream.mediaStream.audioTracks[0].isEnabled),
+                    @"video":@(_localStream.mediaStream.videoTracks[0].isEnabled)
 						   };
 
-    [localStream setAttributes:attributes];
+    [_localStream setAttributes:attributes];
     
 	
 	// We get connected and ready to publish, so publish.
-    [remoteRoom publish:localStream];
+    [_remoteRoom publish:_localStream];
 
     // Subscribe all streams available in the room.
-    for (ECStream *stream in remoteRoom.remoteStreams) {
-        [remoteRoom subscribe:stream];
+    for (ECStream *stream in _remoteRoom.remoteStreams) {
+        [_remoteRoom subscribe:stream];
     }
 }
 
@@ -160,21 +165,21 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 }
 
 - (void)room:(ECRoom *)room didSubscribeStream:(ECStream *)stream {
-    [videoView watchStream:stream];
+    [_conferenceView jionByStream:stream];
 }
 
 - (void)room:(ECRoom *)room didUnSubscribeStream:(ECStream *)stream {
-    [videoView removeStreamById:stream.streamId];
+    [_conferenceView leaveByStream:stream];
 }
 
 - (void)room:(ECRoom *)room didAddedStream:(ECStream *)stream {
     // We subscribe to all streams added.
 
-    [remoteRoom subscribe:stream];
+    [_remoteRoom subscribe:stream];
 }
 
 - (void)room:(ECRoom *)room didRemovedStream:(ECStream *)stream {
-    [videoView removeStreamById:stream.streamId];
+    [_conferenceView leaveByStream:stream];
 }
 
 - (void)room:(ECRoom *)room didStartRecordingStream:(ECStream *)stream
@@ -190,7 +195,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 
 - (void)room:(ECRoom *)room didUnpublishStream:(ECStream *)stream {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self->localStream = nil;
+        self->_localStream = nil;
     });
 }
 
@@ -207,13 +212,13 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 - (void)room:(ECRoom *)room didReceiveData:(NSDictionary *)data fromStream:(ECStream *)stream {
 	L_INFO(@"received data stream %@ %@\n", stream.streamId, data);
     
-    NSNumber *audio = [data objectForKey:@"audioSate"];
-    NSNumber *video = [data objectForKey:@"videoSate"];
+    NSNumber *audio = [data objectForKey:@"audioMute"];
+    NSNumber *video = [data objectForKey:@"videoClose"];
     if(audio){
-        [videoView notifyRemoteAudioSateChange:stream ennable:audio.boolValue];
+        [_conferenceView onAudioMuteFromStream:stream mute:audio.boolValue];
     }
     if(video){
-        [videoView notifyRemoteVideoSateChange:stream ennable:video.boolValue];
+        [_conferenceView onVideoCloseFromStream:stream close:video.boolValue];
     }
 }
 
@@ -232,9 +237,6 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 # pragma mark - UI Actions
 
 -(void)connect {
-    if (!localStream) {
-        [self initializeLocalStream];
-    }
     
     // Initialize room (without token!)
     
@@ -243,9 +245,9 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     RTCPeerConnectionFactory *_peerFactory = [[RTCPeerConnectionFactory alloc]
                                               initWithEncoderFactory:encoderFactory
                                               decoderFactory:decoderFactory];
-    remoteRoom = [[ECRoom alloc] initWithDelegate:self
+    _remoteRoom = [[ECRoom alloc] initWithDelegate:self
                                    andPeerFactory:_peerFactory];
-    [remoteRoom setStatsDelegate:self];
+    [_remoteRoom setStatsDelegate:self];
     
     /*
      
@@ -299,8 +301,8 @@ static NSString *kDefaultUserName = @"ErizoIOS";
                                   role:@"presenter"
                             completion:^(BOOL success, NSString *token) {
                                 if (success) {
-                                    [self->remoteRoom connectWithEncodedToken:token];
-                                    self->localStream.signalingChannel = self->remoteRoom.signalingChannel;
+                                    [self->_remoteRoom connectWithEncodedToken:token];
+                                    self->_localStream.signalingChannel = self->_remoteRoom.signalingChannel;
                                 } else {
                                     NSLog(@"error createToken");
                                 }
@@ -340,47 +342,14 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 }
 
 - (void)leave{
-    for (ECStream *stream in remoteRoom.remoteStreams) {
-        [videoView removeStreamById:stream.streamId];
+    for (ECStream *stream in _remoteRoom.remoteStreams) {
+       [_conferenceView leaveByStream:stream];
     }
-    [remoteRoom leave];
-    remoteRoom = nil;
-    videoView.captureSession = nil;
-    [localStream.capturer stopCapture];
+    [_remoteRoom leave];
+    _remoteRoom = nil;
+    _conferenceView.captureSession = nil;
+    [_localStream.capturer stopCapture];
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (IBAction)unpublish:(id)sender {
-    if (localStream) {
-        [remoteRoom unpublish];
-    } else {
-        [self initializeLocalStream];
-        [remoteRoom publish:localStream];
-    }
-}
-
-- (void)didTapLabelWithGesture:(UITapGestureRecognizer *)tapGesture {
-	NSDictionary *data = @{
-						   @"name": _userName,
-						   @"msg": @"my test message in licode chat room"
-						   };
-	[localStream sendData:data];
-	
-	NSDictionary *attributes = @{
-						   @"name": _userName,
-						   @"actualName": _userName,
-						   @"type": @"public",
-						   };
-	[localStream setAttributes:attributes];
-}
-
-- (void)closeStream:(id)sender {
-    NSString *streamId = [NSString stringWithFormat:@"%ld", (long)((UIButton *)sender).tag];
-    for (ECStream *stream in remoteRoom.remoteStreams) {
-        if ([stream.streamId isEqualToString:streamId]) {
-            [remoteRoom unsubscribe:stream];
-        }
-    }
 }
 
 - (void)configureAudioSession {
@@ -425,11 +394,11 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 
 - (void)onCameraCtlClick:(BOOL)close {
     
-    localStream.mediaStream.videoTracks[0].isEnabled = close;
+    _localStream.mediaStream.videoTracks[0].isEnabled = close;
     
-    NSDictionary *data = @{@"videoSate": @(close)};
+    NSDictionary *data = @{@"videoClose": @(close)};
 
-    [localStream sendData:data];
+    [_localStream sendData:data];
 }
 
 - (void)onHangUpClick {
@@ -438,14 +407,14 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 
 - (void)onMutuCtlClick:(BOOL)mutu {
     if(mutu){
-        [localStream mute];
+        [_localStream mute];
     }else{
-        [localStream unmute];
+        [_localStream unmute];
     }
     
-    NSDictionary *data = @{@"audioSate": @(!mutu)};
+    NSDictionary *data = @{@"audioMute": @(mutu)};
     
-    [localStream sendData:data];
+    [_localStream sendData:data];
 }
 
 - (void)onSpeakerCtlClick:(BOOL)speaker {
@@ -462,7 +431,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 }
 
 - (void)onSwitchCamera {
-    [localStream switchCamera];
+    [_localStream switchCamera];
 }
 
 # pragma mark - status bar hide
@@ -471,5 +440,12 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     return YES;
 }
 
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskAll;
+}
+
+- (BOOL)shouldAutorotate{
+    return YES;
+}
 
 @end

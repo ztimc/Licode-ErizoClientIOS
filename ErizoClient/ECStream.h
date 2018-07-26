@@ -228,6 +228,8 @@ static NSString * _Nonnull const kStreamOptionMaxAudioBW    = @"maxAudioBW";
 
 @property (readonly) BOOL isLocal;
 @property (readonly) BOOL usingFrontCamera;
+@property (nonatomic, assign) BOOL audioEnable;
+@property (nonatomic, assign) BOOL videoEnable;
 
 /// Default video contraints.
 @property (readonly) RTCMediaConstraints * _Nullable defaultVideoConstraints;

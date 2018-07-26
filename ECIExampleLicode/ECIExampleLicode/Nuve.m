@@ -203,7 +203,7 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
     NSString *server = [model currentServerSettingFromStore];
     if(server){
         if([server caseInsensitiveCompare:@"美国"] == NSOrderedSame){
-            kNuveHost =  @"http://18.222.176.169:3001";
+            kNuveHost =  @"http://18.219.26.230:3001";
         }else{
             kNuveHost = @"https://webrtc.muguovr.cn:3004";
         }

@@ -52,6 +52,17 @@
 		7DA7AC3E20F83F3F00CD29A0 /* ICNRoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DA7AC3C20F83F3F00CD29A0 /* ICNRoomView.m */; };
 		7DACE71320F74B7600AD6C7E /* ICNEditText.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DACE71120F74B7600AD6C7E /* ICNEditText.h */; };
 		7DACE71420F74B7600AD6C7E /* ICNEditText.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DACE71220F74B7600AD6C7E /* ICNEditText.m */; };
+		7DF7FCB4210822E800CB3B3F /* ICNConferenceView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DF7FCB2210822E800CB3B3F /* ICNConferenceView.h */; };
+		7DF7FCB5210822E800CB3B3F /* ICNConferenceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7FCB3210822E800CB3B3F /* ICNConferenceView.m */; };
+		7DF7FCB8210836FB00CB3B3F /* ICNConferenceVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DF7FCB6210836FB00CB3B3F /* ICNConferenceVideo.h */; };
+		7DF7FCBC2108385C00CB3B3F /* ICNLocalVideoView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DF7FCBA2108385C00CB3B3F /* ICNLocalVideoView.h */; };
+		7DF7FCBD2108385C00CB3B3F /* ICNLocalVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7FCBB2108385C00CB3B3F /* ICNLocalVideoView.m */; };
+		7DF7FCC0210850CB00CB3B3F /* ICNRemoteVideoView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DF7FCBE210850CB00CB3B3F /* ICNRemoteVideoView.h */; };
+		7DF7FCC1210850CB00CB3B3F /* ICNRemoteVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7FCBF210850CB00CB3B3F /* ICNRemoteVideoView.m */; };
+		7DF7FCC4210855BC00CB3B3F /* ICNConferenceAudioView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DF7FCC2210855BC00CB3B3F /* ICNConferenceAudioView.h */; };
+		7DF7FCC5210855BC00CB3B3F /* ICNConferenceAudioView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7FCC3210855BC00CB3B3F /* ICNConferenceAudioView.m */; };
+		7DF7FCC82109BAA700CB3B3F /* ICNNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DF7FCC62109BAA700CB3B3F /* ICNNavigationController.h */; };
+		7DF7FCC92109BAA700CB3B3F /* ICNNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7FCC72109BAA700CB3B3F /* ICNNavigationController.m */; };
 		7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DFDFF5D20B3FBFF0096D25A /* Wav.h */; };
 		7DFDFF6020B3FC000096D25A /* Wav.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFDFF5E20B3FC000096D25A /* Wav.m */; };
 /* End PBXBuildFile section */
@@ -125,6 +136,17 @@
 		7DACE71020F73E4E00AD6C7E /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		7DACE71120F74B7600AD6C7E /* ICNEditText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNEditText.h; sourceTree = "<group>"; };
 		7DACE71220F74B7600AD6C7E /* ICNEditText.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNEditText.m; sourceTree = "<group>"; };
+		7DF7FCB2210822E800CB3B3F /* ICNConferenceView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNConferenceView.h; sourceTree = "<group>"; };
+		7DF7FCB3210822E800CB3B3F /* ICNConferenceView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNConferenceView.m; sourceTree = "<group>"; };
+		7DF7FCB6210836FB00CB3B3F /* ICNConferenceVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNConferenceVideo.h; sourceTree = "<group>"; };
+		7DF7FCBA2108385C00CB3B3F /* ICNLocalVideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNLocalVideoView.h; sourceTree = "<group>"; };
+		7DF7FCBB2108385C00CB3B3F /* ICNLocalVideoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNLocalVideoView.m; sourceTree = "<group>"; };
+		7DF7FCBE210850CB00CB3B3F /* ICNRemoteVideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNRemoteVideoView.h; sourceTree = "<group>"; };
+		7DF7FCBF210850CB00CB3B3F /* ICNRemoteVideoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNRemoteVideoView.m; sourceTree = "<group>"; };
+		7DF7FCC2210855BC00CB3B3F /* ICNConferenceAudioView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNConferenceAudioView.h; sourceTree = "<group>"; };
+		7DF7FCC3210855BC00CB3B3F /* ICNConferenceAudioView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNConferenceAudioView.m; sourceTree = "<group>"; };
+		7DF7FCC62109BAA700CB3B3F /* ICNNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNNavigationController.h; sourceTree = "<group>"; };
+		7DF7FCC72109BAA700CB3B3F /* ICNNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNNavigationController.m; sourceTree = "<group>"; };
 		7DFDFF5D20B3FBFF0096D25A /* Wav.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wav.h; sourceTree = "<group>"; };
 		7DFDFF5E20B3FC000096D25A /* Wav.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Wav.m; sourceTree = "<group>"; };
 		B8B9640BB43255AF81F1E68D /* Pods-ECIExampleLicode.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ECIExampleLicode.release.xcconfig"; path = "../Pods/Target Support Files/Pods-ECIExampleLicode/Pods-ECIExampleLicode.release.xcconfig"; sourceTree = "<group>"; };
@@ -164,7 +186,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		78621BE91BD16D36009D4342 /* Logger */ = {
+		78621BE91BD16D36009D4342 /* logger */ = {
 			isa = PBXGroup;
 			children = (
 				7DFDFF5D20B3FBFF0096D25A /* Wav.h */,
@@ -172,8 +194,8 @@
 				78621BE71BD16D36009D4342 /* Logger.h */,
 				78621BE81BD16D36009D4342 /* Logger.m */,
 			);
-			name = Logger;
-			path = ../../Vendor/Logger;
+			name = logger;
+			path = ../../Vendor/logger;
 			sourceTree = "<group>";
 		};
 		78E53A081B99F388004B63EF = {
@@ -199,12 +221,13 @@
 		78E53A131B99F388004B63EF /* ECIExampleLicode */ = {
 			isa = PBXGroup;
 			children = (
+				7DF7FCB121081FD100CB3B3F /* conference */,
 				7D50156120F87D0400BA1C45 /* category */,
 				7D29C87520CFBF62008C649A /* SwissPanel.h */,
 				7D29C87620CFBF63008C649A /* SwissPanel.m */,
 				7D7B92FA20BE3A800082C9F3 /* statistic */,
-				7D26E53920B6525500D66326 /* VideoView */,
-				78621BE91BD16D36009D4342 /* Logger */,
+				7D26E53920B6525500D66326 /* videoView */,
+				78621BE91BD16D36009D4342 /* logger */,
 				78E53A181B99F388004B63EF /* AppDelegate.h */,
 				78E53A191B99F388004B63EF /* AppDelegate.m */,
 				78E53A1B1B99F388004B63EF /* MultiConferenceViewController.h */,
@@ -234,6 +257,8 @@
 				7DACE71020F73E4E00AD6C7E /* PrefixHeader.pch */,
 				7DACE71120F74B7600AD6C7E /* ICNEditText.h */,
 				7DACE71220F74B7600AD6C7E /* ICNEditText.m */,
+				7DF7FCC62109BAA700CB3B3F /* ICNNavigationController.h */,
+				7DF7FCC72109BAA700CB3B3F /* ICNNavigationController.m */,
 			);
 			path = ECIExampleLicode;
 			sourceTree = "<group>";
@@ -264,7 +289,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		7D26E53920B6525500D66326 /* VideoView */ = {
+		7D26E53920B6525500D66326 /* videoView */ = {
 			isa = PBXGroup;
 			children = (
 				7D50155D20F87C4D00BA1C45 /* ICNSurroundButton.h */,
@@ -277,7 +302,7 @@
 				7D1E2EDB20FF417700EE3236 /* ICNAudioStateView.h */,
 				7D1E2EDC20FF417700EE3236 /* ICNAudioStateView.m */,
 			);
-			path = VideoView;
+			path = videoView;
 			sourceTree = "<group>";
 		};
 		7D50156120F87D0400BA1C45 /* category */ = {
@@ -296,6 +321,22 @@
 				7D7B930020BE415F0082C9F3 /* ICNStatsView.m */,
 			);
 			path = statistic;
+			sourceTree = "<group>";
+		};
+		7DF7FCB121081FD100CB3B3F /* conference */ = {
+			isa = PBXGroup;
+			children = (
+				7DF7FCB2210822E800CB3B3F /* ICNConferenceView.h */,
+				7DF7FCB3210822E800CB3B3F /* ICNConferenceView.m */,
+				7DF7FCB6210836FB00CB3B3F /* ICNConferenceVideo.h */,
+				7DF7FCBA2108385C00CB3B3F /* ICNLocalVideoView.h */,
+				7DF7FCBB2108385C00CB3B3F /* ICNLocalVideoView.m */,
+				7DF7FCBE210850CB00CB3B3F /* ICNRemoteVideoView.h */,
+				7DF7FCBF210850CB00CB3B3F /* ICNRemoteVideoView.m */,
+				7DF7FCC2210855BC00CB3B3F /* ICNConferenceAudioView.h */,
+				7DF7FCC3210855BC00CB3B3F /* ICNConferenceAudioView.m */,
+			);
+			path = conference;
 			sourceTree = "<group>";
 		};
 		C4B7398EE29893B353AD6D22 /* Pods */ = {
@@ -320,6 +361,7 @@
 				7D26E53B20B652A300D66326 /* ICNVideoViewDelegete.h in Headers */,
 				7DACE71320F74B7600AD6C7E /* ICNEditText.h in Headers */,
 				7D26E52A20B55F7C00D66326 /* ICNMainViewController.h in Headers */,
+				7DF7FCC0210850CB00CB3B3F /* ICNRemoteVideoView.h in Headers */,
 				7D50155F20F87C4E00BA1C45 /* ICNSurroundButton.h in Headers */,
 				7D29C87B20CFCDA9008C649A /* ICNSabineDeviceConfigure.h in Headers */,
 				781B3FEE1E6DDEF3003782EE /* Nuve.h in Headers */,
@@ -327,12 +369,17 @@
 				7D7B930120BE415F0082C9F3 /* ICNStatsView.h in Headers */,
 				7D50156520F87D4400BA1C45 /* UIView+MHFrame.h in Headers */,
 				7DFDFF5F20B3FC000096D25A /* Wav.h in Headers */,
+				7DF7FCB4210822E800CB3B3F /* ICNConferenceView.h in Headers */,
 				7D1E2EDD20FF417700EE3236 /* ICNAudioStateView.h in Headers */,
 				7D29C87720CFBF63008C649A /* SwissPanel.h in Headers */,
+				7DF7FCBC2108385C00CB3B3F /* ICNLocalVideoView.h in Headers */,
 				7DA7AC3D20F83F3F00CD29A0 /* ICNRoomView.h in Headers */,
+				7DF7FCB8210836FB00CB3B3F /* ICNConferenceVideo.h in Headers */,
 				7D26E53720B5978B00D66326 /* ICNViewCallView.h in Headers */,
 				7D26E53220B565A100D66326 /* UIViewController+Hidden.h in Headers */,
 				7D5DBA8920BBDC8700A8757E /* ICNSettingViewController.h in Headers */,
+				7DF7FCC82109BAA700CB3B3F /* ICNNavigationController.h in Headers */,
+				7DF7FCC4210855BC00CB3B3F /* ICNConferenceAudioView.h in Headers */,
 				7D5DBA8F20BBF0E100A8757E /* ICNSettingModel.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,7 +438,7 @@
 					78E53A101B99F388004B63EF = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = WY4LP9F37N;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -451,12 +498,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/../Pods/Target Support Files/Pods-ECIExampleLicode/Pods-ECIExampleLicode-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${PODS_ROOT}/../WebRTC.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/StarscreamSocketIO/StarscreamSocketIO.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StarscreamSocketIO.framework",
@@ -496,6 +545,9 @@
 				7D26E53320B565A100D66326 /* UIViewController+Hidden.m in Sources */,
 				7D5DBA9020BBF0E100A8757E /* ICNSettingModel.m in Sources */,
 				7D26E52B20B55F7C00D66326 /* ICNMainViewController.m in Sources */,
+				7DF7FCC1210850CB00CB3B3F /* ICNRemoteVideoView.m in Sources */,
+				7DF7FCBD2108385C00CB3B3F /* ICNLocalVideoView.m in Sources */,
+				7DF7FCB5210822E800CB3B3F /* ICNConferenceView.m in Sources */,
 				78E53A3F1B99F3EF004B63EF /* LicodeServer.m in Sources */,
 				7D1E2EDE20FF417700EE3236 /* ICNAudioStateView.m in Sources */,
 				78E53A1A1B99F388004B63EF /* AppDelegate.m in Sources */,
@@ -504,6 +556,7 @@
 				7D29C87C20CFCDA9008C649A /* ICNSabineDeviceConfigure.m in Sources */,
 				7D5DBA8620BBB22200A8757E /* ICNSettingTableViewController.m in Sources */,
 				7D5DBA9420BBF75800A8757E /* ICNSettingStore.m in Sources */,
+				7DF7FCC5210855BC00CB3B3F /* ICNConferenceAudioView.m in Sources */,
 				7DFDFF6020B3FC000096D25A /* Wav.m in Sources */,
 				78621BEA1BD16D36009D4342 /* Logger.m in Sources */,
 				7D50156020F87C4E00BA1C45 /* ICNSurroundButton.m in Sources */,
@@ -511,6 +564,7 @@
 				7D26E53820B5978B00D66326 /* ICNViewCallView.m in Sources */,
 				781B3FED1E6DDEF2003782EE /* Nuve.m in Sources */,
 				7D50156420F87D4400BA1C45 /* UIView+MHFrame.m in Sources */,
+				7DF7FCC92109BAA700CB3B3F /* ICNNavigationController.m in Sources */,
 				7DA7AC3E20F83F3F00CD29A0 /* ICNRoomView.m in Sources */,
 				7DACE71420F74B7600AD6C7E /* ICNEditText.m in Sources */,
 			);
@@ -666,11 +720,11 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Sabine Technology Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sabine Technology Co., Ltd.";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = WY4LP9F37N;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",
@@ -694,8 +748,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sabinetek.icn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "467cd7eb-9168-4d7b-9937-d364f51e7b1a";
-				PROVISIONING_PROFILE_SPECIFIER = icn_pp;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
@@ -708,11 +762,11 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Sabine Technology Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Sabine Technology Co., Ltd.";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = WY4LP9F37N;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)/**",
@@ -733,8 +787,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sabinetek.icn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "467cd7eb-9168-4d7b-9937-d364f51e7b1a";
-				PROVISIONING_PROFILE_SPECIFIER = icn_pp;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";

@@ -14,8 +14,31 @@
     OnTextFieldChangeCallback callback;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    
+    if(self){
+        [self setBackgroundColor:RGBHexAlpha(0xFFFFFF, 0.3)];
+        self.layer.cornerRadius = 20;
+        self.layer.masksToBounds = YES;
+        
+        iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"EditText-Name-Icon"]];
+        textView = [[UITextField alloc] initWithFrame:CGRectZero];
+        textView.placeholder = @"text";
+        textView.textColor   = [UIColor whiteColor];
+        textView.borderStyle = UITextBorderStyleNone;
+        textView.keyboardType = UIKeyboardTypeNumberPad;
+        [textView addTarget:self action:@selector(onTextChange:) forControlEvents:UIControlEventEditingChanged];
+        
+        [self addSubview:iconView];
+        [self addSubview:textView];
+    }
+    return self;
+}
+
 - (instancetype)initWithIcon:(UIImage *)image
                         text:(NSString *)text
+                keyboardType:(UIKeyboardType)keyboardType
                        frame:(CGRect)frame {
     self = [super initWithFrame:frame];
     
@@ -29,7 +52,7 @@
         textView.placeholder = text;
         textView.textColor   = [UIColor whiteColor];
         textView.borderStyle = UITextBorderStyleNone;
-        textView.keyboardType = UIKeyboardTypeNumberPad;
+        textView.keyboardType = keyboardType;
         [textView addTarget:self action:@selector(onTextChange:) forControlEvents:UIControlEventEditingChanged];
         
         [self addSubview:iconView];
