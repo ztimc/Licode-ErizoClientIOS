@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 @import WebRTC;
 #import "ECRoom.h"
-#import "ICNViewCallView.h"
 
 typedef enum _ChatMode{
     Audio = 0,

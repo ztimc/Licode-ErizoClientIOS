@@ -47,7 +47,6 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     ICNSettingModel *_settingMode;
     
     ICNConferenceView *_conferenceView;
-    SwissPanel *_swissPanel;
 }
 
 - (instancetype) initWithMode:(ChatMode)mode
@@ -65,6 +64,10 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 - (void)loadView{
     _settingMode = [[ICNSettingModel alloc] init];
     [self initview];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onSabineError:)
+                                                 name:kSwissDidDisconnectNotification object:nil];
+    
 }
 
 
@@ -123,11 +126,12 @@ static NSString *kDefaultUserName = @"ErizoIOS";
                                 @"actualName":_userName,
                                 @"roomName":self.roomName}];
     
+    _localStream.mediaStream.videoTracks[0].isEnabled = self.mode == Video;
+    
     _conferenceView = [[ICNConferenceView alloc] initWithLocalStream:_localStream frame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     [_conferenceView setDelegete:self];
     self.view = _conferenceView;
     
-    _localStream.mediaStream.videoTracks[0].isEnabled = _mode == Video;
     if ([_localStream hasVideo]) {
         [_conferenceView setCaptureSession:[_localStream capturer].captureSession];
     }
@@ -447,5 +451,16 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 - (BOOL)shouldAutorotate{
     return YES;
 }
+
+- (void)onSabineError:(NSNotification *)notify {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"蓝牙断开了" message:@"请重新进入房间" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+         [self leave];
+    }];
+    [alert addAction:confirm];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 
 @end

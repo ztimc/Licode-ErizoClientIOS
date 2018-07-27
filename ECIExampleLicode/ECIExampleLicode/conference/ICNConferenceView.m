@@ -116,7 +116,11 @@
         [self addSubview:_cammerCtlImage];
         [self addSubview:_speakerCtlImage];
         [self addSubview:_hangupImage];
-
+        
+        if([self isEarphoneConnected] || [self isHeadsetPluggedIn]){
+            
+            [_speakerCtlImage setHidden:YES];
+        }
     }
     
     return self;
@@ -414,9 +418,9 @@
     ICNConferenceAudioView *audioView = [[ICNConferenceAudioView alloc] initWithStream:stream frame:CGRectZero];
     [audioView showMute:NO];
         
-    ICNRemoteVideoView *videoView = [[ICNRemoteVideoView alloc] initWithLiveStream:stream frame:CGRectZero];
+    ICNRemoteVideoView *videoView = [[ICNRemoteVideoView alloc] initWithLiveStream:stream frame:CGRectMake(0, 0, 90, 90)];
     [videoView showSmallStyle];
-        
+
     [_audioViews addObject:audioView];
     [_videoViews addObject:videoView];
     
@@ -518,6 +522,26 @@
     }
     
     [self setNeedsLayout];
+}
+
+- (BOOL)isEarphoneConnected {
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs]) {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones] || [[desc portType] isEqualToString:AVAudioSessionPortBluetoothA2DP]) {
+            
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)isHeadsetPluggedIn {
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs]) {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones])
+            return YES;
+    }
+    return NO;
 }
 
 # pragma mark - property set
