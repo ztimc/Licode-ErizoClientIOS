@@ -138,13 +138,13 @@
     }
     [self.view addSubview:mainIcon];
     
-    roomEditText = [[ICNEditText alloc] initWithIcon:[UIImage imageNamed:@"EditText-Room-Icon"] text:@"房间" keyboardType:UIKeyboardTypeNumberPad frame:CGRectZero];
+    roomEditText = [[ICNEditText alloc] initWithIcon:[UIImage imageNamed:@"EditText-Room-Icon"] text:@"房间号" keyboardType:UIKeyboardTypeNumberPad frame:CGRectZero];
     [roomEditText setOnTextChange:^(NSString *text) {
         self->roomName = text;
     }];
     [self.view addSubview:roomEditText];
     
-    nameEditText = [[ICNEditText alloc] initWithIcon:[UIImage imageNamed:@"EditText-Name-Icon"] text:@"名字" keyboardType:UIKeyboardTypeDefault frame:CGRectZero];
+    nameEditText = [[ICNEditText alloc] initWithIcon:[UIImage imageNamed:@"EditText-Name-Icon"] text:@"昵称" keyboardType:UIKeyboardTypeDefault frame:CGRectZero];
     [nameEditText setOnTextChange:^(NSString *text) {
         self->userName = text;
     }];
@@ -162,6 +162,7 @@
 }
 
 - (void)onJionButtonClick:(UIButton *)buttion {
+
     [self.view endEditing:YES];
     if(roomName == nil || [roomName isEqualToString:@""]){
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"房间号写错了" message:@"不能不写哦" preferredStyle:UIAlertControllerStyleAlert];
@@ -285,6 +286,26 @@
     }];
 }
 
+- (BOOL) isHeadSetPlugging {
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs]) {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones])
+            NSLog(@"戴了普通耳机");
+            return YES;
+    }
+    return NO;
+}
+
+- (BOOL)isEarphoneConnected {
+    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
+    for (AVAudioSessionPortDescription* desc in [route outputs]) {
+        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones] || [[desc portType] isEqualToString:AVAudioSessionPortBluetoothA2DP]) {
+
+            return YES;
+        }
+    }
+    return NO;
+}
 
 
 @end

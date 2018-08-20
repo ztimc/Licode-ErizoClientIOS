@@ -51,6 +51,13 @@
         textView = [[UITextField alloc] initWithFrame:CGRectZero];
         textView.placeholder = text;
         textView.textColor   = [UIColor whiteColor];
+        NSAttributedString *attrString = [[NSAttributedString alloc]
+                                          initWithString:text
+                                          attributes:
+                                          @{NSForegroundColorAttributeName:RGBHexAlpha(0xFFFFFF, 0.6),
+                                            NSFontAttributeName:textView.font
+                                            }];
+        textView.attributedPlaceholder = attrString;
         textView.borderStyle = UITextBorderStyleNone;
         textView.keyboardType = keyboardType;
         [textView addTarget:self action:@selector(onTextChange:) forControlEvents:UIControlEventEditingChanged];

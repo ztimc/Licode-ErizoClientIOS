@@ -78,7 +78,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     [[AppDelegate sharedDelegate] setVolume:100];
     ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
     [deviceConfigrue configure];
-    RTCSetMinDebugLogLevel(RTCLoggingSeverityError);
+    RTCSetMinDebugLogLevel(RTCLoggingSeverityInfo);
     
     RTCAudioSessionConfiguration *webRTCConfig =
     [RTCAudioSessionConfiguration webRTCConfiguration];
@@ -301,7 +301,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     
     [[Nuve sharedInstance] createToken:_roomName
                               roomType:RoomTypeMCU
-                              username:_userName
+                          username:_userName
                                   role:@"presenter"
                             completion:^(BOOL success, NSString *token) {
                                 if (success) {

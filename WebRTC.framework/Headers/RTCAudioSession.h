@@ -84,6 +84,41 @@ RTC_EXPORT
 - (void)audioSession:(RTCAudioSession *)audioSession
     didDetectPlayoutGlitch:(int64_t)totalNumberOfGlitches;
 
+/** Called when the audio session is about to change the active state.
+ */
+- (void)audioSession:(RTCAudioSession *)audioSession willSetActive:(BOOL)active;
+
+/** Called after the audio session sucessfully changed the active state.
+ */
+- (void)audioSession:(RTCAudioSession *)audioSession didSetActive:(BOOL)active;
+
+/** Called after the audio session failed to change the active state.
+ */
+- (void)audioSession:(RTCAudioSession *)audioSession
+    failedToSetActive:(BOOL)active
+                error:(NSError *)error;
+
+- (void)onSabineData:(UInt8 *)data
+              length:(NSInteger)length;
+
+@end
+
+/** This is a protocol is sabine device need implement */
+RTC_EXPORT
+@protocol SabineDeviceDelegate <NSObject>
+
+/** device start recording */
+- (void)sabineDeviceStartRecording;
+
+/** device stop recording */
+- (void)SabineDeviceStopRecording;
+
+/**
+ * sabine device state
+ * @return YES is connect, NO is disconnect
+ */
+- (BOOL)SabineDeviceState;
+
 @end
 
 /** This is a protocol used to inform RTCAudioSession when the audio session
@@ -98,20 +133,6 @@ RTC_EXPORT
 
 /** Called when the audio session is deactivated outside of the app by iOS. */
 - (void)audioSessionDidDeactivate:(AVAudioSession *)session;
-
-@end
-
-
-/**
-  塞宾设备代理，用来控制塞宾设备录音
- */
-@protocol SabineDeviceDelegate <NSObject>
-
-- (void)startRecording;
-
-- (void)stopRecoding;
-
-- (BOOL)hasDevice;
 
 @end
 
@@ -145,6 +166,8 @@ RTC_EXPORT
  */
 @property(nonatomic, assign) BOOL useManualAudio;
 
+@property(nonatomic, assign) id<SabineDeviceDelegate> sabineDelete;
+
 /** This property is only effective if useManualAudio is YES.
  *  Represents permission for WebRTC to initialize the VoIP audio unit.
  *  When set to NO, if the VoIP audio unit used by WebRTC is active, it will be
@@ -158,7 +181,6 @@ RTC_EXPORT
  *  we are able to prevent the abrupt cutoff.
  */
 @property(nonatomic, assign) BOOL isAudioEnabled;
-@property(nonatomic, strong) id<SabineDeviceDelegate> sabineDelegate;
 
 // Proxy properties.
 @property(readonly) NSString *category;
@@ -240,10 +262,8 @@ RTC_EXPORT
 - (BOOL)setOutputDataSource:(AVAudioSessionDataSourceDescription *)dataSource
                       error:(NSError **)outError;
 
-- (void)startSabineRecord;
-- (void)stopSabineRecord;
-- (void)pushSabineAduio:(UInt8 *)data :(NSUInteger) length;
-
+- (void)pushSabineData:(UInt8 *)data
+                length:(NSUInteger)length;
 @end
 
 @interface RTCAudioSession (Configuration)

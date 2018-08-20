@@ -72,22 +72,25 @@
         
     }];
     [[SSSwiss sharedInstance] initialize];
-    [[RTCAudioSession sharedInstance] setSabineDelegate:self];
-  
+    [[RTCAudioSession sharedInstance] setSabineDelete:self];
 }
 
 - (BOOL)hasDevice {
     return [[SSSwiss sharedInstance] hasDevice];
 }
 
-- (void)startRecording {
-    [[SSSwiss sharedInstance] startRecord:^(UInt8 * _Nonnull pcm, UInt32 length) {
-        [[RTCAudioSession sharedInstance] pushSabineAduio:pcm :length ];
-    }];
+- (BOOL)SabineDeviceState {
+    return [[SSSwiss sharedInstance] hasDevice];
 }
 
-- (void)stopRecoding {
+- (void)SabineDeviceStopRecording {
     [[SSSwiss sharedInstance] stopRecord];
+}
+
+- (void)sabineDeviceStartRecording {
+    [[SSSwiss sharedInstance] startRecord:^(UInt8 * _Nonnull pcm, UInt32 length) {
+        [[RTCAudioSession sharedInstance] pushSabineData:pcm length:length];
+    }];
 }
 
 /**

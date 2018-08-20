@@ -16,7 +16,11 @@
 
 - (instancetype)init {
     if (self = [super init]) {
+#if defined(RTC_SUPPORTS_METAL)
         _videoView = [[RTCMTLVideoView alloc] initWithFrame:self.frame];
+#else
+        _videoView = [[RTCEAGLVideoView alloc] initWithFrame:self.frame];
+#endif
         [self addSubview:_videoView];
     }
     return self;
@@ -24,7 +28,11 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _videoView = [[RTCMTLVideoView alloc] initWithFrame:frame];
+#if defined(RTC_SUPPORTS_METAL)
+        _videoView = [[RTCMTLVideoView alloc] initWithFrame:self.frame];
+#else
+        _videoView = [[RTCEAGLVideoView alloc] initWithFrame:self.frame];
+#endif
         [self addSubview:_videoView];
     }
     return self;
