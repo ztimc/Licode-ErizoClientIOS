@@ -301,7 +301,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     
     [[Nuve sharedInstance] createToken:_roomName
                               roomType:RoomTypeMCU
-                          username:_userName
+                          username:@"user"
                                   role:@"presenter"
                             completion:^(BOOL success, NSString *token) {
                                 if (success) {
