@@ -19,7 +19,7 @@
 #import "AppDelegate.h"
 #import "ICNSabineDeviceConfigure.h"
 #import "ICNConferenceView.h"
-
+#import "UIView+Toast.h"
 
 /*
 static NSString *roomId = @"59de889a35189661b58017a1";
@@ -47,6 +47,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     ICNSettingModel *_settingMode;
     
     ICNConferenceView *_conferenceView;
+    
 }
 
 - (instancetype) initWithMode:(ChatMode)mode
@@ -63,11 +64,12 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 
 - (void)loadView{
     _settingMode = [[ICNSettingModel alloc] init];
+    
     [self initview];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onSabineError:)
                                                  name:kSwissDidDisconnectNotification object:nil];
-    
+   
 }
 
 
@@ -123,8 +125,9 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     _localStream = [[ECStream alloc]
                    initLocalStreamWithOptions:options
                    attributes:@{@"name":@"localStream",
-                                @"actualName":_userName,
+                                @"actualName":@"_userName",
                                 @"roomName":self.roomName}];
+    
     
     _localStream.mediaStream.videoTracks[0].isEnabled = self.mode == Video;
     
@@ -162,6 +165,8 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     for (ECStream *stream in _remoteRoom.remoteStreams) {
         [_remoteRoom subscribe:stream];
     }
+    [self _dismissLoading];
+    [self _showConnectSuccess];
 }
 
 - (void)room:(ECRoom *)room didPublishStream:(ECStream *)stream {
@@ -169,6 +174,14 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 }
 
 - (void)room:(ECRoom *)room didSubscribeStream:(ECStream *)stream {
+    
+    NSDictionary *data = @{@"videoClose":
+                               @(!_localStream.mediaStream.videoTracks[0].isEnabled),
+                           @"audioMute":
+                               @(!_localStream.mediaStream.audioTracks[0].isEnabled)
+                           };
+    [_localStream sendData:data];
+    
     [_conferenceView jionByStream:stream];
 }
 
@@ -301,14 +314,15 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     
     [[Nuve sharedInstance] createToken:_roomName
                               roomType:RoomTypeMCU
-                          username:@"user"
+                              username:@"user"
                                   role:@"presenter"
                             completion:^(BOOL success, NSString *token) {
                                 if (success) {
                                     [self->_remoteRoom connectWithEncodedToken:token];
                                     self->_localStream.signalingChannel = self->_remoteRoom.signalingChannel;
+                                    [self _showLoading];
                                 } else {
-                                    NSLog(@"error createToken");
+                                    [self _handleConnectError:@"创建房间失败"];
                                 }
                             }];
     
@@ -394,6 +408,54 @@ static NSString *kDefaultUserName = @"ErizoIOS";
                                             didReceiveStats:(RTCLegacyStatsReport *)statsReport{
 }
 
+# pragma mark connect handler
+
+- (void)_handleConnectError:(NSString*)msg{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"服务器连接失败" message:msg preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *retry = [UIAlertAction actionWithTitle:@"重试" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[Nuve sharedInstance] createToken:self->_roomName
+                                  roomType:RoomTypeMCU
+                                  username:@"user"
+                                      role:@"presenter"
+                                completion:^(BOOL success, NSString *token) {
+                                    if (success) {
+                                        [self->_remoteRoom connectWithEncodedToken:token];
+                                        self->_localStream.signalingChannel = self->_remoteRoom.signalingChannel;
+                                        [self _showLoading];
+                                    } else {
+                                        [self _handleConnectError:@"创建房间失败"];
+                                    }
+                                }];
+    }];
+    
+    UIAlertAction *exit = [UIAlertAction actionWithTitle:@"退出" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [self leave];
+    }];
+    
+    [alert addAction:retry];
+    [alert addAction:exit];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)_showLoading {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.view makeToastActivity:CSToastPositionCenter];
+    });
+
+}
+
+- (void)_dismissLoading {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.view hideToastActivity];
+    });
+}
+
+- (void)_showConnectSuccess {
+    [self.view makeToast:@"连接成功"
+                duration:1
+                position:CSToastPositionCenter];
+}
+
 # pragma mark - roomViewDelegete
 
 - (void)onCameraCtlClick:(BOOL)close {
@@ -401,7 +463,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     _localStream.mediaStream.videoTracks[0].isEnabled = close;
     
     NSDictionary *data = @{@"videoClose": @(close)};
-
+    
     [_localStream sendData:data];
 }
 
@@ -437,6 +499,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 - (void)onSwitchCamera {
     [_localStream switchCamera];
 }
+
 
 # pragma mark - status bar hide
 

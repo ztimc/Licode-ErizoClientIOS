@@ -13,10 +13,12 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
 #import "ICNSabineDeviceConfigure.h"
+#import "Wav.h"
+
 @interface AppDelegate ()<SabineDeviceDelegate>
 
-@property(nonatomic,strong)UISlider *volumeSlider;
-@property(nonatomic,strong)MPVolumeView *volumeView;
+@property(nonatomic,strong) UISlider *volumeSlider;
+@property(nonatomic,strong) MPVolumeView *volumeView;
 
 @end
 
@@ -32,7 +34,7 @@
     // Initialize library
     [ErizoClient sharedInstance];
     [self initSwiss];
-    
+
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
    
     return YES;

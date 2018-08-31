@@ -11,6 +11,8 @@
 #import "ICNEditText.h"
 #import "MultiConferenceViewController.h"
 #import "ICNConferenceView.h"
+#import <Swiss/Swiss.h>
+#import "Wav.h"
 
 @interface ICNMainViewController ()
 
@@ -25,7 +27,7 @@
     UIImageView *mainIcon;
     ICNEditText *nameEditText;
     ICNEditText *roomEditText;
-    
+ 
 }
 
 - (void)loadView{
@@ -162,11 +164,10 @@
 }
 
 - (void)onJionButtonClick:(UIButton *)buttion {
-
+    
     [self.view endEditing:YES];
     if(roomName == nil || [roomName isEqualToString:@""]){
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"房间号写错了" message:@"不能不写哦" preferredStyle:UIAlertControllerStyleAlert];
-        
         UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:confirm];
         [self presentViewController:alert animated:YES completion:nil];
@@ -286,26 +287,6 @@
     }];
 }
 
-- (BOOL) isHeadSetPlugging {
-    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
-    for (AVAudioSessionPortDescription* desc in [route outputs]) {
-        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones])
-            NSLog(@"戴了普通耳机");
-            return YES;
-    }
-    return NO;
-}
-
-- (BOOL)isEarphoneConnected {
-    AVAudioSessionRouteDescription* route = [[AVAudioSession sharedInstance] currentRoute];
-    for (AVAudioSessionPortDescription* desc in [route outputs]) {
-        if ([[desc portType] isEqualToString:AVAudioSessionPortHeadphones] || [[desc portType] isEqualToString:AVAudioSessionPortBluetoothA2DP]) {
-
-            return YES;
-        }
-    }
-    return NO;
-}
 
 
 @end

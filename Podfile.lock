@@ -8,6 +8,7 @@ PODS:
   - Socket.IO-Client-Swift (12.0.0):
     - StarscreamSocketIO (~> 8.0.7)
   - StarscreamSocketIO (8.0.7)
+  - Toast (4.0.0)
 
 DEPENDENCIES:
   - IQKeyboardManager
@@ -15,6 +16,7 @@ DEPENDENCIES:
   - PodSwiss (from `./`)
   - PodWebRTC (from `./`)
   - Socket.IO-Client-Swift (~> 12.0.0)
+  - Toast (~> 4.0.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -23,6 +25,7 @@ SPEC REPOS:
     - OCMockito
     - Socket.IO-Client-Swift
     - StarscreamSocketIO
+    - Toast
 
 EXTERNAL SOURCES:
   PodSwiss:
@@ -38,7 +41,8 @@ SPEC CHECKSUMS:
   PodWebRTC: 00ee323db5a46bd777bb8ea4c1ad39221366f2ca
   Socket.IO-Client-Swift: 5b0154b42b3892bfb4c44fa138cbeb8afec4f6ef
   StarscreamSocketIO: 00b54e4208481ca5cef089545353aaf126bae16d
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: cf7a7c2292e5397a9dd6aa0c9327af52ad1efcdb
+PODFILE CHECKSUM: 1b5ea863e05c798b4537ba8115278bf408f7d62b
 
 COCOAPODS: 1.5.2

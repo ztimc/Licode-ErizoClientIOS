@@ -31,4 +31,5 @@ target 'ECIExampleLicode' do
   pod 'PodSwiss', :path => './'
   pod 'Socket.IO-Client-Swift', '~> 12.0.0'
   pod 'IQKeyboardManager'
+  pod 'Toast', '~> 4.0.0'
 end

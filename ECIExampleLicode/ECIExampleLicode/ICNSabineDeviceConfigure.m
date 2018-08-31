@@ -23,7 +23,7 @@
         [[SSSwiss sharedInstance] setGain:15];
     }else if(name == ALAYA_PRO || name == ALAYA_SILVER){
         [[SSSwiss sharedInstance] setGain:50];
-        [[SSSwiss sharedInstance] setMonitor:(UInt8)60];
+        [[SSSwiss sharedInstance] setMonitor:(UInt8)80];
     }
 }
 

@@ -177,7 +177,7 @@ typedef void(^SocketIOCallback)(NSArray* data);
     }
     
     SocketIOCallback callback = [self onPublishCallback:delegate];
-    [[socketIO emitWithAck:@"publish" with:@[attributes, [NSNull null]]] timingOutAfter:10
+[[socketIO emitWithAck:@"publish" with:@[attributes, [NSNull null]]] timingOutAfter:10
                                                                                callback:callback];
 }
 
