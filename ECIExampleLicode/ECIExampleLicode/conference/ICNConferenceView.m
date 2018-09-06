@@ -121,6 +121,9 @@
             
             [_speakerCtlImage setHidden:YES];
         }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioRouteChangeListenerCallback:)   name:AVAudioSessionRouteChangeNotification object:nil];
+        
     }
     
     return self;
@@ -543,6 +546,25 @@
     }
     return NO;
 }
+
+- (void)audioRouteChangeListenerCallback:(NSNotification*)notification
+{
+    NSDictionary *interuptionDict = notification.userInfo;
+    NSInteger routeChangeReason = [[interuptionDict valueForKey:AVAudioSessionRouteChangeReasonKey] integerValue];
+    switch (routeChangeReason) {
+        case AVAudioSessionRouteChangeReasonNewDeviceAvailable:
+            [_speakerCtlImage setHidden:YES];
+            break;
+        case AVAudioSessionRouteChangeReasonOldDeviceUnavailable:
+            [_speakerCtlImage setHidden:NO];
+            break;
+        case AVAudioSessionRouteChangeReasonCategoryChange:
+            // called at start - also when other audio wants to play
+            NSLog(@"AVAudioSessionRouteChangeReasonCategoryChange");
+            break;
+    }
+}
+
 
 # pragma mark - property set
 - (void)setCaptureSession:(AVCaptureSession *)captureSession{

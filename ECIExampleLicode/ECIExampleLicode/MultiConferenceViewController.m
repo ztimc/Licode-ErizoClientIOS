@@ -36,6 +36,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 
 @property(nonatomic,strong) NSString *roomName;
 @property(nonatomic,strong) NSString *userName;
+@property(nonatomic,assign) BOOL *isLeave;
 @property(nonatomic,assign) ChatMode mode;
 
 @end
@@ -175,14 +176,17 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 
 - (void)room:(ECRoom *)room didSubscribeStream:(ECStream *)stream {
     
+    [_conferenceView jionByStream:stream];
+    
+    BOOL videoClose = !_localStream.mediaStream.videoTracks[0].isEnabled;
+    BOOL audioMute = !_localStream.mediaStream.audioTracks[0].isEnabled;
+
     NSDictionary *data = @{@"videoClose":
-                               @(!_localStream.mediaStream.videoTracks[0].isEnabled),
+                               @(videoClose),
                            @"audioMute":
-                               @(!_localStream.mediaStream.audioTracks[0].isEnabled)
+                               @(audioMute)
                            };
     [_localStream sendData:data];
-    
-    [_conferenceView jionByStream:stream];
 }
 
 - (void)room:(ECRoom *)room didUnSubscribeStream:(ECStream *)stream {
@@ -219,7 +223,12 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 - (void)room:(ECRoom *)room didChangeStatus:(ECRoomStatus)status {
     switch (status) {
         case ECRoomStatusDisconnected:
-            
+            if (!_isLeave) {
+                for (ECStream *stream in _remoteRoom.remoteStreams) {
+                    [_conferenceView leaveByStream:stream];
+                }
+                [self _handleConnectError:@"与服务器断开连接"];
+            }
             break;
         default:
             break;
@@ -231,12 +240,18 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     
     NSNumber *audio = [data objectForKey:@"audioMute"];
     NSNumber *video = [data objectForKey:@"videoClose"];
-    if(audio){
-        [_conferenceView onAudioMuteFromStream:stream mute:audio.boolValue];
-    }
-    if(video){
-        [_conferenceView onVideoCloseFromStream:stream close:video.boolValue];
-    }
+    
+    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5/*延迟执行时间*/ * NSEC_PER_SEC));
+    
+    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+        if(audio){
+            [self->_conferenceView onAudioMuteFromStream:stream mute:audio.boolValue];
+        }
+        if(video){
+            [self->_conferenceView onVideoCloseFromStream:stream close:video.boolValue];
+        }
+    });
+  
 }
 
 - (void)room:(ECRoom *)room didUpdateAttributesOfStream:(ECStream *)stream {
@@ -360,6 +375,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 }
 
 - (void)leave{
+    _isLeave = YES;
     for (ECStream *stream in _remoteRoom.remoteStreams) {
        [_conferenceView leaveByStream:stream];
     }
