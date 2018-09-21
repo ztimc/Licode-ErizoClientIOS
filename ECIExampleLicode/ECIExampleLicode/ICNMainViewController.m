@@ -11,7 +11,7 @@
 #import "ICNEditText.h"
 #import "MultiConferenceViewController.h"
 #import "ICNConferenceView.h"
-#import <Swiss/Swiss.h>
+
 #import "Wav.h"
 
 @interface ICNMainViewController ()

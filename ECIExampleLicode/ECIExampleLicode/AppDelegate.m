@@ -9,16 +9,17 @@
 @import WebRTC;
 #import "AppDelegate.h"
 #import "ErizoClient.h"
-#import <Swiss/Swiss.h>
+
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
+#import <SabineSwissSDK/SabineSwissSDK.h>
 #import "ICNSabineDeviceConfigure.h"
 #import "Wav.h"
 
-@interface AppDelegate ()<SabineDeviceDelegate>
+@interface AppDelegate ()<SabineDeviceDelegate,SWDeviceManagerAudioStreamDelegate>
 
-@property(nonatomic,strong) UISlider *volumeSlider;
-@property(nonatomic,strong) MPVolumeView *volumeView;
+@property(nonatomic, strong) UISlider *volumeSlider;
+@property(nonatomic, strong) MPVolumeView *volumeView;
 
 @end
 
@@ -63,7 +64,7 @@
 }
 
 - (void)initSwiss{
-    [[NSNotificationCenter defaultCenter] addObserverForName:kSwissDidConnectNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:SWSccessoryConnectStateChangeNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [[AVAudioSession sharedInstance]setActive:YES error:nil];
@@ -73,26 +74,35 @@
         });
         
     }];
-    [[SSSwiss sharedInstance] initialize];
+    
+    [[SWDeviceManager sharedInstance] connect:^(BOOL success) {
+        
+    }];
+    
     [[RTCAudioSession sharedInstance] setSabineDelete:self];
+    
 }
 
 - (BOOL)hasDevice {
-    return [[SSSwiss sharedInstance] hasDevice];
+    return [[SWDeviceManager sharedInstance] isConnect];
 }
 
 - (BOOL)SabineDeviceState {
-    return [[SSSwiss sharedInstance] hasDevice];
+     return [[SWDeviceManager sharedInstance] isConnect];
 }
 
 - (void)SabineDeviceStopRecording {
-    [[SSSwiss sharedInstance] stopRecord];
+    [[SWDeviceManager sharedInstance] stopRecord];
 }
 
 - (void)sabineDeviceStartRecording {
-    [[SSSwiss sharedInstance] startRecord:^(UInt8 * _Nonnull pcm, UInt32 length) {
-        [[RTCAudioSession sharedInstance] pushSabineData:pcm length:length];
-    }];
+    [[SWDeviceManager sharedInstance] startRecordWithDelegate:self];
+}
+
+- (void)readPCMBytesWithCircular:(STCircularPCMBufferModel *)circular andPcm:(Byte *)pcm pcmByteSize:(SInt32)pcmSize {
+    
+    
+    [[RTCAudioSession sharedInstance] pushSabineData:(UInt8 *)pcm length:pcmSize];
 }
 
 /**

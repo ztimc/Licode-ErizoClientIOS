@@ -37,7 +37,7 @@ SPEC CHECKSUMS:
   IQKeyboardManager: c390e612f4b98c8fd748016470138537dc163ead
   OCHamcrest: 363e1bf738c3e8a94abe7c2c415f70d671adde38
   OCMockito: bceefcd365252bcdf8b59c1b2bd23890805fc0d8
-  PodSwiss: b12319a0360f6b402e8673e9242a5d745dbc30b5
+  PodSwiss: 15c84d7f8e28c2ccc1233099cfde5a11b6a2f619
   PodWebRTC: 00ee323db5a46bd777bb8ea4c1ad39221366f2ca
   Socket.IO-Client-Swift: 5b0154b42b3892bfb4c44fa138cbeb8afec4f6ef
   StarscreamSocketIO: 00b54e4208481ca5cef089545353aaf126bae16d

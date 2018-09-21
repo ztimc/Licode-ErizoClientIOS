@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
   #s.source_files  = "**/*.{h}"
 
   s.requires_arc = true
-  s.vendored_frameworks = 'Swiss.framework'
+  s.vendored_frameworks = 'SabineSwissSDK.framework'
 end

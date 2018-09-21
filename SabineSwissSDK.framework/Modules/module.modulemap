@@ -1,0 +1,6 @@
+framework module SabineSwissSDK {
+  umbrella header "SabineSwissSDK.h"
+
+  export *
+  module * { export * }
+}

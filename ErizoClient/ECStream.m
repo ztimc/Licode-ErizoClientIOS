@@ -274,7 +274,7 @@ static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
     }
     
     //NSInteger fps = [self selectFpsForFormat:format];
-    NSInteger fps = 15;
+    NSInteger fps = 25;
 
     [_capturer startCaptureWithDevice:device format:format fps:fps];
 }

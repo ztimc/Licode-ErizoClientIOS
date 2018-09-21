@@ -13,20 +13,21 @@
 #import "LicodeServer.h"
 #import "Nuve.h"
 #import "ErizoClient.h"
-#import <Swiss/Swiss.h>
 #import <CoreTelephony/CTCellularData.h>
 #import "ICNSettingModel.h"
 #import "AppDelegate.h"
 #import "ICNSabineDeviceConfigure.h"
 #import "ICNConferenceView.h"
 #import "UIView+Toast.h"
+#import <SabineSwissSDK/SabineSwissSDK.h>
+
+
 
 /*
 static NSString *roomId = @"59de889a35189661b58017a1";
 static NSString *roomName = @"IOS Demo APP";
 static NSString *kDefaultUserName = @"ErizoIOS";
  */
-#import "SwissPanel.h"
 
 @interface MultiConferenceViewController () <UITextFieldDelegate,
                                              RTCEAGLVideoViewDelegate,
@@ -69,7 +70,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     [self initview];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onSabineError:)
-                                                 name:kSwissDidDisconnectNotification object:nil];
+                                                 name:SWSccessoryConnectStateChangeNotification object:nil];
    
 }
 
@@ -78,7 +79,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     [super viewDidLoad];
     
     [[AVAudioSession sharedInstance]setActive:YES error:nil];
-    [[AppDelegate sharedDelegate] setVolume:100];
+    [[AppDelegate sharedDelegate] setVolume:90];
     ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
     [deviceConfigrue configure];
     RTCSetMinDebugLogLevel(RTCLoggingSeverityInfo);
@@ -86,7 +87,7 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     RTCAudioSessionConfiguration *webRTCConfig =
     [RTCAudioSessionConfiguration webRTCConfiguration];
     
-    if([[SSSwiss sharedInstance] hasDevice]){
+    if([[SWDeviceManager sharedInstance] isConnect]){
         webRTCConfig.category = AVAudioSessionCategoryPlayback;
         webRTCConfig.categoryOptions = AVAudioSessionCategoryOptionDuckOthers;
         webRTCConfig.sampleRate = 44100;
@@ -271,7 +272,6 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 -(void)connect {
     
     // Initialize room (without token!)
-    
     RTCDefaultVideoDecoderFactory *decoderFactory = [[RTCDefaultVideoDecoderFactory alloc] init];
     RTCDefaultVideoEncoderFactory *encoderFactory = [[RTCDefaultVideoEncoderFactory alloc] init];
     RTCPeerConnectionFactory *_peerFactory = [[RTCPeerConnectionFactory alloc]
@@ -532,13 +532,15 @@ static NSString *kDefaultUserName = @"ErizoIOS";
 }
 
 - (void)onSabineError:(NSNotification *)notify {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"蓝牙断开了" message:@"请重新进入房间" preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-         [self leave];
-    }];
-    [alert addAction:confirm];
-    [self presentViewController:alert animated:YES completion:nil];
+    if(![notify.object boolValue]) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"蓝牙断开了" message:@"请重新进入房间" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *confirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self leave];
+        }];
+        [alert addAction:confirm];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
 }
 
 

@@ -7,23 +7,25 @@
 //
 
 #import "ICNSabineDeviceConfigure.h"
-#import <Swiss/Swiss.h>
+#import <SabineSwissSDK/SabineSwissSDK.h>
 
 @implementation ICNSabineDeviceConfigure
 
 - (void)configure{
-    SSDeviceInfo *deviceInfo = [[SSDeviceInfo alloc] init];
-    [[SSSwiss sharedInstance] setMusicMix:NO];
-    [[SSSwiss sharedInstance] setReverberaion:(UInt8)0];
-    [[SSSwiss sharedInstance] setAGC:NO];
+
     
-    DEVICE_NAME name = [deviceInfo getDeviceName];
+    [[SWDeviceManager sharedInstance] setMusicMix:NO];
+    [[SWDeviceManager sharedInstance] setReverber:0];
+      [[SWDeviceManager sharedInstance] setAgc:SWSAGCSwitch_OFF];
     
-    if(name == S_MIC){
-        [[SSSwiss sharedInstance] setGain:15];
-    }else if(name == ALAYA_PRO || name == ALAYA_SILVER){
-        [[SSSwiss sharedInstance] setGain:50];
-        [[SSSwiss sharedInstance] setMonitor:(UInt8)80];
+    
+    SWSHardwardType model = [[[SWDeviceManager sharedInstance] getDeviceInfo] SWS_HardwardType];
+    
+    if(model == SWSHardwardTypeSMIC){
+        [[SWDeviceManager sharedInstance] setMicEffect:15];
+    }else if(model == SWSHardwardTypeAlayaSilver || model == SWSHardwardTypeAlayaPro){
+        [[SWDeviceManager sharedInstance] setMonito:80];
+        [[SWDeviceManager sharedInstance] setMicEffect:50];
     }
 }
 

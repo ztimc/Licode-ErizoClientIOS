@@ -1,6 +1,0 @@
-framework module Swiss {
-  umbrella header "Swiss.h"
-
-  export *
-  module * { export * }
-}
