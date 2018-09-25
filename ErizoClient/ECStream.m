@@ -115,7 +115,8 @@ static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
 
 - (RTCMediaStream *)createLocalStream {
     _usingFrontCamera = true;
-    _mediaStream = [_peerFactory mediaStreamWithStreamId:@"LCMSv0"];
+    _mediaStream = [_peerFactory mediaStreamWithStreamId:@"LCMS"];
+    _streamOptions[@"label"] = @"LCMS";
 
     if ([(NSNumber *)[_streamOptions objectForKey:kStreamOptionVideo] boolValue])
         [self generateVideoTracks];
@@ -273,8 +274,8 @@ static NSString *const kVideoResolutionKey = @"rtc_video_resolution_key";
         return;
     }
     
-    //NSInteger fps = [self selectFpsForFormat:format];
-    NSInteger fps = 25;
+    NSInteger fps = [self selectFpsForFormat:format];
+    
 
     [_capturer startCaptureWithDevice:device format:format fps:fps];
 }

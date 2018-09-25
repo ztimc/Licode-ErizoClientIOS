@@ -411,11 +411,12 @@
 
 # pragma mark - stream operator
 - (void)jionByStream:(ECStream *)stream {
+    if(stream == nil) return;
+    
     BOOL hasVideo = NO;
     for(int i = 0; i < _videoViews.count; i++){
         hasVideo |= _videoViews[i].enableVideo;
     }
-    
     [streams addObject:stream];
     
     ICNConferenceAudioView *audioView = [[ICNConferenceAudioView alloc] initWithStream:stream frame:CGRectZero];

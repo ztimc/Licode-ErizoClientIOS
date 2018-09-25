@@ -134,14 +134,25 @@
 }
 
 - (RTCMediaConstraints *)defaultAnswerConstraints {
-    return [self defaultOfferConstraints];
+    return [self defaultOfferConstraints:false];
 }
 
-- (RTCMediaConstraints *)defaultOfferConstraints {
-    NSDictionary *mandatoryConstraints = @{
-                                      @"OfferToReceiveAudio": @"true",
-                                      @"OfferToReceiveVideo": @"true"
-                                      };
+- (RTCMediaConstraints *)defaultOfferConstraints:(BOOL)isPubliser {
+    
+    NSDictionary *mandatoryConstraints;
+    if (isPubliser) {
+       mandatoryConstraints = @{
+            @"OfferToReceiveAudio": @"false",
+            @"OfferToReceiveVideo": @"false"
+            };
+    } else {
+        mandatoryConstraints = @{
+            @"OfferToReceiveAudio": @"true",
+            @"OfferToReceiveVideo": @"true"
+            };
+    }
+    
+    
     RTCMediaConstraints* constraints =
     [[RTCMediaConstraints alloc]
      initWithMandatoryConstraints:mandatoryConstraints
@@ -252,11 +263,13 @@ readyToSubscribeStreamId:(NSString *)streamId
                 break;
                 
             case RTCIceConnectionStateConnected: {
+                
                 [self setState:ECClientStateConnected];
                 break;
             }
+                
             case RTCIceConnectionStateFailed: {
-                L_WARNING(@"RTCIceConnectionStateFailed %@", peerConnection);
+                C_L_WARNING(@"ICE RTCIceConnectionStateFailed ")
                 break;
             }
             case RTCIceConnectionStateClosed:
@@ -294,9 +307,9 @@ readyToSubscribeStreamId:(NSString *)streamId
         C_L_DEBUG(@"Generated ICE candidate: %@", candidate);
         ECICECandidateMessage *message =
         [[ECICECandidateMessage alloc] initWithCandidate:candidate
-                                                streamId:_streamId
-                                            peerSocketId:_peerSocketId];
-        [_signalingChannel enqueueSignalingMessage:message];
+                                                streamId:self->_streamId
+                                            peerSocketId:self->_peerSocketId];
+        [self->_signalingChannel enqueueSignalingMessage:message];
     });
 }
 
@@ -362,7 +375,7 @@ readyToSubscribeStreamId:(NSString *)streamId
     _localStream = [self.delegate streamToPublishByAppClient:self];
     [_peerConnection addStream:_localStream];
     __weak ECClient *weakSelf = self;
-    [_peerConnection offerForConstraints:[self defaultOfferConstraints]
+    [_peerConnection offerForConstraints:[self defaultOfferConstraints:YES]
                        completionHandler:^(RTCSessionDescription * _Nullable sdp, NSError * _Nullable error) {
                            
                            NSString *sdpStr = [[sdp sdp] stringByReplacingOccurrencesOfString:@"a=fmtp:111 minptime=10;useinbandfec=1" withString: @"a=fmtp:111 minptime=10;useinbandfec=1;stereo=1;sprop-stereo=1"];
@@ -391,7 +404,7 @@ readyToSubscribeStreamId:(NSString *)streamId
     if (_peerSocketId) {
         [self drainMessageQueueIfReady];
     } else {
-        [_peerConnection offerForConstraints:[self defaultOfferConstraints]
+        [_peerConnection offerForConstraints:[self defaultOfferConstraints:NO]
                            completionHandler:^(RTCSessionDescription * _Nullable sdp, NSError * _Nullable error) {
                                ECClient *strongSelf = weakSelf;
                                
@@ -432,11 +445,11 @@ readyToSubscribeStreamId:(NSString *)streamId
             
             newSDP = [self descriptionForDescription:newSDP bandwidthOptions:_clientOptions];
             
-            __weak ECClient *weakSelf = self;
-            
+             __weak typeof(self)weakSelf = self;
             [_peerConnection setRemoteDescription:newSDP
                                 completionHandler:^(NSError * _Nullable error) {
-                ECClient *strongSelf = weakSelf;
+                __strong typeof (weakSelf) strongSelf = weakSelf;
+                
                 [strongSelf peerConnection:strongSelf.peerConnection didSetSessionDescriptionWithError:error];
             }];
             break;

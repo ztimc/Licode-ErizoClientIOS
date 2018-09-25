@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <CommonCrypto/CommonHMAC.h>
 
-static NSString *kNuveHost          = @"https://webrtc.muguovr.cn:3004"; //@"http://47.92.124.64:3000"; //lihengz
+static NSString *kNuveHost          = @"https://webrtc.ztimc.com:3004"; //@"http://47.92.124.64:3000"; //lihengz
 static NSString *kNuveServiceId     = @"5af3fddbc64aa6c43a89ed87"; //lihengz
 static NSString *kNuveServiceKey    = @"13655";  //lihengz
 
@@ -43,7 +43,7 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
     NSDictionary *postData = @{
                            @"username" : username,
                            @"role" : role,
-                           @"room" : roomName
+                           @"room" : @"basicExampleRoom"
                            };
     if (roomType == RoomTypeP2P)
         [postData setValue:@TRUE forKey:@"p2p"];
@@ -125,7 +125,7 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
                   completion:(NuveCreateTokenCallback)completion {
     NSAssert(roomId, @"You should provide a roomId!");
     NSAssert(username, @"You should provide username!");
-    NSAssert(role, @"You should provide a role!");
+    NSAssert(role, @"/ should provide a role!");
 
     NSString *endpoint = [NSString stringWithFormat:@"/rooms/%@/tokens", roomId];
     NSString *authorizationHeader = [self authorizationHeaderForUserName:username
@@ -205,7 +205,8 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
         if([server caseInsensitiveCompare:@"美国"] == NSOrderedSame){
             kNuveHost =  @"http://18.219.26.230:3001";
         }else{
-            kNuveHost = @"https://webrtc.muguovr.cn:3004";
+            //kNuveHost = @"http://192.168.1.38:3001";
+            kNuveHost = @"https://webrtc.ztimc.com:3004";
         }
     }
     

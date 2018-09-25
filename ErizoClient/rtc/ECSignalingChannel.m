@@ -61,12 +61,12 @@ typedef void(^SocketIOCallback)(NSArray* data);
                                                            @"forceWebsockets": @YES,
                                                            @"secure": [NSNumber numberWithBool:secure],
                                                            @"reconnects": @NO,
+                                                           @"forceNew":@NO
                                                          }];
 
     [socketIO on:@"connect" callback:^(NSArray* data, SocketAckEmitter* ack) {
         L_INFO(@"Websocket Connection success!");
-        //[[socketIO emitWithAck:@"token" with:@[@{@"singlePC":@NO,@"token":decodedToken}]] timingOutAfter:0 callback:^(NSArray* data) {  //lihengz
-        [[socketIO emitWithAck:@"token" with:@[decodedToken]] timingOutAfter:0 callback:^(NSArray* data) {
+        [[self->socketIO emitWithAck:@"token" with:@[@{@"singlePC":@NO,@"token":self->decodedToken}]] timingOutAfter:0 callback:^(NSArray* data) {
             [self onSendTokenCallback](data);
         }];
     }];
@@ -175,7 +175,8 @@ typedef void(^SocketIOCallback)(NSArray* data);
     if (!options[@"state"]) {
         attributes[@"state"] = @"erizo";
     }
-    
+    attributes[@"metadata"] = @{@"type" : @"publisher"};
+    attributes[@"muteStream"] = @{@"audio" : @NO, @"video" : @NO};
     SocketIOCallback callback = [self onPublishCallback:delegate];
 [[socketIO emitWithAck:@"publish" with:@[attributes, [NSNull null]]] timingOutAfter:10
                                                                                callback:callback];
