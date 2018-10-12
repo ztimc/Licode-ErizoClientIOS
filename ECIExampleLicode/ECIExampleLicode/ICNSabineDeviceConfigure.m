@@ -12,21 +12,21 @@
 @implementation ICNSabineDeviceConfigure
 
 - (void)configure{
-
-    
-    [[SWDeviceManager sharedInstance] setMusicMix:NO];
+   
     [[SWDeviceManager sharedInstance] setReverber:0];
-      [[SWDeviceManager sharedInstance] setAgc:SWSAGCSwitch_OFF];
+    [[SWDeviceManager sharedInstance] setMusicMix:NO];
+    [[SWDeviceManager sharedInstance] setAgc:SWSAGCSwitch_OFF];
     
     
     SWSHardwardType model = [[[SWDeviceManager sharedInstance] getDeviceInfo] SWS_HardwardType];
     
     if(model == SWSHardwardTypeSMIC){
-        [[SWDeviceManager sharedInstance] setMicEffect:15];
+        [[SWDeviceManager sharedInstance] setMicEffect:10];
     }else if(model == SWSHardwardTypeAlayaSilver || model == SWSHardwardTypeAlayaPro){
         [[SWDeviceManager sharedInstance] setMonito:80];
         [[SWDeviceManager sharedInstance] setMicEffect:50];
     }
+    [[SWDeviceManager sharedInstance] setMusicMix:NO];
 }
 
 @end

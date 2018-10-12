@@ -20,6 +20,7 @@
 
 @property(nonatomic, strong) UISlider *volumeSlider;
 @property(nonatomic, strong) MPVolumeView *volumeView;
+@property(nonatomic, assign) BOOL isSabine;
 
 @end
 
@@ -56,7 +57,9 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[SWDeviceManager sharedInstance] connect:^(BOOL success) {
+        
+    }];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -64,31 +67,32 @@
 }
 
 - (void)initSwiss{
-    [[NSNotificationCenter defaultCenter] addObserverForName:SWSccessoryConnectStateChangeNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [[AVAudioSession sharedInstance]setActive:YES error:nil];
-            [[AppDelegate sharedDelegate] setVolume:90];
-            ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
-            [deviceConfigrue configure];
-        });
-        
-    }];
-    
     [[SWDeviceManager sharedInstance] connect:^(BOOL success) {
         
     }];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(staticChange:) name:SWSccessoryConnectStateChangeNotification object:nil];
+    [[SWSDKManager sharedInstance] registerSabineSwissSDK];
     
     [[RTCAudioSession sharedInstance] setSabineDelete:self];
+}
+
+-(void)staticChange:(NSNotification * )noti{
+    _isSabine = [[noti object] boolValue];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[AVAudioSession sharedInstance]setActive:YES error:nil];
+        [[AppDelegate sharedDelegate] setVolume:90];
+        ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
+        [deviceConfigrue configure];
+    });
     
 }
 
 - (BOOL)hasDevice {
-    return [[SWDeviceManager sharedInstance] isConnect];
+    return _isSabine;
 }
 
 - (BOOL)SabineDeviceState {
-     return [[SWDeviceManager sharedInstance] isConnect];
+    return _isSabine;
 }
 
 - (void)SabineDeviceStopRecording {

@@ -83,27 +83,6 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
     [deviceConfigrue configure];
     RTCSetMinDebugLogLevel(RTCLoggingSeverityInfo);
-    
-    RTCAudioSessionConfiguration *webRTCConfig =
-    [RTCAudioSessionConfiguration webRTCConfiguration];
-    
-    if([[SWDeviceManager sharedInstance] isConnect]){
-        webRTCConfig.category = AVAudioSessionCategoryPlayback;
-        webRTCConfig.categoryOptions = AVAudioSessionCategoryOptionDuckOthers;
-        webRTCConfig.sampleRate = 44100;
-    }else{
-        webRTCConfig.category = AVAudioSessionCategoryPlayAndRecord;
-        webRTCConfig.categoryOptions = webRTCConfig.categoryOptions |
-        AVAudioSessionCategoryOptionDefaultToSpeaker;
-        webRTCConfig.sampleRate = 44100;
-    }
-    webRTCConfig.mode = AVAudioSessionModeDefault;
-
-    webRTCConfig.inputNumberOfChannels = 2;
-    webRTCConfig.outputNumberOfChannels = 2;
-    [RTCAudioSessionConfiguration setWebRTCConfiguration:webRTCConfig];
-    [self configureAudioSession];
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -384,30 +363,6 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     _conferenceView.captureSession = nil;
     [_localStream.capturer stopCapture];
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)configureAudioSession {
-    RTCAudioSessionConfiguration *configuration =
-    [[RTCAudioSessionConfiguration alloc] init];
-    configuration.category = AVAudioSessionCategoryPlayback;
-    configuration.categoryOptions = AVAudioSessionCategoryOptionDuckOthers;
-    configuration.mode = AVAudioSessionModeDefault;
-    
-    RTCAudioSession *session = [RTCAudioSession sharedInstance];
-    [session lockForConfiguration];
-    BOOL hasSucceeded = NO;
-    NSError *error = nil;
-    if (session.isActive) {
-        hasSucceeded = [session setConfiguration:configuration error:&error];
-    } else {
-        hasSucceeded = [session setConfiguration:configuration
-                                          active:YES
-                                           error:&error];
-    }
-    if (!hasSucceeded) {
-        RTCLogError(@"Error setting configuration: %@", error.localizedDescription);
-    }
-    [session unlockForConfiguration];
 }
 
 # pragma mark - publish statistic
