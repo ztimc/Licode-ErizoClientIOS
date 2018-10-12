@@ -43,7 +43,7 @@ static NSString *kNuveServiceKey    = @"13655";  //lihengz
     NSDictionary *postData = @{
                            @"username" : username,
                            @"role" : role,
-                           @"room" : @"basicExampleRoom"
+                           @"room" : roomName
                            };
     if (roomType == RoomTypeP2P)
         [postData setValue:@TRUE forKey:@"p2p"];
