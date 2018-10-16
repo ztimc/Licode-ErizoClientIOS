@@ -18,6 +18,7 @@
 #import "AppDelegate.h"
 #import "ICNSabineDeviceConfigure.h"
 #import "ICNConferenceView.h"
+#import "ICNSabinePannel.h"
 #import "UIView+Toast.h"
 #import <SabineSwissSDK/SabineSwissSDK.h>
 
@@ -80,9 +81,9 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     
     [[AVAudioSession sharedInstance]setActive:YES error:nil];
     [[AppDelegate sharedDelegate] setVolume:90];
+    RTCSetMinDebugLogLevel(RTCLoggingSeverityInfo);
     ICNSabineDeviceConfigure * deviceConfigrue = [[ICNSabineDeviceConfigure alloc] init];
     [deviceConfigrue configure];
-    RTCSetMinDebugLogLevel(RTCLoggingSeverityInfo);
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -114,7 +115,9 @@ static NSString *kDefaultUserName = @"ErizoIOS";
     
     _conferenceView = [[ICNConferenceView alloc] initWithLocalStream:_localStream frame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     [_conferenceView setDelegete:self];
+
     self.view = _conferenceView;
+    
     
     if ([_localStream hasVideo]) {
         [_conferenceView setCaptureSession:[_localStream capturer].captureSession];

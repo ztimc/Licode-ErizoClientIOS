@@ -101,6 +101,8 @@
 
 - (void)sabineDeviceStartRecording {
     [[SWDeviceManager sharedInstance] startRecordWithDelegate:self];
+    
+    [[SWDeviceManager sharedInstance] setMusicMix:SWSMusicMixSwitch_OFF];
 }
 
 - (void)readPCMBytesWithCircular:(STCircularPCMBufferModel *)circular andPcm:(Byte *)pcm pcmByteSize:(SInt32)pcmSize {

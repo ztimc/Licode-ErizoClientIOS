@@ -14,19 +14,20 @@
 - (void)configure{
    
     [[SWDeviceManager sharedInstance] setReverber:0];
-    [[SWDeviceManager sharedInstance] setMusicMix:NO];
+   
     [[SWDeviceManager sharedInstance] setAgc:SWSAGCSwitch_OFF];
     
     
     SWSHardwardType model = [[[SWDeviceManager sharedInstance] getDeviceInfo] SWS_HardwardType];
+    [[SWDeviceManager sharedInstance] setMusicMix:SWSMusicMixSwitch_OFF];
     
     if(model == SWSHardwardTypeSMIC){
-        [[SWDeviceManager sharedInstance] setMicEffect:10];
+        [[SWDeviceManager sharedInstance] setMicEffect:15];
+        [[SWDeviceManager sharedInstance] setMonito:60];
     }else if(model == SWSHardwardTypeAlayaSilver || model == SWSHardwardTypeAlayaPro){
         [[SWDeviceManager sharedInstance] setMonito:80];
         [[SWDeviceManager sharedInstance] setMicEffect:50];
     }
-    [[SWDeviceManager sharedInstance] setMusicMix:NO];
 }
 
 @end

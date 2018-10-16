@@ -45,6 +45,8 @@
 		7D7B930220BE415F0082C9F3 /* ICNStatsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D7B930020BE415F0082C9F3 /* ICNStatsView.m */; };
 		7DACE71320F74B7600AD6C7E /* ICNEditText.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DACE71120F74B7600AD6C7E /* ICNEditText.h */; };
 		7DACE71420F74B7600AD6C7E /* ICNEditText.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DACE71220F74B7600AD6C7E /* ICNEditText.m */; };
+		7DBE06B221757C8500933801 /* ICNSabinePannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DBE06B021757C8500933801 /* ICNSabinePannel.h */; };
+		7DBE06B321757C8500933801 /* ICNSabinePannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBE06B121757C8500933801 /* ICNSabinePannel.m */; };
 		7DF7FCB4210822E800CB3B3F /* ICNConferenceView.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DF7FCB2210822E800CB3B3F /* ICNConferenceView.h */; };
 		7DF7FCB5210822E800CB3B3F /* ICNConferenceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DF7FCB3210822E800CB3B3F /* ICNConferenceView.m */; };
 		7DF7FCB8210836FB00CB3B3F /* ICNConferenceVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DF7FCB6210836FB00CB3B3F /* ICNConferenceVideo.h */; };
@@ -122,6 +124,8 @@
 		7DACE71020F73E4E00AD6C7E /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		7DACE71120F74B7600AD6C7E /* ICNEditText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNEditText.h; sourceTree = "<group>"; };
 		7DACE71220F74B7600AD6C7E /* ICNEditText.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNEditText.m; sourceTree = "<group>"; };
+		7DBE06B021757C8500933801 /* ICNSabinePannel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNSabinePannel.h; sourceTree = "<group>"; };
+		7DBE06B121757C8500933801 /* ICNSabinePannel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNSabinePannel.m; sourceTree = "<group>"; };
 		7DF7FCB2210822E800CB3B3F /* ICNConferenceView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNConferenceView.h; sourceTree = "<group>"; };
 		7DF7FCB3210822E800CB3B3F /* ICNConferenceView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ICNConferenceView.m; sourceTree = "<group>"; };
 		7DF7FCB6210836FB00CB3B3F /* ICNConferenceVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ICNConferenceVideo.h; sourceTree = "<group>"; };
@@ -207,6 +211,7 @@
 		78E53A131B99F388004B63EF /* ECIExampleLicode */ = {
 			isa = PBXGroup;
 			children = (
+				7DBE06AF21757C1700933801 /* sabine */,
 				7DF7FCB121081FD100CB3B3F /* conference */,
 				7D50156120F87D0400BA1C45 /* category */,
 				7D7B92FA20BE3A800082C9F3 /* statistic */,
@@ -290,6 +295,15 @@
 			path = statistic;
 			sourceTree = "<group>";
 		};
+		7DBE06AF21757C1700933801 /* sabine */ = {
+			isa = PBXGroup;
+			children = (
+				7DBE06B021757C8500933801 /* ICNSabinePannel.h */,
+				7DBE06B121757C8500933801 /* ICNSabinePannel.m */,
+			);
+			path = sabine;
+			sourceTree = "<group>";
+		};
 		7DF7FCB121081FD100CB3B3F /* conference */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +347,7 @@
 				7D26E52A20B55F7C00D66326 /* ICNMainViewController.h in Headers */,
 				7DF7FCC0210850CB00CB3B3F /* ICNRemoteVideoView.h in Headers */,
 				7D50155F20F87C4E00BA1C45 /* ICNSurroundButton.h in Headers */,
+				7DBE06B221757C8500933801 /* ICNSabinePannel.h in Headers */,
 				7D29C87B20CFCDA9008C649A /* ICNSabineDeviceConfigure.h in Headers */,
 				781B3FEE1E6DDEF3003782EE /* Nuve.h in Headers */,
 				7D5DBA8520BBB22200A8757E /* ICNSettingTableViewController.h in Headers */,
@@ -526,6 +541,7 @@
 				7D5DBA9420BBF75800A8757E /* ICNSettingStore.m in Sources */,
 				7DF7FCC5210855BC00CB3B3F /* ICNConferenceAudioView.m in Sources */,
 				7DFDFF6020B3FC000096D25A /* Wav.m in Sources */,
+				7DBE06B321757C8500933801 /* ICNSabinePannel.m in Sources */,
 				78621BEA1BD16D36009D4342 /* Logger.m in Sources */,
 				7D50156020F87C4E00BA1C45 /* ICNSurroundButton.m in Sources */,
 				7D7B930220BE415F0082C9F3 /* ICNStatsView.m in Sources */,
